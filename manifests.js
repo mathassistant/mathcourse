@@ -16,11 +16,9 @@ var ALL_MANIFESTS = {
       "小学数学"
     ],
     "prerequisites": [],
-    "version": "0.2.0",
     "has_canvas": true,
     "has_geogebra": true,
-    "has_knowledge_graph": true,
-    "has_tts": true
+    "has_knowledge_graph": true
   },
   "array-to-area": {
     "id": "array-to-area",
@@ -43,11 +41,9 @@ var ALL_MANIFESTS = {
       "math-elementary-multiplication",
       "point-line-plane"
     ],
-    "version": "0.2.0",
     "has_canvas": true,
     "has_geogebra": false,
-    "has_knowledge_graph": true,
-    "has_tts": true
+    "has_knowledge_graph": true
   },
   "perimeter-rectangle-square": {
     "id": "perimeter-rectangle-square",
@@ -67,11 +63,9 @@ var ALL_MANIFESTS = {
     "prerequisites": [
       "认识长方形和正方形"
     ],
-    "version": "1.1.0",
     "has_canvas": true,
     "has_geogebra": false,
-    "has_knowledge_graph": true,
-    "has_tts": true
+    "has_knowledge_graph": true
   },
   "id-card-encoding": {
     "id": "id-card-encoding",
@@ -94,10 +88,26 @@ var ALL_MANIFESTS = {
       "math-elementary-multiplication",
       "math-elementary-division"
     ],
-    "version": "0.4.0",
     "has_canvas": true,
     "has_geogebra": false,
-    "has_knowledge_graph": true,
-    "has_tts": true
+    "has_knowledge_graph": true
+  },
+  "area-vs-perimeter": {
+    "id": "area-vs-perimeter",
+    "name": "area-vs-perimeter",
+    "subject": "math",
+    "grade": "elementary-3",
+    "stage": "elementary",
+    "domain": "geometry",
+    "lesson_type": "",
+    "description": "同一个长方形，铺地砖算面积，围栅栏算周长。通过互动对比画布，一次看清楚两个概念的区别。",
+    "tags": [],
+    "prerequisites": [
+      "array-to-area",
+      "perimeter-rectangle-square"
+    ],
+    "has_canvas": false,
+    "has_geogebra": false,
+    "has_knowledge_graph": false
   }
 };

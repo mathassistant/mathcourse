@@ -1,0 +1,17 @@
+{
+  "id": "area-vs-perimeter",
+  "title": "铺地砖 vs 围栅栏——面积与周长对比",
+  "subject": "math",
+  "grade": "elementary-3",
+  "lessonType": "inquiry-project",
+  "node": "math-elementary-area-rectangle",
+  "domain": "geometry",
+  "stage": "elementary",
+  "prerequisites": ["array-to-area", "perimeter-rectangle-square"],
+  "next": "",
+  "freeMode": false,
+  "version": "0.1.0",
+  "teachanyVersion": "7.14.0",
+  "has_tts": false,
+  "description": "同一个长方形，铺地砖算面积，围栅栏算周长。通过互动对比画布，一次看清楚两个概念的区别。"
+}

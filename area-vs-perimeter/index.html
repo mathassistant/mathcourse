@@ -1,0 +1,810 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>铺地砖 vs 围栅栏——面积与周长对比</title>
+<meta name="description" content="同一个长方形要铺地砖（面积=长×宽），还要围栅栏（周长=(长+宽)×2）。一边操作一边对比，再也不会搞混！">
+
+<meta name="course-id" content="area-vs-perimeter">
+<meta name="course-title" content="铺地砖 vs 围栅栏——面积与周长对比">
+<meta name="course-subject" content="math">
+<meta name="course-grade" content="elementary-3">
+<meta name="course-prereqs" content="array-to-area,perimeter-rectangle-square">
+<meta name="course-next" content="">
+<meta name="course-version" content="0.1.0">
+<meta name="teachany-version" content="7.14.0">
+<meta name="teachany-node" content="math-elementary-area-rectangle">
+<meta name="teachany-subject" content="math">
+<meta name="teachany-grade" content="3">
+<meta name="teachany-stage" content="elementary">
+<meta name="teachany-domain" content="geometry">
+<meta name="teachany-prerequisites" content="array-to-area,perimeter-rectangle-square">
+<meta name="teachany-lesson-type" content="inquiry-project">
+<meta name="teachany-free-mode" content="false">
+
+<link rel="stylesheet" href="../scripts/ai-tutor.css">
+<link rel="stylesheet" href="../scripts/teachany-tutor-card.css">
+<link rel="stylesheet" href="../scripts/teachany-section-hints.css">
+<link rel="stylesheet" href="../scripts/teachany-knowledge-graph.css">
+
+<style>
+:root {
+  --bg: #0a0f1a;
+  --panel: #111827;
+  --card: #162240;
+  --line: #2a3f5f;
+  --text: #eef6ff;
+  --muted: #94a3b8;
+  --brand: #38bdf8;
+  --area-color: #22c55e;
+  --perimeter-color: #f59e0b;
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; max-width: 100%; overflow-x: hidden; scroll-behavior: smooth; }
+body {
+  padding-top: var(--safe-top);
+  padding-bottom: calc(18px + var(--safe-bottom));
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Source Han Sans SC", system-ui, sans-serif;
+  line-height: 1.7;
+  font-size: 16px;
+}
+a { color: #7dd3fc; }
+button, a, input, select, textarea { min-height: 44px; }
+img, video, canvas, svg { max-width: 100%; height: auto; }
+.teachany-brand-bar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 16px;
+  background: rgba(10,15,26,.94);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(148,163,184,.18);
+}
+.brand-logo { display: flex; align-items: center; gap: 8px; color: #f8fafc; text-decoration: none; font-weight: 800; }
+.brand-mark { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, var(--area-color), var(--perimeter-color)); color: #0a0f1a; font-weight: 900; }
+.brand-right { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+.brand-link { text-decoration: none; }
+.brand-version { color: #cbd5e1; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: rgba(255,255,255,.08); padding: 4px 8px; border-radius: 999px; }
+.brand-skill-version { color: #94a3b8; }
+.hero {
+  padding: 64px 20px 38px; text-align: center;
+  background: radial-gradient(circle at 30% 0%, rgba(34,197,94,.18), transparent 40%), radial-gradient(circle at 70% 0%, rgba(245,158,11,.18), transparent 40%);
+}
+h1 { font-size: clamp(28px, 6vw, 46px); line-height: 1.15; margin: 0 auto 16px; max-width: 960px; }
+.subtitle { color: var(--muted); font-size: clamp(16px, 2.8vw, 20px); max-width: 860px; margin: 0 auto; }
+.section { max-width: 1080px; margin: 0 auto; padding: 36px 20px; }
+.card { background: linear-gradient(180deg, rgba(22,34,64,.96), rgba(15,25,48,.96)); border: 1px solid rgba(148,163,184,.18); border-radius: 18px; padding: 22px; box-shadow: 0 16px 40px rgba(0,0,0,.18); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+.choice { width: 100%; text-align: left; border: 1px solid rgba(245,158,11,.24); border-radius: 14px; background: rgba(245,158,11,.08); color: var(--text); padding: 14px 16px; cursor: pointer; }
+.choice.selected { border-color: var(--perimeter-color); box-shadow: 0 0 0 3px rgba(245,158,11,.18); }
+.phase-tag { display: inline-flex; align-items: center; gap: 6px; color: #fde68a; background: rgba(245,158,11,.12); border: 1px solid rgba(245,158,11,.25); border-radius: 999px; padding: 4px 10px; font-size: 13px; }
+.result { padding: 14px; border-radius: 12px; background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.25); }
+.warn { background: rgba(245,158,11,.1); border-color: rgba(245,158,11,.28); }
+.canvas-wrap { overflow: auto; background: #0a1220; border: 1px solid rgba(148,163,184,.18); border-radius: 16px; padding: 12px; text-align: center; }
+.slider-group { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
+.slider-group label { font-size: 14px; color: var(--muted); min-width: 60px; }
+.slider-group input[type=range] { flex: 1; accent-color: var(--brand); }
+.slider-group span { font-weight: 700; color: var(--brand); min-width: 24px; text-align: center; font-size: 18px; }
+.quiz-option { display: block; width: 100%; text-align: left; border: 1px solid var(--line); border-radius: 10px; background: rgba(22,34,64,.4); color: var(--text); padding: 10px 14px; margin: 6px 0; cursor: pointer; font-size: 15px; }
+.quiz-option.correct { border-color: var(--area-color); background: rgba(34,197,94,.15); }
+.quiz-option.wrong { border-color: #ef4444; background: rgba(239,68,68,.15); }
+.quiz-feedback { font-size: 13px; margin-top: 4px; }
+.comparison-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 15px; }
+.comparison-table th, .comparison-table td { padding: 12px 16px; text-align: center; border: 1px solid rgba(148,163,184,.15); }
+.comparison-table th { background: rgba(22,34,64,.6); font-weight: 600; }
+.comparison-table .area-col { background: rgba(34,197,94,.08); }
+.comparison-table .perimeter-col { background: rgba(245,158,11,.08); }
+.area-tag { color: var(--area-color); font-weight: 700; }
+.perimeter-tag { color: var(--perimeter-color); font-weight: 700; }
+
+@media (max-width: 600px) {
+  .teachany-brand-bar { padding: 8px 12px; }
+  .brand-name { display: none; }
+  .brand-right { gap: 8px; font-size: 12px; }
+  .hero { padding: 42px 16px 28px; }
+  .section { padding: 26px 16px; }
+  .grid, .objectives { grid-template-columns: 1fr !important; }
+  .card { padding: 18px; border-radius: 16px; }
+  h2 { font-size: 22px; }
+  canvas.wide-canvas { min-width: 640px; }
+}
+</style>
+</head>
+<body>
+<div class="teachany-brand-bar">
+  <a class="brand-logo" href="../index.html" aria-label="TeachAny Gallery">
+    <span class="brand-mark">T</span><span class="brand-name">TeachAny</span>
+  </a>
+  <div class="brand-right">
+    <a class="brand-link" href="../index.html">Gallery</a>
+    <span class="brand-version">v<span id="course-version-display">0.1.0</span><span class="brand-skill-version"> · skill v<span id="skill-version-display">7.14.0</span></span></span>
+  </div>
+</div>
+
+<!-- ===== Hero ===== -->
+<header class="hero" id="hero" data-tsh="开场 - 同一个花园，要铺草坪也要围篱笆">
+  <h1>铺地砖 vs 围栅栏<br>面积与周长一次看清楚</h1>
+  <p class="subtitle">王叔叔要修一个小花园——买草坪算面积，买篱笆算周长。同一个长方形，两道完全不同的算术题。这节课用一张图帮你把两个概念彻底分清！</p>
+</header>
+
+<!-- ===== ABT 叙事 ===== -->
+<section class="section" id="abt-narrative" data-tsh="ABT叙事 - 一个花园两个问题">
+  <div class="card">
+    <span class="phase-tag">Why Learn This?</span>
+    <h2>一个花园，两道算术题</h2>
+    <p><strong>王叔叔修了一个长 6 米、宽 4 米的长方形花园。</strong></p>
+    <div class="grid-2" style="margin:16px 0">
+      <div class="card" style="background:rgba(34,197,94,.06);border-color:rgba(34,197,94,.25)">
+        <h3 style="color:var(--area-color)">问题 A：铺草坪</h3>
+        <p style="font-size:14px">草坪按"平方米"卖。<br>需要买多少平方米？</p>
+        <p style="color:var(--muted);font-size:13px">→ 算的是"铺满"</p>
+      </div>
+      <div class="card" style="background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.25)">
+        <h3 style="color:var(--perimeter-color)">问题 B：围篱笆</h3>
+        <p style="font-size:14px">篱笆按"米"卖。<br>需要买多少米？</p>
+        <p style="color:var(--muted);font-size:13px">→ 算的是"围一圈"</p>
+      </div>
+    </div>
+    <p style="color:var(--muted)"><strong>And</strong> 都是同一个长方形。<strong>But</strong> 用的公式完全不同。<strong>Therefore</strong> 必须学会分辨什么时候用面积，什么时候用周长。</p>
+  </div>
+</section>
+
+<!-- ===== Problem Anchor ===== -->
+<section id="problem-anchor" class="section" data-tsh="问题锚点">
+  <div class="card">
+    <span class="phase-tag">Problem Anchor</span>
+    <h2>你最想弄清楚什么？</h2>
+    <div class="grid" id="problem-anchor-choices">
+      <button class="choice" data-anchor-choice="什么时候用面积公式，什么时候用周长公式？">什么时候用面积公式，什么时候用周长公式？</button>
+      <button class="choice" data-anchor-choice="面积和周长都用长和宽，为什么公式不一样？">面积和周长都用长和宽，为什么公式不一样？</button>
+      <button class="choice" data-anchor-choice="面积一样的长方形，周长也一样吗？反过来呢？">面积一样的长方形，周长也一样吗？反过来呢？</button>
+    </div>
+    <p id="anchor-feedback" class="result warn" style="margin-top:14px">选择一个问题，后面的探究会围绕它展开。</p>
+  </div>
+</section>
+
+<!-- ===== Learning Objectives ===== -->
+<section id="objectives" class="section" data-tsh="学习目标">
+  <div class="card">
+    <span class="phase-tag">Learning Objectives</span>
+    <h2>学习目标</h2>
+    <div class="grid">
+      <div style="padding:12px">能区分"铺满"（面积）和"围一圈"（周长）两种场景</div>
+      <div style="padding:12px">理解面积 = 长×宽，周长 = (长+宽)×2 的本质区别</div>
+      <div style="padding:12px">发现固定面积下周长可以不同，反之亦然</div>
+      <div style="padding:12px">能根据实际问题选择正确的公式</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Pretest ===== -->
+<section class="section" id="pretest" data-tsh="前测">
+  <div class="card">
+    <span class="phase-tag">Pre-Test</span>
+    <h2>课前小测</h2>
+    <p style="color:var(--muted)">3道题，看看你现在能不能分清。不会也没关系！</p>
+    <div id="pretest-quiz"></div>
+  </div>
+</section>
+
+<!-- ===== Core: Same Rectangle, Two Views ===== -->
+<section class="section" id="two-views" data-tsh="核心概念 - 同一个长方形两个视角">
+  <div class="card">
+    <span class="phase-tag">Core Concept</span>
+    <h2>同一个长方形，两个完全不同的计算</h2>
+    <p>来看一个 <strong>长 6、宽 4</strong> 的长方形。拖动滑块改变大小，观察面积和周长各自怎么变！</p>
+
+    <div class="slider-group">
+      <label>长：</label>
+      <input type="range" id="slider-length" min="2" max="10" value="6" step="1">
+      <span id="val-length">6</span>
+    </div>
+    <div class="slider-group">
+      <label>宽：</label>
+      <input type="range" id="slider-width" min="2" max="8" value="4" step="1">
+      <span id="val-width">4</span>
+    </div>
+
+    <div class="canvas-wrap">
+      <canvas id="canvas-compare" width="680" height="420" class="wide-canvas"></canvas>
+    </div>
+
+    <div class="grid-2" style="margin-top:16px">
+      <div class="result" style="text-align:center">
+        <span style="font-size:14px;color:var(--muted)">面积（铺草坪）</span><br>
+        <span class="area-tag" style="font-size:18px">长 × 宽</span><br>
+        <strong id="label-area-v" style="font-size:32px;color:var(--area-color)">24</strong>
+        <span style="color:var(--muted)">m²</span><br>
+        <span style="font-size:13px;color:var(--muted)">数：铺满的格子</span>
+      </div>
+      <div class="result warn" style="text-align:center">
+        <span style="font-size:14px;color:var(--muted)">周长（围篱笆）</span><br>
+        <span class="perimeter-tag" style="font-size:18px">(长+宽) × 2</span><br>
+        <strong id="label-perimeter-v" style="font-size:32px;color:var(--perimeter-color)">20</strong>
+        <span style="color:var(--muted)">m</span><br>
+        <span style="font-size:13px;color:var(--muted)">数：边框的线段</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Side-by-side Comparison Table ===== -->
+<section class="section" id="comparison-table-section" data-tsh="对比表格">
+  <div class="card">
+    <span class="phase-tag">Comparison</span>
+    <h2>一表看清：面积 vs 周长</h2>
+    <div style="overflow-x:auto">
+    <table class="comparison-table">
+      <tr>
+        <th></th>
+        <th class="area-col"><span class="area-tag">面积</span></th>
+        <th class="perimeter-col"><span class="perimeter-tag">周长</span></th>
+      </tr>
+      <tr>
+        <td><strong>问的是什么</strong></td>
+        <td class="area-col">里面铺满要多少？</td>
+        <td class="perimeter-col">外面围一圈要多长？</td>
+      </tr>
+      <tr>
+        <td><strong>生活比喻</strong></td>
+        <td class="area-col">铺地砖、刷墙漆、种草坪</td>
+        <td class="perimeter-col">围栅栏、装踢脚线、绕操场</td>
+      </tr>
+      <tr>
+        <td><strong>数什么</strong></td>
+        <td class="area-col">数格子（里面的）</td>
+        <td class="perimeter-col">数线段（边上的）</td>
+      </tr>
+      <tr>
+        <td><strong>公式</strong></td>
+        <td class="area-col">长 × 宽</td>
+        <td class="perimeter-col">(长 + 宽) × 2</td>
+      </tr>
+      <tr>
+        <td><strong>单位</strong></td>
+        <td class="area-col">平方米 m²、平方厘米 cm²</td>
+        <td class="perimeter-col">米 m、厘米 cm</td>
+      </tr>
+      <tr>
+        <td><strong>单位读法</strong></td>
+        <td class="area-col">"平方"——看到²就是面积</td>
+        <td class="perimeter-col">普通长度单位——没有²就是周长</td>
+      </tr>
+      <tr>
+        <td><strong>2×(长+宽)的2从哪来</strong></td>
+        <td class="area-col" style="color:var(--muted)">不适用</td>
+        <td class="perimeter-col">上下两条长 + 左右两条宽</td>
+      </tr>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Inquiry 1: Fixed Area ===== -->
+<section class="section" id="inquiry-fixed-area" data-tsh="探究 - 固定面积周长会变吗">
+  <div class="card">
+    <span class="phase-tag">Inquiry 1</span>
+    <h2>固定面积，周长会变吗？</h2>
+    <p>下面三种长方形，<strong>面积都是 24 m²</strong>。但它们的周长一样吗？</p>
+    <div class="grid" style="margin-top:16px">
+      <div class="card" style="text-align:center;background:rgba(34,197,94,.04);border-color:rgba(34,197,94,.2)">
+        <h4>1 × 24</h4>
+        <div style="width:80%;height:24px;background:rgba(34,197,94,.2);margin:8px auto;border-radius:4px;border:2px dashed var(--perimeter-color)"></div>
+        <p style="font-size:13px;color:var(--area-color)">面积 = 1×24 = 24 ✓</p>
+        <p style="font-size:13px;color:var(--perimeter-color)">周长 = 2×(1+24) = <strong>50</strong></p>
+      </div>
+      <div class="card" style="text-align:center;background:rgba(34,197,94,.04);border-color:rgba(34,197,94,.2)">
+        <h4>4 × 6</h4>
+        <div style="width:60%;height:60px;background:rgba(34,197,94,.2);margin:8px auto;border-radius:4px;border:2px dashed var(--perimeter-color)"></div>
+        <p style="font-size:13px;color:var(--area-color)">面积 = 4×6 = 24 ✓</p>
+        <p style="font-size:13px;color:var(--perimeter-color)">周长 = 2×(4+6) = <strong>20</strong></p>
+      </div>
+      <div class="card" style="text-align:center;background:rgba(34,197,94,.04);border-color:rgba(34,197,94,.2)">
+        <h4>3 × 8</h4>
+        <div style="width:70%;height:48px;background:rgba(34,197,94,.2);margin:8px auto;border-radius:4px;border:2px dashed var(--perimeter-color)"></div>
+        <p style="font-size:13px;color:var(--area-color)">面积 = 3×8 = 24 ✓</p>
+        <p style="font-size:13px;color:var(--perimeter-color)">周长 = 2×(3+8) = <strong>22</strong></p>
+      </div>
+    </div>
+    <div class="result" style="margin-top:16px">
+      <strong>发现：</strong>面积相同时，<strong>越"瘦长"周长越大</strong>，越接近正方形周长越小！
+    </div>
+  </div>
+</section>
+
+<!-- ===== Inquiry 2: Fixed Perimeter ===== -->
+<section class="section" id="inquiry-fixed-perimeter" data-tsh="探究 - 固定周长面积会变吗">
+  <div class="card">
+    <span class="phase-tag">Inquiry 2</span>
+    <h2>固定周长，面积会变吗？</h2>
+    <p>下面三种长方形，<strong>周长都是 24 m</strong>。面积一样吗？</p>
+    <div class="grid" style="margin-top:16px">
+      <div class="card" style="text-align:center;background:rgba(245,158,11,.04);border-color:rgba(245,158,11,.2)">
+        <h4>2 × 10</h4>
+        <div style="width:80%;height:28px;background:rgba(245,158,11,.15);margin:8px auto;border-radius:4px"></div>
+        <p style="font-size:13px;color:var(--perimeter-color)">周长 = 2×(2+10) = 24 ✓</p>
+        <p style="font-size:13px;color:var(--area-color)">面积 = 2×10 = <strong>20</strong></p>
+      </div>
+      <div class="card" style="text-align:center;background:rgba(245,158,11,.04);border-color:rgba(245,158,11,.2)">
+        <h4>6 × 6</h4>
+        <div style="width:50%;height:80px;background:rgba(245,158,11,.15);margin:8px auto;border-radius:4px"></div>
+        <p style="font-size:13px;color:var(--perimeter-color)">周长 = 2×(6+6) = 24 ✓</p>
+        <p style="font-size:13px;color:var(--area-color)">面积 = 6×6 = <strong>36</strong></p>
+      </div>
+      <div class="card" style="text-align:center;background:rgba(245,158,11,.04);border-color:rgba(245,158,11,.2)">
+        <h4>4 × 8</h4>
+        <div style="width:70%;height:44px;background:rgba(245,158,11,.15);margin:8px auto;border-radius:4px"></div>
+        <p style="font-size:13px;color:var(--perimeter-color)">周长 = 2×(4+8) = 24 ✓</p>
+        <p style="font-size:13px;color:var(--area-color)">面积 = 4×8 = <strong>32</strong></p>
+      </div>
+    </div>
+    <div class="result warn" style="margin-top:16px">
+      <strong>发现：</strong>周长相同时，<strong>越接近正方形面积越大</strong>！正方形（6×6）是"固定周长下面积最大"的形状。
+    </div>
+  </div>
+</section>
+
+<!-- ===== ConcepTest ===== -->
+<section class="section" id="conceptest" data-tsh="ConcepTest">
+  <div class="card">
+    <span class="phase-tag">Concept Check</span>
+    <h2>概念检查：你真的分清了吗？</h2>
+    <div id="conceptest-quiz"></div>
+  </div>
+</section>
+
+<!-- ===== Tiered Practice ===== -->
+<section class="section" id="tiered-practice" data-tsh="分层练习">
+  <div class="card">
+    <span class="phase-tag">Practice</span>
+    <h2>分层练习</h2>
+
+    <div class="result" style="margin-bottom:16px">
+      <h3>Level 1 · 基础</h3>
+      <p>1. 长方形长 8m、宽 5m，面积是多少？周长是多少？<br>
+      2. 教室地面长 9m、宽 6m，铺地砖要算面积还是周长？<br>
+      3. 操场跑道一圈是 400m，这是面积还是周长？</p>
+      <p id="tier1-feedback" style="font-size:13px;color:var(--muted)"></p>
+      <button id="tier1-check" style="margin-top:8px;padding:6px 14px;border-radius:8px;border:1px solid var(--area-color);background:rgba(34,197,94,.1);color:var(--area-color);cursor:pointer">检查</button>
+    </div>
+
+    <div class="result warn" style="margin-bottom:16px">
+      <h3>Level 2 · 进阶</h3>
+      <p>1. 王叔叔用 40m 篱笆围长方形花园，长 12m，宽多少？面积多少？<br>
+      2. 两个长方形：A(5×3) 和 B(4×4)，哪个面积大？哪个周长大？<br>
+      3. 已知面积 = 48m²，列举两种可能的长宽，算出各自的周长。</p>
+      <p id="tier2-feedback" style="font-size:13px;color:var(--muted)"></p>
+      <button id="tier2-check" style="margin-top:8px;padding:6px 14px;border-radius:8px;border:1px solid var(--perimeter-color);background:rgba(245,158,11,.1);color:var(--perimeter-color);cursor:pointer">检查</button>
+    </div>
+
+    <div class="result" style="background:rgba(56,189,248,.08);border-color:rgba(56,189,248,.25)">
+      <h3>Level 3 · 挑战</h3>
+      <p>1. 用 36m 篱笆围长方形，怎样让面积最大？<br>
+      2. 面积 36m² 的长方形中，哪种周长最小？<br>
+      3. 一个"田"字形由 4 个 3×3 正方形拼成，总面积和总周长各是多少？</p>
+      <p id="tier3-feedback" style="font-size:13px;color:var(--muted)"></p>
+      <button id="tier3-check" style="margin-top:8px;padding:6px 14px;border-radius:8px;border:1px solid var(--brand);background:rgba(56,189,248,.1);color:var(--brand);cursor:pointer">检查</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Common Mistakes ===== -->
+<section class="section" id="common-mistakes" data-tsh="易错点">
+  <div class="card">
+    <span class="phase-tag">Common Mistakes</span>
+    <h2>小心！这 3 个坑最容易踩</h2>
+    <div class="grid" style="margin-top:16px">
+      <div class="card" style="background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2)">
+        <h3 style="color:#ef4444">坑1："平方"忘记写²</h3>
+        <p style="font-size:13px;color:var(--muted)">面积单位必须带 ²（平方），写 24m 是错的，正确的是 24m²。² 就是"平方"的记号，看到它就知道在说面积。</p>
+      </div>
+      <div class="card" style="background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2)">
+        <h3 style="color:#ef4444">坑2："围一圈"用面积公式</h3>
+        <p style="font-size:13px;color:var(--muted)">买篱笆围花园 → 算的是"多长"，用周长公式 (长+宽)×2。买草皮铺满 → 算的是"多大"，用面积公式 长×宽。</p>
+      </div>
+      <div class="card" style="background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2)">
+        <h3 style="color:#ef4444">坑3：以为面积大周长就大</h3>
+        <p style="font-size:13px;color:var(--muted)">6×6面积36周长24；4×8面积32周长也是24——面积变了周长可以不变！面积和周长不是"同涨同跌"的关系。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Posttest ===== -->
+<section class="section" id="posttest" data-tsh="后测">
+  <div class="card">
+    <span class="phase-tag">Post-Test</span>
+    <h2>课后检测</h2>
+    <p style="color:var(--muted)">再测一次，和前测对比看看进步！</p>
+    <div id="posttest-quiz"></div>
+  </div>
+</section>
+
+<!-- ===== Summary ===== -->
+<section class="section" id="summary" data-tsh="小结">
+  <div class="card">
+    <span class="phase-tag">Summary</span>
+    <h2>小结：两条公式，一个口诀</h2>
+    <div class="grid-2" style="margin:16px 0">
+      <div class="result">
+        <h3 class="area-tag">面积 = 长 × 宽</h3>
+        <p style="font-size:14px">"铺满" → 数格子 → 带 ²</p>
+        <p style="font-size:13px;color:var(--muted)">草坪、地砖、墙漆</p>
+      </div>
+      <div class="result warn">
+        <h3 class="perimeter-tag">周长 = (长+宽) × 2</h3>
+        <p style="font-size:14px">"围一圈" → 数边框 → 不带 ²</p>
+        <p style="font-size:13px;color:var(--muted)">篱笆、跑道、镜框</p>
+      </div>
+    </div>
+    <div class="result" style="background:rgba(56,189,248,.08);border-color:rgba(56,189,248,.25);margin-top:12px">
+      <strong>口诀：</strong>"铺满算面积（带平方），围圈算周长（没平方）。<br>面积看格子，周长看线段。瘦长周长飙，方正面积高。"
+    </div>
+  </div>
+</section>
+
+<!-- ===== Knowledge Graph ===== -->
+<section class="section" id="knowledge-graph" data-tsh="知识图谱">
+  <div class="card">
+    <span class="phase-tag">Knowledge Graph</span>
+    <h2>知识图谱</h2>
+    <div data-teachany-kg="math-elementary-area-rectangle">
+      <canvas class="tkg-fallback-canvas" width="720" height="120" aria-label="知识图谱" style="display:block;width:100%;max-height:140px;border-radius:12px;"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AI Tutor ===== -->
+<section class="section" id="teachany-ai-tutor-card" data-tsh="AI 学伴">
+  <div data-teachany-tutor-card></div>
+</section>
+
+<script>
+window.__TEACHANY_LEARNER_QUESTION__ = '';
+window.__TEACHANY_TUTOR_CONFIG__ = {
+  courseId: 'area-vs-perimeter',
+  courseTitle: '铺地砖 vs 围栅栏——面积与周长对比',
+  subject: 'math',
+  grade: '3',
+  nodeId: 'math-elementary-area-rectangle',
+  lessonType: 'inquiry-project',
+  getLearnerQuestion: function() { return window.__TEACHANY_LEARNER_QUESTION__ || ''; },
+  getContext: function() {
+    var current = document.querySelector('section.current-section') || (location.hash ? document.querySelector(location.hash) : null);
+    return (current || document.body).innerText.slice(0, 3000);
+  }
+};
+
+function setTeachAnyLearnerQuestion(question) {
+  window.__TEACHANY_LEARNER_QUESTION__ = question || '';
+  var fb = document.getElementById('anchor-feedback');
+  if (fb) fb.textContent = question ? '你的问题：' + question : '选择一个问题，后面的探究会围绕它展开。';
+}
+
+document.querySelectorAll('[data-anchor-choice]').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('[data-anchor-choice]').forEach(function(b) { b.classList.remove('selected'); });
+    btn.classList.add('selected');
+    setTeachAnyLearnerQuestion(btn.getAttribute('data-anchor-choice'));
+  });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  var cv = document.querySelector('meta[name="course-version"]').content;
+  var sv = document.querySelector('meta[name="teachany-version"]').content;
+  if (cv) document.getElementById('course-version-display').textContent = cv;
+  if (sv) document.getElementById('skill-version-display').textContent = sv.replace(/^v/, '');
+});
+</script>
+
+<!-- =============================================
+     Canvas: 对比画布 —— 同时显示面积和周长
+     ============================================= -->
+<script>
+(function() {
+  var canvas = document.getElementById('canvas-compare');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+
+  var LEN = 6, WID = 4;
+  var CELL = 42;
+  var ox, oy;
+  var PAD = 68; // left/bottom padding for labels
+
+  function recalc() {
+    ox = PAD + 20;
+    oy = 20;
+  }
+
+  function draw() {
+    recalc();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    var tw = LEN * CELL;
+    var th = WID * CELL;
+
+    // === Area: filled grid cells ===
+    for (var r = 0; r < WID; r++) {
+      for (var c = 0; c < LEN; c++) {
+        var x = ox + c * CELL;
+        var y = oy + r * CELL;
+        // alternate shades for readability
+        var shade = (r + c) % 2 === 0
+          ? 'rgba(34,197,94,0.15)'
+          : 'rgba(34,197,94,0.07)';
+        ctx.fillStyle = shade;
+        ctx.fillRect(x + 1, y + 1, CELL - 2, CELL - 2);
+        ctx.strokeStyle = 'rgba(34,197,94,0.25)';
+        ctx.lineWidth = 0.5;
+        ctx.strokeRect(x + 1, y + 1, CELL - 2, CELL - 2);
+
+        // cell number
+        ctx.fillStyle = 'rgba(34,197,94,0.5)';
+        ctx.font = '10px monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(r * LEN + c + 1, x + CELL / 2, y + CELL / 2);
+      }
+    }
+
+    // === Perimeter: highlighted border ===
+    // Top border
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(ox, oy);
+    ctx.lineTo(ox + tw, oy);
+    ctx.stroke();
+
+    // Right border
+    ctx.beginPath();
+    ctx.moveTo(ox + tw, oy);
+    ctx.lineTo(ox + tw, oy + th);
+    ctx.stroke();
+
+    // Bottom border
+    ctx.beginPath();
+    ctx.moveTo(ox + tw, oy + th);
+    ctx.lineTo(ox, oy + th);
+    ctx.stroke();
+
+    // Left border
+    ctx.beginPath();
+    ctx.moveTo(ox, oy + th);
+    ctx.lineTo(ox, oy);
+    ctx.stroke();
+
+    // === Perimeter tick marks on top ===
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 2;
+    for (var c = 0; c < LEN; c++) {
+      var tx = ox + c * CELL + CELL / 2;
+      ctx.beginPath();
+      ctx.moveTo(tx, oy - 8);
+      ctx.lineTo(tx, oy);
+      ctx.stroke();
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(c + 1, tx, oy - 14);
+    }
+
+    // === Perimeter tick marks on right ===
+    for (var r = 0; r < WID; r++) {
+      var ty = oy + r * CELL + CELL / 2;
+      ctx.beginPath();
+      ctx.moveTo(ox + tw + 8, ty);
+      ctx.lineTo(ox + tw, ty);
+      ctx.stroke();
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(r + 1, ox + tw + 14, ty + 4);
+    }
+
+    // === Perimeter tick marks on bottom (reverse) ===
+    for (var c = LEN - 1; c >= 0; c--) {
+      var bx = ox + c * CELL + CELL / 2;
+      ctx.beginPath();
+      ctx.moveTo(bx, oy + th + 8);
+      ctx.lineTo(bx, oy + th);
+      ctx.stroke();
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(LEN - c, bx, oy + th + 22);
+    }
+
+    // === Perimeter tick marks on left (reverse) ===
+    for (var r = WID - 1; r >= 0; r--) {
+      var ly = oy + r * CELL + CELL / 2;
+      ctx.beginPath();
+      ctx.moveTo(ox - 8, ly);
+      ctx.lineTo(ox, ly);
+      ctx.stroke();
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(WID - r, ox - 14, ly + 4);
+    }
+
+    // === Dimension arrows ===
+    // Length arrow (top)
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = 'bold 13px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('长 = ' + LEN, ox + tw / 2, oy - 30);
+
+    // Width arrow (left)
+    ctx.save();
+    ctx.translate(ox - 36, oy + th / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText('宽 = ' + WID, 0, 0);
+    ctx.restore();
+
+    // === Area formula at bottom center ===
+    ctx.fillStyle = '#22c55e';
+    ctx.font = 'bold 14px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('面积 = ' + LEN + ' × ' + WID + ' = ' + (LEN * WID) + '（铺满的格子）', ox + tw / 2, oy + th + 48);
+
+    // === Perimeter formula at bottom-right of grid ===
+    ctx.fillStyle = '#f59e0b';
+    ctx.fillText('周长 = 2×(' + LEN + '+' + WID + ') = ' + (2 * (LEN + WID)) + '（边框的线段）', ox + tw / 2, oy + th + 68);
+
+    // === Legend ===
+    var lx = ox + tw + 50;
+    var ly = oy + 20;
+
+    // Area legend
+    ctx.fillStyle = 'rgba(34,197,94,0.2)';
+    ctx.fillRect(lx, ly, 16, 16);
+    ctx.strokeStyle = 'rgba(34,197,94,0.4)';
+    ctx.strokeRect(lx, ly, 16, 16);
+    ctx.fillStyle = '#22c55e';
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('面积：格子', lx + 24, ly + 8);
+
+    // Perimeter legend
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(lx, ly + 36);
+    ctx.lineTo(lx + 16, ly + 36);
+    ctx.stroke();
+    ctx.fillStyle = '#f59e0b';
+    ctx.fillText('周长：边框', lx + 24, ly + 36);
+  }
+
+  function updateUI() {
+    document.getElementById('val-length').textContent = LEN;
+    document.getElementById('val-width').textContent = WID;
+    document.getElementById('label-area-v').textContent = LEN * WID;
+    document.getElementById('label-perimeter-v').textContent = 2 * (LEN + WID);
+    draw();
+  }
+
+  document.getElementById('slider-length').addEventListener('input', function() {
+    LEN = parseInt(this.value);
+    updateUI();
+  });
+
+  document.getElementById('slider-width').addEventListener('input', function() {
+    WID = parseInt(this.value);
+    updateUI();
+  });
+
+  updateUI();
+})();
+</script>
+
+<!-- =============================================
+     Quiz System
+     ============================================= -->
+<script>
+var diagnosticHints = {
+  pretest: [
+    { correct: '正确！铺草坪算面积 = 长×宽 = 8×5 = 40m²。', wrong: '铺草坪是面积问题！面积 = 长×宽 = 8×5 = 40m²。' },
+    { correct: '对！绕操场一圈是周长，算的是"多长"。', wrong: '绕一圈算的是周长，结果是长度单位"米"，不是"平方米"。' },
+    { correct: '对！面积=长×宽=7×4=28cm²。单位带²说明是面积。', wrong: '面积=7×4=28cm²。28cm²说的是"28个1平方厘米的格子"。' }
+  ],
+  posttest: [
+    { correct: '正确！10×6=60m²（面积），2×(10+6)=32m（周长）。', wrong: '面积=10×6=60m²（铺满），周长=2×(10+6)=32m（围一圈）。' },
+    { correct: '对！篱笆40m=周长=2×(长+宽)，宽=40÷2-12=8m。面积=12×8=96m²。', wrong: '40m是周长→半周长20m→宽=20-12=8m→面积=12×8=96m²。' },
+    { correct: '正确！周长同24，正方形6×6面积最大=36。', wrong: '周长24，半周长12。正方形6×6面积36最大；长方形2×10面积仅20。越方正面积越大！' }
+  ],
+  conceptest: [
+    { correct: '正确！面积算"铺满"，周长算"围一圈"，问法决定了用什么公式。', wrong: '买材料时：按"平方米"卖→面积（长×宽）；按"米"卖→周长（(长+宽)×2）。' },
+    { correct: '对！看单位：m²是面积，m是周长。单位是最快的区分方式。', wrong: '看单位！m²（平方米）→面积；m（米）→周长。单位就是线索。' },
+    { correct: '正确！面积24→3×8周长22，4×6周长20。面积同但形状不同周长就不同。', wrong: '面积24的矩形:(3×8)周长22,(4×6)周长20,(2×12)周长28——面积不变周长可变！' }
+  ]
+};
+
+function buildQuiz(containerId, questions) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  var quizType = containerId.replace('-quiz', '');
+  var hints = diagnosticHints[quizType] || [];
+  container.innerHTML = '';
+  questions.forEach(function(q, qi) {
+    var div = document.createElement('div');
+    div.style.cssText = 'margin-bottom:18px';
+    div.innerHTML = '<p style="font-weight:600;margin:0 0 8px">' + (qi + 1) + '. ' + q.q + '</p>';
+    var optsDiv = document.createElement('div');
+    q.opts.forEach(function(opt, oi) {
+      var btn = document.createElement('button');
+      btn.className = 'quiz-option';
+      btn.textContent = String.fromCharCode(65 + oi) + '. ' + opt;
+      btn.addEventListener('click', function() {
+        if (btn.disabled) return;
+        optsDiv.querySelectorAll('.quiz-option').forEach(function(b) { b.disabled = true; });
+        var fb = document.createElement('p');
+        fb.className = 'quiz-feedback';
+        if (oi === q.ans) {
+          btn.classList.add('correct');
+          fb.style.color = 'var(--area-color)';
+          fb.textContent = '✓ 正确！' + (hints[qi] ? ' ' + hints[qi].correct : '');
+        } else {
+          btn.classList.add('wrong');
+          optsDiv.querySelectorAll('.quiz-option')[q.ans].classList.add('correct');
+          fb.style.color = '#ef4444';
+          fb.textContent = '✗ 答案 ' + String.fromCharCode(65 + q.ans) + '。' + (hints[qi] ? hints[qi].wrong : '');
+        }
+        optsDiv.appendChild(fb);
+      });
+      optsDiv.appendChild(btn);
+    });
+    div.appendChild(optsDiv);
+    container.appendChild(div);
+  });
+}
+
+buildQuiz('pretest-quiz', [
+  { q: '长方形花坛长8m、宽5m，要铺满草坪需要买多少平方米？', opts: ['40m²', '40m', '26m²', '26m'], ans: 0 },
+  { q: '学校操场跑道400m，说的是什么？', opts: ['面积', '周长', '体积', '宽度'], ans: 1 },
+  { q: '一个长方形长7cm、宽4cm，面积是多少？', opts: ['11cm', '22cm²', '28cm²', '28cm'], ans: 2 }
+]);
+
+buildQuiz('posttest-quiz', [
+  { q: '长方形长10m、宽6m，面积和周长各是多少？', opts: ['60m²和32m', '60m和32m²', '16m²和60m', '32m²和60m'], ans: 0 },
+  { q: '王叔叔用40m篱笆围长方形，长12m。宽是多少？面积呢？', opts: ['宽28m，面积336m²', '宽8m，面积96m²', '宽14m，面积168m²', '宽8m，面积20m²'], ans: 1 },
+  { q: '周长都是24m，哪种形状面积最大？', opts: ['2×10长方形', '3×9长方形', '4×8长方形', '6×6正方形'], ans: 3 }
+]);
+
+buildQuiz('conceptest-quiz', [
+  { q: '买"篱笆"和买"草皮"，哪个用面积哪个用周长？', opts: ['篱笆周长，草皮面积', '篱笆面积，草皮周长', '都是面积', '都是周长'], ans: 0 },
+  { q: '一个答案是24m²，另一个答案是24m。哪个是面积？', opts: ['24m是面积', '24m²是面积', '两个都是', '两个都不是'], ans: 1 },
+  { q: '面积24m²的长方形，周长可能不同吗？', opts: ['不可能，面积一样周长就一样', '可能，形状不同周长就不同', '只有正方形周长固定', '不知道'], ans: 1 }
+]);
+</script>
+
+<!-- =============================================
+     Practice Check Buttons
+     ============================================= -->
+<script>
+document.getElementById('tier1-check').addEventListener('click', function() {
+  document.getElementById('tier1-feedback').textContent = '✓ 基础级参考：① 面积=8×5=40m², 周长=2×(8+5)=26m；② 铺地砖算面积（铺满）；③ 跑道400m是周长（绕一圈）。';
+});
+document.getElementById('tier2-check').addEventListener('click', function() {
+  document.getElementById('tier2-feedback').textContent = '✓ 进阶级参考：① 半周长=40÷2=20, 宽=20-12=8m, 面积=12×8=96m²；② A面积15周长16, B面积16周长16→面积B大, 周长相同；③ 如6×8周长28, 4×12周长32。';
+});
+document.getElementById('tier3-check').addEventListener('click', function() {
+  document.getElementById('tier3-feedback').textContent = '✓ 挑战级参考：① 36m篱笆→半周长18m→9×9正方形面积=81m²最大；② 6×6正方形周长最小=24；③ 总面积=4×9=36, 总周长=12+12+12+12=48（四条外边）, 或2×(6+6)×2=24×2=48。';
+});
+</script>
+
+<!-- Standard Scripts -->
+<script src="../scripts/ai-tutor.js"></script>
+<script src="../scripts/teachany-tutor-card.js" defer></script>
+<script src="../scripts/teachany-section-hints.js" defer></script>
+<script src="../scripts/teachany-knowledge-graph.js" defer></script>
+</body>
+</html>
