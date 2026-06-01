@@ -12,6 +12,6 @@
   "freeMode": false,
   "version": "0.1.0",
   "teachanyVersion": "7.14.0",
-  "has_tts": false,
+  "has_tts": true,
   "description": "同一个长方形，面积和周长到底哪里不一样？通过互动对比画布，一次看清楚。"
 }

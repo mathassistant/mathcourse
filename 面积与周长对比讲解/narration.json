@@ -1,0 +1,50 @@
+[
+  {
+    "id": "s01-hero",
+    "src": "tts/s01-hero.mp3",
+    "size": 95904,
+    "label": "s01-hero"
+  },
+  {
+    "id": "s02-two-views",
+    "src": "tts/s02-two-views.mp3",
+    "size": 129168,
+    "label": "s02-two-views"
+  },
+  {
+    "id": "s03-inquiry1",
+    "src": "tts/s03-inquiry1.mp3",
+    "size": 131184,
+    "label": "s03-inquiry1"
+  },
+  {
+    "id": "s04-inquiry2",
+    "src": "tts/s04-inquiry2.mp3",
+    "size": 137664,
+    "label": "s04-inquiry2"
+  },
+  {
+    "id": "s05-conceptest",
+    "src": "tts/s05-conceptest.mp3",
+    "size": 160128,
+    "label": "s05-conceptest"
+  },
+  {
+    "id": "s06-practice",
+    "src": "tts/s06-practice.mp3",
+    "size": 153504,
+    "label": "s06-practice"
+  },
+  {
+    "id": "s07-mistakes",
+    "src": "tts/s07-mistakes.mp3",
+    "size": 200880,
+    "label": "s07-mistakes"
+  },
+  {
+    "id": "s08-summary",
+    "src": "tts/s08-summary.mp3",
+    "size": 175104,
+    "label": "s08-summary"
+  }
+]

@@ -27,6 +27,7 @@
 <link rel="stylesheet" href="../scripts/teachany-tutor-card.css">
 <link rel="stylesheet" href="../scripts/teachany-section-hints.css">
 <link rel="stylesheet" href="../scripts/teachany-knowledge-graph.css">
+<link rel="stylesheet" href="../scripts/teachany-tts-narrator.css">
 
 <style>
 :root {
@@ -127,8 +128,26 @@ h1 { font-size: clamp(28px, 6vw, 46px); line-height: 1.15; margin: 0 auto 16px; 
   </div>
 </div>
 
+<!-- =============================================
+     音频播放列表配置
+     ============================================= -->
+<div id="audio-config" data-teachany-audio hidden>
+  <script type="application/json" data-teachany-audio-playlist>
+[
+  {"id":"s01-hero","src":"tts/s01-hero.mp3","label":"开场引入","target":"hero"},
+  {"id":"s02-two-views","src":"tts/s02-two-views.mp3","label":"核心概念","target":"two-views"},
+  {"id":"s03-inquiry1","src":"tts/s03-inquiry1.mp3","label":"固定面积探究","target":"inquiry-fixed-area"},
+  {"id":"s04-inquiry2","src":"tts/s04-inquiry2.mp3","label":"固定周长探究","target":"inquiry-fixed-perimeter"},
+  {"id":"s05-conceptest","src":"tts/s05-conceptest.mp3","label":"概念检查","target":"conceptest"},
+  {"id":"s06-practice","src":"tts/s06-practice.mp3","label":"分层练习","target":"tiered-practice"},
+  {"id":"s07-mistakes","src":"tts/s07-mistakes.mp3","label":"易错点提醒","target":"common-mistakes"},
+  {"id":"s08-summary","src":"tts/s08-summary.mp3","label":"课堂小结","target":"summary"}
+]
+  </script>
+</div>
+
 <!-- ===== Hero ===== -->
-<header class="hero" id="hero" data-tsh="开场 - 同一个花园，要铺草坪也要围篱笆">
+<header class="hero" id="hero" data-tts="s01-hero" data-tsh="开场 - 同一个花园，要铺草坪也要围篱笆">
   <h1>面积与周长对比讲解</h1>
   <p class="subtitle">王叔叔要修一个小花园——买草坪算面积，买篱笆算周长。同一个长方形，两道完全不同的算术题。这节课用一张图帮你把两个概念彻底分清！</p>
 </header>
@@ -194,7 +213,7 @@ h1 { font-size: clamp(28px, 6vw, 46px); line-height: 1.15; margin: 0 auto 16px; 
 </section>
 
 <!-- ===== Core: Same Rectangle, Two Views ===== -->
-<section class="section" id="two-views" data-tsh="核心概念 - 同一个长方形两个视角">
+<section class="section" id="two-views" data-tts="s02-two-views" data-tsh="核心概念 - 同一个长方形两个视角">
   <div class="card">
     <span class="phase-tag">Core Concept</span>
     <h2>同一个长方形，两个完全不同的计算</h2>
@@ -287,7 +306,7 @@ h1 { font-size: clamp(28px, 6vw, 46px); line-height: 1.15; margin: 0 auto 16px; 
 </section>
 
 <!-- ===== Inquiry 1: Fixed Area ===== -->
-<section class="section" id="inquiry-fixed-area" data-tsh="探究 - 固定面积周长会变吗">
+<section class="section" id="inquiry-fixed-area" data-tts="s03-inquiry1" data-tsh="探究 - 固定面积周长会变吗">
   <div class="card">
     <span class="phase-tag">Inquiry 1</span>
     <h2>固定面积，周长会变吗？</h2>
@@ -319,7 +338,7 @@ h1 { font-size: clamp(28px, 6vw, 46px); line-height: 1.15; margin: 0 auto 16px; 
 </section>
 
 <!-- ===== Inquiry 2: Fixed Perimeter ===== -->
-<section class="section" id="inquiry-fixed-perimeter" data-tsh="探究 - 固定周长面积会变吗">
+<section class="section" id="inquiry-fixed-perimeter" data-tts="s04-inquiry2" data-tsh="探究 - 固定周长面积会变吗">
   <div class="card">
     <span class="phase-tag">Inquiry 2</span>
     <h2>固定周长，面积会变吗？</h2>
@@ -351,7 +370,7 @@ h1 { font-size: clamp(28px, 6vw, 46px); line-height: 1.15; margin: 0 auto 16px; 
 </section>
 
 <!-- ===== ConcepTest ===== -->
-<section class="section" id="conceptest" data-tsh="ConcepTest">
+<section class="section" id="conceptest" data-tts="s05-conceptest" data-tsh="ConcepTest">
   <div class="card">
     <span class="phase-tag">Concept Check</span>
     <h2>概念检查：你真的分清了吗？</h2>
@@ -360,7 +379,7 @@ h1 { font-size: clamp(28px, 6vw, 46px); line-height: 1.15; margin: 0 auto 16px; 
 </section>
 
 <!-- ===== Tiered Practice ===== -->
-<section class="section" id="tiered-practice" data-tsh="分层练习">
+<section class="section" id="tiered-practice" data-tts="s06-practice" data-tsh="分层练习">
   <div class="card">
     <span class="phase-tag">Practice</span>
     <h2>分层练习</h2>
@@ -395,7 +414,7 @@ h1 { font-size: clamp(28px, 6vw, 46px); line-height: 1.15; margin: 0 auto 16px; 
 </section>
 
 <!-- ===== Common Mistakes ===== -->
-<section class="section" id="common-mistakes" data-tsh="易错点">
+<section class="section" id="common-mistakes" data-tts="s07-mistakes" data-tsh="易错点">
   <div class="card">
     <span class="phase-tag">Common Mistakes</span>
     <h2>小心！这 3 个坑最容易踩</h2>
@@ -427,7 +446,7 @@ h1 { font-size: clamp(28px, 6vw, 46px); line-height: 1.15; margin: 0 auto 16px; 
 </section>
 
 <!-- ===== Summary ===== -->
-<section class="section" id="summary" data-tsh="小结">
+<section class="section" id="summary" data-tts="s08-summary" data-tsh="小结">
   <div class="card">
     <span class="phase-tag">Summary</span>
     <h2>小结：两条公式，一个口诀</h2>
@@ -804,6 +823,7 @@ document.getElementById('tier3-check').addEventListener('click', function() {
 <!-- Standard Scripts -->
 <script src="../scripts/ai-tutor.js"></script>
 <script src="../scripts/teachany-tutor-card.js" defer></script>
+<script src="../scripts/teachany-tts-narrator.js" defer></script>
 <script src="../scripts/teachany-section-hints.js" defer></script>
 <script src="../scripts/teachany-knowledge-graph.js" defer></script>
 </body>
