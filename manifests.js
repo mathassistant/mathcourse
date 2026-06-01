@@ -92,9 +92,9 @@ var ALL_MANIFESTS = {
     "has_geogebra": false,
     "has_knowledge_graph": true
   },
-  "area-vs-perimeter": {
-    "id": "area-vs-perimeter",
-    "name": "area-vs-perimeter",
+  "面积与周长对比讲解": {
+    "id": "面积与周长对比讲解",
+    "name": "面积与周长对比讲解",
     "subject": "math",
     "grade": "elementary-3",
     "stage": "elementary",
