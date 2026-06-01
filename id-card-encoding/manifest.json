@@ -1,0 +1,58 @@
+{
+  "id": "id-card-encoding",
+  "course_id": "id-card-encoding",
+  "node_id": "math-elementary-encoding-check-digit",
+  "name": "身份证里的数学秘密——编码与校验码",
+  "name_en": "Math Secrets in ID Numbers: Encoding and Check Digits",
+  "subject": "math",
+  "grade": "4",
+  "stage": "elementary",
+  "domain": "applied-math",
+  "lesson_type": "inquiry-project",
+  "status": "community",
+  "author": "TeachAny",
+  "version": "0.4.0",
+  "teachany_version": "7.14.0",
+  "curriculum": "人教版",
+  "description": "拆解身份证18位数字背后的编码秘密！地址码、生日码、顺序码、校验码——每一段都有数学含义。通过动画一步步算出校验码，亲手做错误检测实验，理解编码的数学原理。配有8段Edge Neural TTS音频讲解。",
+  "tags": [
+    "编码",
+    "校验码",
+    "身份证",
+    "模运算",
+    "除法余数",
+    "错误检测"
+  ],
+  "prerequisites": [
+    "math-elementary-multiplication",
+    "math-elementary-division"
+  ],
+  "leads_to": [
+    "math-elementary-error-correction"
+  ],
+  "learning_objectives": [
+    "理解身份证18位编码的结构和各段含义",
+    "掌握校验码的逐步计算方法",
+    "理解校验码的用途：检测输入错误",
+    "能用简化的校验规则自己设计编码方案"
+  ],
+  "assets": {
+    "hero": "assets/hero-infographic.svg",
+    "tts_manifest": "tts/manifest.json",
+    "videos": [],
+    "images": [
+      "assets/hero-infographic.svg"
+    ]
+  },
+  "has_tts": true,
+  "has_video": false,
+  "has_images": true,
+  "has_hero": true,
+  "has_canvas": true,
+  "has_geogebra": false,
+  "has_knowledge_graph": true,
+  "has_ai_tutor": true,
+  "free_mode": true,
+  "created_at": "2026-06-01",
+  "updated_at": "2026-06-01"
+}

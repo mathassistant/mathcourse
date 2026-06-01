@@ -1,0 +1,58 @@
+{
+  "id": "array-to-area",
+  "course_id": "array-to-area",
+  "node_id": "math-elementary-area-rectangle",
+  "name": "从方阵到面积——乘法与几何的奇妙联结",
+  "name_en": "From Array to Area: Multiplication Meets Geometry",
+  "subject": "math",
+  "grade": "3",
+  "stage": "elementary",
+  "domain": "geometry",
+  "lesson_type": "inquiry-project",
+  "status": "community",
+  "author": "TeachAny",
+  "version": "0.2.0",
+  "teachany_version": "7.14.0",
+  "curriculum": "人教版",
+  "description": "通过排方阵的生活场景，找到乘法与面积之间的奇妙联系。每行几人就是长，排了几行就是宽，总数就是面积！三个Canvas互动动画帮你一探究竟。",
+  "tags": [
+    "乘法",
+    "面积",
+    "方阵",
+    "长×宽",
+    "类比思维",
+    "Canvas动画"
+  ],
+  "prerequisites": [
+    "math-elementary-multiplication",
+    "point-line-plane"
+  ],
+  "leads_to": [
+    "perimeter-rectangle-square"
+  ],
+  "learning_objectives": [
+    "理解方阵(矩形排列)与乘法算式的关系",
+    "通过类比发现：每行人数对应长、行数对应宽",
+    "掌握长方形面积 = 长 × 宽",
+    "能用方阵模型解决简单面积问题"
+  ],
+  "assets": {
+    "hero": "assets/hero-infographic.svg",
+    "tts_manifest": "tts/manifest.json",
+    "videos": [],
+    "images": [
+      "assets/hero-infographic.svg"
+    ]
+  },
+  "has_tts": true,
+  "has_video": false,
+  "has_images": true,
+  "has_hero": true,
+  "has_canvas": true,
+  "has_geogebra": false,
+  "has_knowledge_graph": true,
+  "has_ai_tutor": true,
+  "free_mode": false,
+  "created_at": "2026-06-01",
+  "updated_at": "2026-06-01"
+}

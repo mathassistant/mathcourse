@@ -1,0 +1,10 @@
+[
+  {"id":"s01-hero","src":"tts/s01-hero.mp3","size":111744,"label":"hero"},
+  {"id":"s02-what-is-perimeter","src":"tts/s02-what-is-perimeter.mp3","size":109584,"label":"perimeter-demo"},
+  {"id":"s03-discovery-lab","src":"tts/s03-discovery-lab.mp3","size":135360,"label":"discovery"},
+  {"id":"s04-formula","src":"tts/s04-formula.mp3","size":132912,"label":"formula"},
+  {"id":"s05-concepTest","src":"tts/s05-concepTest.mp3","size":156384,"label":"concepTest"},
+  {"id":"s06-practice","src":"tts/s06-practice.mp3","size":152640,"label":"practice"},
+  {"id":"s07-synthesis","src":"tts/s07-synthesis.mp3","size":125136,"label":"synthesis"},
+  {"id":"s08-summary","src":"tts/s08-summary.mp3","size":175680,"label":"summary"}
+]

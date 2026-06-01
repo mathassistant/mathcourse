@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="960" height="520">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f1a2e"/>
+      <stop offset="100%" stop-color="#162441"/>
+    </linearGradient>
+    <linearGradient id="addrGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="birthGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#16a34a"/>
+    </linearGradient>
+    <linearGradient id="seqGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="checkGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="520" fill="url(#bgGrad)" rx="16"/>
+
+  <!-- Title -->
+  <text x="480" y="48" text-anchor="middle" fill="#f8fafc" font-family="sans-serif" font-size="26" font-weight="700">身份证18位编码结构</text>
+  <text x="480" y="74" text-anchor="middle" fill="#9fb4cc" font-family="sans-serif" font-size="14">每一位数字都有特定的数学含义</text>
+
+  <!-- ID card strip -->
+  <rect x="40" y="100" width="880" height="56" rx="10" fill="#1e293b" stroke="#334155" stroke-width="1.5" filter="url(#shadow)"/>
+
+  <!-- Address code (6 digits) -->
+  <rect x="44" y="104" width="290" height="48" rx="7" fill="url(#addrGrad)" opacity="0.92"/>
+  <text x="189" y="124" text-anchor="middle" fill="#fff" font-family="monospace" font-size="22" font-weight="700">1 1 0 1 0 5</text>
+  <text x="189" y="142" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-family="sans-serif" font-size="11">地址码（6位）</text>
+
+  <!-- Birth date (8 digits) -->
+  <rect x="340" y="104" width="386" height="48" rx="7" fill="url(#birthGrad)" opacity="0.92"/>
+  <text x="533" y="124" text-anchor="middle" fill="#fff" font-family="monospace" font-size="22" font-weight="700">2 0 1 0 0 3 1 5</text>
+  <text x="533" y="142" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-family="sans-serif" font-size="11">出生日期码（8位）YYYYMMDD</text>
+
+  <!-- Sequence code (3 digits) -->
+  <rect x="732" y="104" width="112" height="48" rx="7" fill="url(#seqGrad)" opacity="0.92"/>
+  <text x="788" y="124" text-anchor="middle" fill="#fff" font-family="monospace" font-size="22" font-weight="700">0 0 3</text>
+  <text x="788" y="142" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-family="sans-serif" font-size="11">顺序码</text>
+
+  <!-- Check digit (1 digit) - highlighted -->
+  <rect x="850" y="104" width="66" height="48" rx="7" fill="url(#checkGrad)" opacity="0.92"/>
+  <text x="883" y="124" text-anchor="middle" fill="#fff" font-family="monospace" font-size="26" font-weight="900">X</text>
+  <text x="883" y="142" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-family="sans-serif" font-size="10">校验码</text>
+
+  <!-- Arrow from previous 17 digits to check digit -->
+  <path d="M836 128 L848 128" stroke="#a78bfa" stroke-width="2.5" marker-end="url(#arrowPurple)"/>
+  <defs>
+    <marker id="arrowPurple" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0,0 8,3 0,6" fill="#a78bfa"/>
+    </marker>
+  </defs>
+
+  <!-- Segment descriptions row -->
+  <!-- Address -->
+  <rect x="40" y="185" width="200" height="95" rx="10" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.25)" stroke-width="1"/>
+  <text x="140" y="212" text-anchor="middle" fill="#f59e0b" font-family="sans-serif" font-size="15" font-weight="700">🌍 地址码</text>
+  <text x="140" y="235" text-anchor="middle" fill="#9fb4cc" font-family="sans-serif" font-size="11">第1-2位：省份</text>
+  <text x="140" y="254" text-anchor="middle" fill="#9fb4cc" font-family="sans-serif" font-size="11">第3-4位：城市</text>
+  <text x="140" y="273" text-anchor="middle" fill="#9fb4cc" font-family="sans-serif" font-size="11">第5-6位：区县</text>
+
+  <!-- Birth -->
+  <rect x="256" y="185" width="200" height="95" rx="10" fill="rgba(34,197,94,0.08)" stroke="rgba(34,197,94,0.25)" stroke-width="1"/>
+  <text x="356" y="212" text-anchor="middle" fill="#22c55e" font-family="sans-serif" font-size="15" font-weight="700">🎂 生日码</text>
+  <text x="356" y="235" text-anchor="middle" fill="#9fb4cc" font-family="sans-serif" font-size="11">第7-10位：年</text>
+  <text x="356" y="254" text-anchor="middle" fill="#9fb4cc" font-family="sans-serif" font-size="11">第11-12位：月</text>
+  <text x="356" y="273" text-anchor="middle" fill="#9fb4cc" font-family="sans-serif" font-size="11">第13-14位：日</text>
+
+  <!-- Sequence + Gender -->
+  <rect x="472" y="185" width="200" height="95" rx="10" fill="rgba(56,189,248,0.08)" stroke="rgba(56,189,248,0.25)" stroke-width="1"/>
+  <text x="572" y="212" text-anchor="middle" fill="#38bdf8" font-family="sans-serif" font-size="15" font-weight="700">👥 顺序码</text>
+  <text x="572" y="235" text-anchor="middle" fill="#9fb4cc" font-family="sans-serif" font-size="11">第15-16位：派出所编号</text>
+  <text x="572" y="254" text-anchor="middle" fill="#9fb4cc" font-family="sans-serif" font-size="11">第17位：性别</text>
+  <text x="572" y="273" text-anchor="middle" fill="#fbbf24" font-family="sans-serif" font-size="12" font-weight="600">奇数=男 偶数=女</text>
+
+  <!-- Check digit explanation -->
+  <rect x="688" y="185" width="232" height="95" rx="10" fill="rgba(167,139,250,0.08)" stroke="rgba(167,139,250,0.3)" stroke-width="1.5"/>
+  <text x="804" y="212" text-anchor="middle" fill="#a78bfa" font-family="sans-serif" font-size="15" font-weight="700">🔐 校验码（本课重点）</text>
+  <text x="804" y="235" text-anchor="middle" fill="#9fb4cc" font-family="sans-serif" font-size="11">第18位：由前17位算出</text>
+  <text x="804" y="255" text-anchor="middle" fill="#fbbf24" font-family="sans-serif" font-size="12" font-weight="600">加权求和 → 模11 → 查表</text>
+  <text x="804" y="275" text-anchor="middle" fill="#9fb4cc" font-family="sans-serif" font-size="10">作用：检测输入/抄写错误</text>
+
+  <!-- Bottom section: Check digit formula preview -->
+  <rect x="40" y="300" width="880" height="60" rx="10" fill="rgba(167,139,250,0.06)" stroke="rgba(167,139,250,0.2)" stroke-width="1"/>
+  <text x="480" y="325" text-anchor="middle" fill="#a78bfa" font-family="sans-serif" font-size="14" font-weight="600">校验码是怎么算出来的？</text>
+  <text x="480" y="348" text-anchor="middle" fill="#9fb4cc" font-family="monospace" font-size="13">前17位数 × 对应权重 → 求和 → ÷11取余数 → 查表 → 校验码</text>
+
+  <!-- Bottom highlight box -->
+  <rect x="40" y="380" width="880" height="120" rx="10" fill="rgba(34,197,94,0.06)" stroke="rgba(34,197,94,0.2)" stroke-width="1"/>
+  <text x="480" y="410" text-anchor="middle" fill="#22c55e" font-family="sans-serif" font-size="16" font-weight="700">💡 核心思想：冗余信息 = 防错能力</text>
+  <text x="480" y="438" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">所有的编码系统（身份证、条形码、二维码、WiFi密码）</text>
+  <text x="480" y="462" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">都遵循同一个原则：用额外的"校验信息"来保证数据的正确性</text>
+  <text x="480" y="490" text-anchor="middle" fill="#9fb4cc" font-family="sans-serif" font-size="12">这就是密码学、通信、计算机科学最基础的数学思想——而且你现在就能理解它！</text>
+</svg>

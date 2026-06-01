@@ -1,0 +1,54 @@
+{
+  "id": "point-line-plane",
+  "course_id": "point-line-plane",
+  "node_id": "math-g1-point-line-plane",
+  "name": "点线面：几何世界的元老",
+  "name_en": "Points, Lines, and Planes: Foundations of Geometry",
+  "subject": "math",
+  "grade": 3,
+  "stage": "elementary",
+  "domain": "geometry",
+  "lesson_type": "inquiry-project",
+  "status": "community",
+  "author": "TeachAny",
+  "version": "0.2.0",
+  "teachany_version": "7.14.0",
+  "curriculum": "人教版",
+  "description": "小学三年级几何入门探究课。从身边的实物出发，认识点、线、面三个几何基本元素，通过“点动成线”、“线动成面”的动手实验，理解维度递进关系，建立从具象到抽象的几何思维。",
+  "tags": [
+    "几何入门",
+    "点线面",
+    "探究课",
+    "维度",
+    "小学数学"
+  ],
+  "prerequisites": [],
+  "leads_to": [
+    "math-g3-angle-measure",
+    "math-g3-perimeter"
+  ],
+  "learning_objectives": [
+    "能从生活中指认点、线、面的实例，区分记号与数学概念",
+    "能解释“点动成线、线动成面”，用手势或工具演示这一过程",
+    "能说出直线、射线、线段的区别，会正确命名",
+    "能理解“两点确定一条直线”“不共线三点确定一个平面”"
+  ],
+  "assets": {
+    "hero": "assets/point-line-plane-hero.png",
+    "tts_manifest": "tts/manifest.json",
+    "videos": [],
+    "images": [
+      "assets/hero-infographic.svg"
+    ]
+  },
+  "has_tts": true,
+  "has_video": false,
+  "has_images": true,
+  "has_hero": true,
+  "has_canvas": true,
+  "has_knowledge_graph": true,
+  "has_geogebra": true,
+  "free_mode": true,
+  "created_at": "2026-06-01",
+  "updated_at": "2026-06-01"
+}

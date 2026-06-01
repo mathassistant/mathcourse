@@ -1,0 +1,53 @@
+{
+  "id": "perimeter-rectangle-square",
+  "course_id": "perimeter-rectangle-square",
+  "node_id": "math-g3-perimeter",
+  "name": "长方形和正方形的周长",
+  "name_en": "Perimeter of Rectangles and Squares",
+  "subject": "math",
+  "grade": "3",
+  "stage": "elementary",
+  "domain": "geometry",
+  "lesson_type": "inquiry-project",
+  "status": "community",
+  "author": "TeachAny",
+  "version": "1.1.0",
+  "teachany_version": "7.14.0",
+  "curriculum": "人教版",
+  "description": "通过动手探究，发现长方形和正方形周长的计算规律。学生操作互动画布改变图形尺寸，观察周长变化，自主推导公式 C=2×(a+b) 和 C=4a，最终将知识迁移到生活场景。",
+  "tags": [
+    "小学数学",
+    "几何",
+    "周长",
+    "探究学习"
+  ],
+  "prerequisites": [
+    "认识长方形和正方形"
+  ],
+  "leads_to": [
+    "长方形和正方形的面积"
+  ],
+  "learning_objectives": [
+    "理解周长的含义，能指出长方形和正方形的一周",
+    "通过探究发现长方形周长 = 2×(长+宽) 的规律",
+    "推导并掌握正方形周长 = 4×边长",
+    "能运用周长公式解决生活中的实际问题"
+  ],
+  "assets": {
+    "hero": "assets/hero-infographic.svg",
+    "tts_manifest": "tts/manifest.json",
+    "videos": [],
+    "images": [
+      "assets/hero-infographic.svg"
+    ]
+  },
+  "has_tts": true,
+  "has_video": false,
+  "has_images": true,
+  "has_hero": true,
+  "has_canvas": true,
+  "has_knowledge_graph": true,
+  "free_mode": true,
+  "created_at": "2026-06-01",
+  "updated_at": "2026-06-01"
+}

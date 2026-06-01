@@ -1,0 +1,1414 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>身份证里的数学秘密——编码与校验码</title>
+<meta name="description" content="拆解身份证18位数字背后的编码秘密！地址码、生日码、顺序码、校验码——每一段都有数学含义。通过动画一步步算出校验码，亲手做错误检测实验。">
+
+<meta name="course-id" content="id-card-encoding">
+<meta name="course-title" content="身份证里的数学秘密——编码与校验码">
+<meta name="course-subject" content="math">
+<meta name="course-grade" content="elementary-4">
+<meta name="course-prereqs" content="">
+<meta name="course-next" content="">
+<meta name="course-version" content="0.4.0">
+<meta name="teachany-version" content="7.14.0">
+<meta name="teachany-node" content="math-elementary-encoding-check-digit">
+<meta name="teachany-subject" content="math">
+<meta name="teachany-grade" content="4">
+<meta name="teachany-stage" content="elementary">
+<meta name="teachany-domain" content="applied-math">
+<meta name="teachany-prerequisites" content="">
+<meta name="teachany-lesson-type" content="inquiry-project">
+<meta name="teachany-free-mode" content="true">
+
+<link rel="stylesheet" href="../scripts/ai-tutor.css">
+<link rel="stylesheet" href="../scripts/teachany-tutor-card.css">
+<link rel="stylesheet" href="../scripts/teachany-tts-narrator.css">
+<link rel="stylesheet" href="../scripts/teachany-section-hints.css">
+<link rel="stylesheet" href="../scripts/teachany-knowledge-graph.css">
+<link rel="stylesheet" href="../scripts/teachany-audio-player.css">
+
+<style>
+:root {
+  --bg: #07111f;
+  --panel: #101d32;
+  --card: #14233a;
+  --line: #25415f;
+  --text: #eef6ff;
+  --muted: #9fb4cc;
+  --brand: #38bdf8;
+  --brand-2: #a78bfa;
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; max-width: 100%; overflow-x: hidden; scroll-behavior: smooth; }
+body {
+  padding-top: var(--safe-top);
+  padding-bottom: calc(18px + var(--safe-bottom));
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Source Han Sans SC", system-ui, sans-serif;
+  line-height: 1.7;
+  font-size: 16px;
+}
+a { color: #7dd3fc; }
+button, a, input, select, textarea { min-height: 44px; }
+img, video, canvas, svg { max-width: 100%; height: auto; }
+.teachany-brand-bar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 16px;
+  background: rgba(7, 17, 31, .92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(148, 163, 184, .18);
+}
+.brand-logo { display: flex; align-items: center; gap: 8px; color: #f8fafc; text-decoration: none; font-weight: 800; }
+.brand-mark { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, var(--brand), var(--brand-2)); color: #07111f; font-weight: 900; }
+.brand-right { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+.brand-link { text-decoration: none; }
+.brand-version { color: #cbd5e1; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: rgba(255,255,255,.08); padding: 4px 8px; border-radius: 999px; }
+.brand-skill-version { color: #94a3b8; }
+.hero {
+  padding: 64px 20px 38px; text-align: center;
+  background: radial-gradient(circle at 20% 0%, rgba(167,139,250,.22), transparent 36%), radial-gradient(circle at 80% 10%, rgba(245,158,11,.18), transparent 34%);
+}
+h1 { font-size: clamp(28px, 6vw, 48px); line-height: 1.15; margin: 0 auto 16px; max-width: 960px; }
+.subtitle { color: var(--muted); font-size: clamp(16px, 2.8vw, 20px); max-width: 860px; margin: 0 auto; }
+.section { max-width: 1080px; margin: 0 auto; padding: 36px 20px; }
+.card { background: linear-gradient(180deg, rgba(20,35,58,.96), rgba(13,27,47,.96)); border: 1px solid rgba(148,163,184,.18); border-radius: 18px; padding: 22px; box-shadow: 0 16px 40px rgba(0,0,0,.18); }
+.grid, .objectives { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.choice { width: 100%; text-align: left; border: 1px solid rgba(167,139,250,.24); border-radius: 14px; background: rgba(167,139,250,.08); color: var(--text); padding: 14px 16px; cursor: pointer; }
+.choice.selected { border-color: var(--brand-2); box-shadow: 0 0 0 3px rgba(167,139,250,.18); }
+.phase-tag { display: inline-flex; align-items: center; gap: 6px; color: #c4b5fd; background: rgba(167,139,250,.12); border: 1px solid rgba(167,139,250,.25); border-radius: 999px; padding: 4px 10px; font-size: 13px; }
+.ta-standard-figure { margin: 24px auto 0; max-width: 980px; }
+.ta-standard-figure img { display: block; width: 100%; border-radius: 18px; border: 1px solid rgba(148,163,184,.18); background: #0b1628; }
+.ta-standard-figure figcaption { margin-top: 10px; color: var(--muted); font-size: 14px; text-align: center; }
+.canvas-wrap { overflow: auto; background: #081426; border: 1px solid rgba(148,163,184,.18); border-radius: 16px; padding: 12px; }
+.result { padding: 14px; border-radius: 12px; background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.25); }
+.warn { background: rgba(245,158,11,.1); border-color: rgba(245,158,11,.28); }
+.info { background: rgba(56,189,248,.1); border-color: rgba(56,189,248,.25); }
+.purple { background: rgba(167,139,250,.1); border-color: rgba(167,139,250,.25); }
+.quiz-option { display: block; width: 100%; text-align: left; border: 1px solid var(--line); border-radius: 10px; background: rgba(20,35,58,.4); color: var(--text); padding: 10px 14px; margin: 6px 0; cursor: pointer; font-size: 15px; }
+.quiz-option.correct { border-color: var(--ok); background: rgba(34,197,94,.15); }
+.quiz-option.wrong { border-color: #ef4444; background: rgba(239,68,68,.15); }
+.quiz-feedback { font-size: 13px; margin-top: 4px; }
+.step-indicator { display: flex; align-items: center; gap: 6px; margin: 10px 0; flex-wrap: wrap; }
+.step-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--line); transition: all .3s; }
+.step-dot.done { background: var(--ok); }
+.step-dot.active { background: var(--brand-2); box-shadow: 0 0 8px rgba(167,139,250,.5); }
+.step-dot.current { background: var(--warn); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+.highlight-num { display: inline-block; background: rgba(167,139,250,.2); border: 1px solid rgba(167,139,250,.35); border-radius: 6px; padding: 2px 8px; font-family: monospace; font-size: 15px; color: var(--brand-2); font-weight:700; margin: 0 2px; }
+.id-digit-btn { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 44px; border-radius: 8px; border: 1px solid var(--line); background: rgba(20,35,58,.5); color: var(--text); font-family: monospace; font-size: 18px; font-weight: 700; cursor: pointer; transition: all .2s; }
+.id-digit-btn:hover { border-color: var(--brand-2); background: rgba(167,139,250,.15); }
+.id-digit-btn.valid { border-color: var(--ok); background: rgba(34,197,94,.15); color: var(--ok); }
+.id-digit-btn.invalid { border-color: #ef4444; background: rgba(239,68,68,.15); color: #ef4444; }
+.id-digit-btn.selected { border-color: var(--warn); box-shadow: 0 0 0 3px rgba(245,158,11,.25); }
+@media (max-width: 600px) {
+  .teachany-brand-bar { padding: 8px 12px; }
+  .brand-name { display: none; }
+  .brand-right { gap: 8px; font-size: 12px; }
+  .hero { padding: 42px 16px 28px; }
+  .section { padding: 26px 16px; }
+  .grid, .objectives { grid-template-columns: 1fr !important; }
+  .card { padding: 18px; border-radius: 16px; }
+  h2 { font-size: 22px; }
+  canvas.wide-canvas { min-width: 700px; }
+  .id-digit-btn { width: 30px; height: 38px; font-size: 14px; }
+}
+</style>
+</head>
+<body>
+<div class="teachany-brand-bar">
+  <a class="brand-logo" href="https://weponusa.github.io/teachany/" aria-label="TeachAny Gallery">
+    <img src="https://weponusa.github.io/teachany-courseware/assets/teachany-logo.png" alt="TeachAny" style="width:26px;height:26px;border-radius:7px;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-grid'"><span class="brand-mark" style="display:none">T</span><span class="brand-name">TeachAny</span>
+  </a>
+  <div class="brand-right">
+    <a class="brand-link" href="https://weponusa.github.io/teachany/">Gallery</a>
+    <span class="brand-version">v<span id="course-version-display">0.1.0</span><span class="brand-skill-version"> · skill v<span id="skill-version-display">7.14.0</span></span></span>
+  </div>
+</div>
+
+<header class="hero" id="hero" data-tts="hero" data-tsh="开场 - 身份证为什么是18位？最后一位X是什么意思？">
+  <h1>身份证里的数学秘密<br>编码与校验码</h1>
+  <p class="subtitle">11010520100315003<b style="color:#a78bfa">X</b> —— 这18位数字不是随便写的。每一位都有含义，最后一位更是由前17位通过精密的数学规则算出来的。来，一起揭开编码的数学原理！</p>
+</header>
+
+<!-- 音频播放列表配置 -->
+<div id="audio-config" data-teachany-audio hidden>
+  <script type="application/json" data-teachany-audio-playlist>
+[
+  {"id":"s01-hero","src":"tts/s01-hero.mp3","label":"开场引入","target":"hero"},
+  {"id":"s02-decode","src":"tts/s02-decode.mp3","label":"解码身份证","target":"decode-id"},
+  {"id":"s03-check-idea","src":"tts/s03-check-idea.mp3","label":"校验思想","target":"check-idea"},
+  {"id":"s04-calc-animation","src":"tts/s04-calc-animation.mp3","label":"校验码计算","target":"check-digit-calc","syncConfig":{"type":"canvas-step","canvasId":"canvas-checkdigit","totalSteps":13}},
+  {"id":"s05-mod11","src":"tts/s05-mod11.mp3","label":"模11详解","target":"mod11-detail","syncConfig":{"type":"canvas-step","canvasId":"canvas-mod11","totalSteps":19}},
+  {"id":"s06-error-lab","src":"tts/s06-error-lab.mp3","label":"错误检测实验","target":"error-lab","syncConfig":{"type":"timeline-events","canvasId":"error-lab-demo","events":[{"t":0,"action":"reset"},{"t":7,"action":"randomError"},{"t":15,"action":"reset"},{"t":19,"action":"randomError"},{"t":22,"action":"reset"}]}},
+  {"id":"s07-x-meaning","src":"tts/s07-x-meaning.mp3","label":"X的含义","target":"common-mistakes"},
+  {"id":"s08-summary","src":"tts/s08-summary.mp3","label":"课堂小结","target":"summary"}
+]
+  </script>
+</div>
+
+<section class="section" id="hero-infographic" data-tsh="知识结构主图 - 身份证18位编码结构全景">
+  <figure class="ta-standard-figure">
+    <img class="hero-cover-img" src="./assets/hero-infographic.svg" alt="身份证编码结构知识图">
+    <figcaption>身份证18位编码结构：地址码(6位)+出生日期码(8位)+顺序码(3位)+校验码(1位)——每一段的数学含义一览</figcaption>
+  </figure>
+</section>
+
+<!-- ===== ABT 叙事引入 ===== -->
+<section class="section" id="abt-narrative" data-tsh="ABT叙事 - 校验码为什么不是随便写的？">
+  <div class="card">
+    <span class="phase-tag">Why Learn This?</span>
+    <h2>一个身份证号引发的数学问题</h2>
+    <p>填写资料时，你把身份证<strong>第15位</strong>写错了——把"3"写成了"8"。<br>工作人员能发现吗？</p>
+    <p style="color:var(--warn);font-weight:600">能！因为最后一位校验码不匹配。</p>
+    <p style="color:var(--muted)"><strong>And</strong> 身份证有18位。<strong>But</strong> 第18位由前17位算出。<strong>Therefore</strong> 写错数字→校验码对不上→错误被发现！</p>
+    <div class="result purple" style="margin-top:12px">
+      <strong>本课核心问题：</strong>最后一位"校验码"到底怎么算出来的？为什么它能检测错误？
+    </div>
+  </div>
+</section>
+
+<section id="problem-anchor" class="section" data-tts="problem-anchor" data-tsh="问题锚点 - 选一个你关心的问题">
+  <div class="card">
+    <span class="phase-tag">Problem Anchor</span>
+    <h2>今天的课件可以帮你解决什么问题？</h2>
+    <p style="color:var(--muted)">先选一个你关心的问题。后面的例子、提示和 AI 学伴都会围绕这个问题来帮你推进。</p>
+    <div class="grid" id="problem-anchor-choices">
+      <button class="choice" data-anchor-choice="身份证为什么是18位？能随便编一个吗？">身份证为什么是18位？能随便编一个吗？</button>
+      <button class="choice" data-anchor-choice="最后一位校验码是怎么算出来的？X是什么意思？">最后一位校验码是怎么算出来的？X是什么意思？</button>
+      <button class="choice" data-anchor-choice="如果抄错一个数字，能被发现吗？">如果抄错一个数字，能被发现吗？</button>
+    </div>
+    <label style="display:block;margin-top:18px;color:var(--muted)">我有自己的问题
+      <input id="learner-question-input" placeholder="把你卡住的问题写在这里">
+    </label>
+    <p id="anchor-feedback" class="result warn" style="margin-top:14px">选择或输入后，本课会围绕你的问题展开。</p>
+  </div>
+</section>
+
+<section id="objectives" class="section" data-tts="objectives" data-tsh="学习目标">
+  <div class="card">
+    <span class="phase-tag">Learning Objectives</span>
+    <h2>学习目标</h2>
+    <ul class="objectives">
+      <li>理解身份证18位编码的结构和各段含义</li>
+      <li>掌握校验码的逐步计算方法（加权求和→模运算→查表）</li>
+      <li>理解校验码的用途：检测输入/抄写错误</li>
+      <li>能用简化的校验规则自己设计编码方案</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== 前测 ===== -->
+<section class="section" id="pretest" data-tsh="前测 - 看看你对编码和余数的了解">
+  <div class="card">
+    <span class="phase-tag">Pre-Test</span>
+    <h2>课前小测</h2>
+    <p style="color:var(--muted)">3道题，看看你对编码和余数了解多少。不会也没关系，学完这节课你就都明白了！</p>
+    <div id="pretest-quiz"></div>
+  </div>
+</section>
+
+<!-- ===== 模块1：解码身份证 ===== -->
+<section class="section" id="decode-id" data-tts="s02-decode" data-tsh="模块1 - 解码身份证的18位结构">
+  <div class="card">
+    <span class="phase-tag">Core Concept</span>
+    <h2>第一步：解码身份证的18位数字</h2>
+    <p>我们先不急着算校验码，先来看看身份证的18位数字<strong>分别代表什么</strong>。</p>
+
+    <!-- 虚拟身份证卡片 -->
+    <div style="background:#0f1a2e;border-radius:14px;padding:20px;margin:16px 0;text-align:center;border:1px solid #1e3a5f">
+      <div style="font-size:12px;color:#64748b;margin-bottom:8px">📇 示例身份证号</div>
+      <div style="display:flex;justify-content:center;gap:4px;flex-wrap:wrap;font-family:monospace;font-size:22px;font-weight:700">
+        <!-- Address code -->
+        <span style="color:#f59e0b">1</span><span style="color:#f59e0b">1</span><span style="color:#f59e0b">0</span><span style="color:#f59e0b">1</span><span style="color:#f59e0b">0</span><span style="color:#f59e0b">5</span>
+        <!-- Birth -->
+        <span style="color:#22c55e">2</span><span style="color:#22c55e">0</span><span style="color:#22c55e">1</span><span style="color:#22c55e">0</span><span style="color:#22c55e">0</span><span style="color:#22c55e">3</span><span style="color:#22c55e">1</span><span style="color:#22c55e">5</span>
+        <!-- Sequence -->
+        <span style="color:#38bdf8">0</span><span style="color:#38bdf8">0</span><span style="color:#38bdf8">3</span>
+        <!-- Check -->
+        <span style="color:#a78bfa;font-size:26px">X</span>
+      </div>
+      <div style="display:flex;justify-content:center;gap:4px;margin-top:6px;flex-wrap:wrap;font-size:11px">
+        <span style="padding:2px 12px;background:rgba(245,158,11,.15);border-radius:6px;color:#f59e0b">地址码 6位</span>
+        <span style="padding:2px 12px;background:rgba(34,197,94,.15);border-radius:6px;color:#22c55e">生日码 8位</span>
+        <span style="padding:2px 12px;background:rgba(56,189,248,.15);border-radius:6px;color:#38bdf8">顺序码 3位</span>
+        <span style="padding:2px 12px;background:rgba(167,139,250,.15);border-radius:6px;color:#a78bfa">校验码 1位</span>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:16px">
+      <div class="card" style="background:rgba(245,158,11,.05);border-color:rgba(245,158,11,.2)">
+        <h3 style="color:#f59e0b">🌍 地址码（第1-6位）</h3>
+        <p style="font-size:14px;color:var(--muted)">11 = 北京市<br>01 = 市辖区<br>05 = 朝阳区</p>
+        <p style="font-size:13px;color:var(--muted)">编码规则：省→市→区，逐层缩小</p>
+      </div>
+      <div class="card" style="background:rgba(34,197,94,.05);border-color:rgba(34,197,94,.2)">
+        <h3 style="color:#22c55e">🎂 生日码（第7-14位）</h3>
+        <p style="font-size:14px;color:var(--muted)">2010 = 年<br>03 = 月<br>15 = 日</p>
+        <p style="font-size:13px;color:var(--muted)">8位数字 = 一个完整的日期</p>
+      </div>
+      <div class="card" style="background:rgba(56,189,248,.05);border-color:rgba(56,189,248,.2)">
+        <h3 style="color:#38bdf8">👥 顺序码（第15-17位）</h3>
+        <p style="font-size:14px;color:var(--muted)">003 = 当天出生第3人</p>
+        <p style="font-size:13px;color:var(--muted)"><strong>第17位看性别：</strong>奇数→男，偶数→女</p>
+      </div>
+      <div class="card" style="background:rgba(167,139,250,.05);border-color:rgba(167,139,250,.25)">
+        <h3 style="color:#a78bfa">🔐 校验码（第18位）</h3>
+        <p style="font-size:14px;color:var(--muted)">由前17位<strong>算出来</strong>的</p>
+        <p style="font-size:13px;color:var(--muted)">不是随便填的！× ≠ 乘号，代表数字10</p>
+      </div>
+    </div>
+
+    <div class="result" style="margin-top:16px">
+      <strong>关键发现：</strong>前17位都是<strong>信息编码</strong>——用数字表示地址、生日等。第18位是<strong>校验信息</strong>——专门用来检查前面的数字有没有写错。
+    </div>
+  </div>
+</section>
+
+<!-- ===== 模块2：从除9验算到校验思想 ===== -->
+<section class="section" id="check-idea" data-tts="s03-check-idea" data-tsh="模块2 - 从除9验算理解校验思想">
+  <div class="card">
+    <span class="phase-tag">From Known to New</span>
+    <h2>第二步：从"除9验算"理解校验思想</h2>
+    <p>同学们，你们已经学过：<strong>一个数的各位数字之和能被9整除，这个数就能被9整除。</strong></p>
+
+    <div class="result info" style="margin-top:12px">
+      <strong>回忆一下：</strong><br>
+      123 能不能被 9 整除？<br>
+      → 1+2+3 = 6，6 不能被 9 整除 → 所以 123 不能被 9 整除<br>
+      <span style="color:var(--muted);font-size:13px">我们不需要真的做除法！看各位数字之和就能判断。</span>
+    </div>
+
+    <p style="margin-top:16px">这就是<strong style="color:var(--brand-2)">"校验"</strong>的思想：</p>
+    <div class="grid" style="margin-top:12px">
+      <div class="card" style="background:rgba(34,197,94,.05);border-color:rgba(34,197,94,.25)">
+        <h3 style="color:var(--ok)">普通的"检验"</h3>
+        <p style="font-size:14px;color:var(--muted)">用额外计算来判断原始计算是否正确</p>
+        <p style="font-size:13px;color:var(--muted)">例：乘法用除法验算</p>
+      </div>
+      <div class="card" style="background:rgba(167,139,250,.05);border-color:rgba(167,139,250,.25)">
+        <h3 style="color:var(--brand-2)">编码的"校验"</h3>
+        <p style="font-size:14px;color:var(--muted)">在数据末尾<strong>多加一位数字</strong>，这个数字由前面的数据按规则算出</p>
+        <p style="font-size:13px;color:var(--muted)">如果数据被改动了，校验位就对不上了！</p>
+      </div>
+    </div>
+
+    <div class="result purple" style="margin-top:16px">
+      <strong>理解校验码：</strong><br>
+      校验码就像数据的<strong style="color:var(--warn)">"防伪标签"</strong>——它根据前面的数据算出来。如果有人改了数据，标签就对不上了。
+    </div>
+  </div>
+</section>
+
+<!-- ===== 模块3：校验码计算动画 ===== -->
+<section class="section" id="check-digit-calc" data-tts="s04-calc-animation" data-tsh="模块3 - 校验码计算完整动画演示">
+  <div class="card">
+    <span class="phase-tag">Core Animation</span>
+    <h2>第三步：校验码计算 —— 完整动画演示</h2>
+    <p>现在让我们一步步<strong>目睹</strong>校验码是怎么算出来的。我们用一个简化的10位学号示例（原理与18位身份证完全一样）：</p>
+
+    <div style="background:#0f1a2e;border-radius:12px;padding:14px;margin:12px 0;border:1px solid #1e3a5f">
+      <p style="margin:0;font-size:14px;color:var(--muted)"><strong style="color:var(--text)">演示学号：</strong><span style="font-family:monospace;font-size:16px;color:var(--warn)">2 0 2 4 1 5 0 3 0 1</span></p>
+      <p style="margin:4px 0 0;font-size:13px;color:var(--muted)">计算它的校验码（简化版：各位数字之和 ÷ 9 的余数）</p>
+    </div>
+
+    <!-- Step indicators -->
+    <div class="step-indicator">
+      <span style="font-size:12px;color:var(--muted)">计算步骤：</span>
+      <span class="step-dot" id="step1-dot" title="各位求和"></span>
+      <span style="font-size:11px;color:var(--muted)">→</span>
+      <span class="step-dot" id="step2-dot" title="÷9取余"></span>
+      <span style="font-size:11px;color:var(--muted)">→</span>
+      <span class="step-dot" id="step3-dot" title="余数=校验码"></span>
+    </div>
+
+    <div class="canvas-wrap" style="text-align:center">
+      <canvas id="canvas-checkdigit" width="880" height="340" class="wide-canvas"></canvas>
+      <div style="margin-top:10px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button id="btn-play-calc" style="padding:8px 20px;border-radius:20px;border:none;background:var(--brand-2);color:#fff;font-weight:700;cursor:pointer">▶ 自动播放完整计算</button>
+        <button id="btn-step-calc" style="padding:8px 20px;border-radius:20px;border:1px solid var(--brand-2);background:rgba(167,139,250,.1);color:var(--brand-2);cursor:pointer">⏭ 分步演示</button>
+        <button id="btn-reset-calc" style="padding:8px 20px;border-radius:20px;border:1px solid var(--muted);background:transparent;color:var(--muted);cursor:pointer">↺ 重置</button>
+      </div>
+    </div>
+
+    <div id="calc-status" style="margin-top:12px;text-align:center;font-size:15px;min-height:24px;color:var(--muted)">点击"自动播放"或"分步演示"开始计算</div>
+    <div id="calc-formula" style="margin-top:8px;text-align:center;font-family:monospace;font-size:14px;color:var(--brand-2);min-height:20px"></div>
+  </div>
+</section>
+
+<!-- ===== 模块4：国标模11计算详解 ===== -->
+<section class="section" id="mod11-detail" data-tts="s05-mod11" data-tsh="模块4 - 国标模11校验码逐步详解">
+  <div class="card">
+    <span class="phase-tag">Deep Dive</span>
+    <h2>第四步：国标模11校验码详解</h2>
+    <p>上面我们用了简化版的"数字之和÷9"来理解原理。真正的身份证用的是一种更精密的算法——<strong style="color:var(--brand-2)">模11加权校验</strong>。</p>
+
+    <div class="result info" style="margin-top:12px">
+      <strong>为什么是"模11"而不是"模9"？</strong><br>
+      模11的检错能力更强！它能检测出<strong>绝大多数</strong>的单个数字错误和相邻数字交换错误——这正是身份证录入时最常见的错误类型。
+    </div>
+
+    <p style="margin-top:16px">真正的身份证校验码计算分为<strong>三步</strong>：</p>
+
+    <div class="grid" style="margin-top:12px">
+      <div class="card" style="background:rgba(245,158,11,.05);border-color:rgba(245,158,11,.25)">
+        <h3 style="color:var(--warn)">步骤一：加权求和</h3>
+        <p style="font-size:13px;color:var(--muted)">前17位数字分别乘以<strong>固定的权重</strong>：</p>
+        <p style="font-size:11px;color:var(--muted);font-family:monospace">权重 = 7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2</p>
+        <p style="font-size:13px;color:var(--muted)">每一位：数字 × 权重 → 全部加起来</p>
+      </div>
+      <div class="card" style="background:rgba(167,139,250,.05);border-color:rgba(167,139,250,.25)">
+        <h3 style="color:var(--brand-2)">步骤二：模11取余</h3>
+        <p style="font-size:13px;color:var(--muted)">总和 ÷ 11 → 取<strong>余数</strong>（0~10）</p>
+        <p style="font-size:13px;color:var(--muted)">为什么是11？因为11是质数，检错能力最强</p>
+      </div>
+      <div class="card" style="background:rgba(34,197,94,.05);border-color:rgba(34,197,94,.25)">
+        <h3 style="color:var(--ok)">步骤三：查表映射</h3>
+        <p style="font-size:13px;color:var(--muted)">余数 0→1, 1→0, 2→X, 3→9, 4→8...</p>
+        <p style="font-size:13px;color:var(--muted)">X = 罗马数字10，因为校验码只能占1位！</p>
+      </div>
+    </div>
+
+    <!-- Full calculation with visualization -->
+    <div class="canvas-wrap" style="text-align:center;margin-top:16px">
+      <canvas id="canvas-mod11" width="920" height="420" class="wide-canvas"></canvas>
+      <div style="margin-top:10px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button id="btn-mod11-auto" style="padding:8px 20px;border-radius:20px;border:none;background:var(--brand-2);color:#fff;font-weight:700;cursor:pointer">▶ 自动演示模11计算</button>
+        <button id="btn-mod11-step" style="padding:8px 20px;border-radius:20px;border:1px solid var(--brand-2);background:rgba(167,139,250,.1);color:var(--brand-2);cursor:pointer">⏭ 逐位计算</button>
+        <button id="btn-mod11-reset" style="padding:8px 20px;border-radius:20px;border:1px solid var(--muted);background:transparent;color:var(--muted);cursor:pointer">↺ 重置</button>
+      </div>
+    </div>
+    <div id="mod11-status" style="margin-top:12px;text-align:center;font-size:15px;min-height:24px;color:var(--muted)">点击按钮观看模11校验码的完整计算过程</div>
+  </div>
+</section>
+
+<!-- ===== 模块5：错误检测实验室 ===== -->
+<section class="section" id="error-lab" data-tts="s06-error-lab" data-tsh="模块5 - 错误检测互动实验室">
+  <div class="card">
+    <span class="phase-tag">Interactive Lab</span>
+    <h2>第五步：错误检测实验室 —— 亲手试试！</h2>
+    <p>现在轮到你动手了！下面这串数字是一个<strong>10位学号+1位校验码</strong>（简化版规则：前10位之和 ÷ 9 的余数 = 校验码）。</p>
+    <p style="color:var(--muted);font-size:14px">点击任意一位数字来修改它，看看校验码能不能发现你改错了！</p>
+
+    <!-- Clickable digits -->
+    <div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:16px 0;align-items:center" id="error-lab-digits">
+      <!-- Generated by JS -->
+    </div>
+    <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:12px 0">
+      <button id="btn-random-error" style="padding:8px 18px;border-radius:20px;border:1px solid #ef4444;background:rgba(239,68,68,.1);color:#ef4444;cursor:pointer;font-weight:600">🎲 随机写错一位</button>
+      <button id="btn-reset-error" style="padding:8px 18px;border-radius:20px;border:1px solid var(--muted);background:transparent;color:var(--muted);cursor:pointer">↺ 恢复正确值</button>
+    </div>
+
+    <div id="error-lab-result" style="text-align:center;font-size:16px;min-height:30px;padding:10px;border-radius:10px;margin-top:8px"></div>
+
+    <div class="result purple" style="margin-top:12px">
+      <strong>思考：</strong><br>
+      1. 改一位数字后，校验码一定对不上吗？<br>
+      2. 如果同时改<strong>两位</strong>数字，有没有可能"碰巧"通过校验？<br>
+      3. 这就是为什么真正的身份证用<strong>加权模11</strong>而不是简单求和——它让"碰巧通过"的概率变得极低！
+    </div>
+  </div>
+</section>
+
+<!-- ===== ConcepTest ===== -->
+<section class="section" id="conceptest" data-tsh="ConcepTest - 概念理解检查">
+  <div class="card">
+    <span class="phase-tag">Concept Check</span>
+    <h2>概念检查：你真的理解了吗？</h2>
+    <div id="conceptest-quiz"></div>
+  </div>
+</section>
+
+<!-- ===== 后测 ===== -->
+<section class="section" id="posttest" data-tsh="后测 - 对比前测看进步">
+  <div class="card">
+    <span class="phase-tag">Post-Test</span>
+    <h2>课后检测</h2>
+    <p style="color:var(--muted)">学完了，再来测一次！和前测对比，看看进步了多少。</p>
+    <div id="posttest-quiz"></div>
+  </div>
+</section>
+
+<!-- ===== 分层练习 ===== -->
+<section class="section" id="tiered-practice" data-tsh="三段式分层练习 - 基础→进阶→挑战">
+  <div class="card">
+    <span class="phase-tag">Practice</span>
+    <h2>分层练习：选你的挑战级别</h2>
+
+    <div class="result" style="margin-bottom:16px">
+      <h3>Level 1 · 基础</h3>
+      <p>1. 身份证第7-14位代表什么信息？<br>
+      2. 身份证最后一位校验码是随便写的吗？它有什么作用？<br>
+      3. 学号 2+0+2+4+0+3+0+1 = 12，12÷9 余数是 3。校验码是多少？</p>
+      <p id="tier1-feedback" style="font-size:13px;color:var(--muted)"></p>
+      <button id="tier1-check" style="margin-top:8px;padding:6px 14px;border-radius:8px;border:1px solid var(--ok);background:rgba(34,197,94,.1);color:var(--ok);cursor:pointer">我完成了，检查一下</button>
+    </div>
+
+    <div class="result warn" style="margin-bottom:16px">
+      <h3>Level 2 · 进阶</h3>
+      <p>1. 身份证第17位看性别，奇数=男。532末位2是偶数，猜性别？<br>
+      2. 学号前10位=1020304050，数字之和÷9余几？校验码是几？<br>
+      3. 为什么说校验码像"快递封条"？用自己的话解释。</p>
+      <p id="tier2-feedback" style="font-size:13px;color:var(--muted)"></p>
+      <button id="tier2-check" style="margin-top:8px;padding:6px 14px;border-radius:8px;border:1px solid var(--warn);background:rgba(245,158,11,.1);color:var(--warn);cursor:pointer">我完成了，检查一下</button>
+    </div>
+
+    <div class="result purple">
+      <h3>Level 3 · 挑战</h3>
+      <p>1. 设计一个6位学号编码方案（入学年份2位+班级2位+序号2位），加1位校验码（各位之和÷7的余数）。写出完整7位学号。<br>
+      2. 简化规则下原始之和=18，校验码=0。把某一位加9，校验码变吗？说明什么问题？<br>
+      3. 身份证用"加权求和"而不用"简单求和"，有什么好处？</p>
+      <p id="tier3-feedback" style="font-size:13px;color:var(--muted)"></p>
+      <button id="tier3-check" style="margin-top:8px;padding:6px 14px;border-radius:8px;border:1px solid var(--brand-2);background:rgba(167,139,250,.1);color:var(--brand-2);cursor:pointer">我完成了，检查一下</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 易错点 ===== -->
+<section class="section" id="common-mistakes" data-tts="s07-x-meaning" data-tsh="易错点提醒">
+  <div class="card">
+    <span class="phase-tag">Common Mistakes</span>
+    <h2>小心！这3个坑最容易踩</h2>
+    <div class="grid" style="margin-top:16px">
+      <div class="card" style="background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2)">
+        <h3 style="color:#ef4444">坑1：X不是乘号！</h3>
+        <p style="font-size:13px;color:var(--muted)">X 是罗马数字 <strong>10</strong>。因为校验码占1位，10没法用"10"两个字符表示，就用X代替。</p>
+      </div>
+      <div class="card" style="background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2)">
+        <h3 style="color:#ef4444">坑2：校验码只能"发现"错误，不能"纠正"</h3>
+        <p style="font-size:13px;color:var(--muted)">校验码能告诉你"数据有问题"，但不能告诉你是哪一位错了。更高级的编码（如二维码）才有纠错能力。</p>
+      </div>
+      <div class="card" style="background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2)">
+        <h3 style="color:#ef4444">坑3：权重≠随便选</h3>
+        <p style="font-size:13px;color:var(--muted)">权重 7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2 不是乱来的——它们经过了精心设计，确保能检测到最常见的错误模式。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 五镜头深层理解 ===== -->
+<section class="section" id="five-lenses" data-tsh="五镜头深层理解 - 从不同角度看校验码">
+  <div class="card">
+    <span class="phase-tag">Deep Understanding</span>
+    <h2>换个角度理解：五镜头看校验码</h2>
+    <div class="grid" style="margin-top:16px">
+      <div class="card" style="background:rgba(245,158,11,.05);border-color:rgba(245,158,11,.25)">
+        <h3 style="color:var(--warn)">🔢 数学视角</h3>
+        <p style="font-size:13px;color:var(--muted)">模运算：加权求和→除11取余→查表。核心是"用一个数学规则把17位压缩成1位"。</p>
+      </div>
+      <div class="card" style="background:rgba(34,197,94,.05);border-color:rgba(34,197,94,.25)">
+        <h3 style="color:var(--ok)">🔐 安全视角</h3>
+        <p style="font-size:13px;color:var(--muted)">防伪手段。如果不知道校验算法，就算改了一个数字也无法让它通过验证。</p>
+      </div>
+      <div class="card" style="background:rgba(56,189,248,.05);border-color:rgba(56,189,248,.25)">
+        <h3 style="color:var(--brand)">📡 通信视角</h3>
+        <p style="font-size:13px;color:var(--muted)">发送方附加校验码→接收方验证。互联网每个数据包都有校验——你每天都在用它！</p>
+      </div>
+      <div class="card" style="background:rgba(167,139,250,.05);border-color:rgba(167,139,250,.25)">
+        <h3 style="color:var(--brand-2)">🏗 设计视角</h3>
+        <p style="font-size:13px;color:var(--muted)">好的编码要平衡：信息密度、唯一性、检错能力。身份证18位是精妙的设计。</p>
+      </div>
+      <div class="card" style="background:rgba(245,158,11,.05);border-color:rgba(245,158,11,.25)">
+        <h3 style="color:var(--warn)">🎯 生活视角</h3>
+        <p style="font-size:13px;color:var(--muted)">填表时写错身份证号→系统提示"号码错误"→这就是校验码在保护你！</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 小结 ===== -->
+<section class="section" id="summary" data-tts="s08-summary" data-tsh="小结 - 回顾整节课">
+  <div class="card">
+    <span class="phase-tag">Summary</span>
+    <h2>小结：你今天学到了什么？</h2>
+    <div class="result">
+      <strong>核心知识：</strong><br>
+      1. 身份证18位 = <strong>地址(6)+生日(8)+顺序(3)+校验(1)</strong> —— 每一段都是精密的编码<br>
+      2. 校验码 = <strong>前17位 → 加权求和 → 模11取余 → 查表</strong> —— 一个完整的数学计算<br>
+      3. 校验码的作用 = <strong>检测错误</strong>，就像数据的"防伪标签"<br>
+      4. 所有编码系统（条形码、二维码、通信协议）都基于这个思想
+    </div>
+    <div class="result purple" style="margin-top:12px">
+      <strong>最重要的收获：</strong><br>
+      数学不只是做题——它渗透在我们生活的每一个角落。连你每天带着的身份证，都藏着一套精密的数学算法。
+    </div>
+    <p style="margin-top:12px;color:var(--muted)">学会用"校验"思维看待数据——这在密码学、计算机科学中会再次出现。</p>
+  </div>
+</section>
+
+<!-- ===== 知识图谱 ===== -->
+<section class="section" id="knowledge-graph" data-tts="knowledge-graph" data-tsh="知识图谱">
+  <div class="card">
+    <span class="phase-tag">Knowledge Graph</span>
+    <h2>知识图谱</h2>
+    <p style="color:var(--muted)">本节点的前置、后续和同域知识。</p>
+    <div data-teachany-kg="math-elementary-encoding-check-digit">
+      <canvas class="tkg-fallback-canvas" width="720" height="120" aria-label="知识图谱互动画布占位" style="display:block;width:100%;max-height:140px;border-radius:12px;"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AI 学伴 ===== -->
+<section class="section" id="teachany-ai-tutor-card" data-tts="ai-tutor" data-tsh="AI 学伴">
+  <div data-teachany-tutor-card></div>
+</section>
+
+<script>
+window.__TEACHANY_LEARNER_QUESTION__ = '';
+window.__TEACHANY_TUTOR_CONFIG__ = {
+  courseId: 'id-card-encoding',
+  courseTitle: '身份证里的数学秘密——编码与校验码',
+  subject: 'math',
+  grade: '4',
+  nodeId: 'math-elementary-encoding-check-digit',
+  lessonType: 'inquiry-project',
+  freeMode: true,
+  getLearnerQuestion: () => window.__TEACHANY_LEARNER_QUESTION__ || '',
+  getContext: () => {
+    var current = document.querySelector('section.current-section') || (location.hash ? document.querySelector(location.hash) : null);
+    return (current || document.body).innerText.slice(0, 3000);
+  }
+};
+
+function setTeachAnyLearnerQuestion(question) {
+  window.__TEACHANY_LEARNER_QUESTION__ = question || '';
+  var feedback = document.getElementById('anchor-feedback');
+  if (feedback) feedback.textContent = question ? '你的问题：' + question : '选择或输入后，本课会围绕你的问题展开。';
+}
+
+document.querySelectorAll('[data-anchor-choice]').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('[data-anchor-choice]').forEach(function(item) { item.classList.remove('selected'); });
+    btn.classList.add('selected');
+    setTeachAnyLearnerQuestion(btn.getAttribute('data-anchor-choice') || btn.textContent.trim());
+  });
+});
+document.getElementById('learner-question-input').addEventListener('input', function(event) {
+  setTeachAnyLearnerQuestion(event.target.value.trim());
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  var courseVersion = document.querySelector('meta[name="course-version"]').content;
+  var skillVersion = document.querySelector('meta[name="teachany-version"]').content;
+  if (courseVersion) document.getElementById('course-version-display').textContent = courseVersion;
+  if (skillVersion) document.getElementById('skill-version-display').textContent = skillVersion.replace(/^v/, '');
+});
+</script>
+
+<!-- =============================================
+     Canvas 1: 校验码计算动画（简化版：求和÷9）
+     ============================================= -->
+<script>
+(function() {
+  var canvas = document.getElementById('canvas-checkdigit');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var digits = [2,0,2,4,1,5,0,3,0,1];
+  var n = digits.length;
+  var currentStep = 0; // 0=nothing, 1..n=showing each digit's add, n+1=showing sum, n+2=division, n+3=result
+
+  var animTimer = null;
+  var isPlaying = false;
+  var stepDelay = 700;
+
+  // Colors
+  var C_SUM = '#f59e0b';
+  var C_MUTED = '#64748b';
+  var C_TEXT = '#eef6ff';
+  var C_HIGHLIGHT = '#a78bfa';
+  var C_OK = '#22c55e';
+  var C_BG = '#0b1628';
+
+  function draw() {
+    var W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    // Title
+    ctx.fillStyle = C_MUTED;
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('简化版校验码计算：各位数字之和 ÷ 9 → 取余数', 20, 22);
+
+    var cellW = 56;
+    var startX = (W - n * cellW) / 2;
+    var topY = 44;
+
+    // Draw digit boxes
+    for (var i = 0; i < n; i++) {
+      var x = startX + i * cellW;
+      var highlighted = currentStep > i;
+      ctx.fillStyle = highlighted ? 'rgba(167,139,250,0.18)' : 'rgba(37,65,95,0.2)';
+      ctx.fillRect(x, topY, cellW - 4, 42);
+      ctx.strokeStyle = highlighted ? 'rgba(167,139,250,0.5)' : 'rgba(37,65,95,0.4)';
+      ctx.lineWidth = highlighted ? 2 : 1;
+      ctx.strokeRect(x, topY, cellW - 4, 42);
+
+      ctx.fillStyle = highlighted ? C_HIGHLIGHT : C_TEXT;
+      ctx.font = 'bold 20px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(digits[i], x + (cellW - 4) / 2, topY + 30);
+
+      // Index label
+      ctx.fillStyle = C_MUTED;
+      ctx.font = '9px sans-serif';
+      ctx.fillText('第' + (i + 1) + '位', x + (cellW - 4) / 2, topY + 52);
+    }
+
+    // Running sum line
+    var sumY = topY + 78;
+    var sum = 0;
+    if (currentStep > 0) {
+      ctx.fillStyle = C_SUM;
+      ctx.font = '13px sans-serif';
+      ctx.textAlign = 'left';
+      var sumText = '';
+      for (var i = 0; i < Math.min(currentStep, n); i++) {
+        sum += digits[i];
+        sumText += (i > 0 ? ' + ' : '') + digits[i];
+      }
+      ctx.fillText('累加: ' + sumText + ' = ' + sum, 20, sumY);
+
+      // Highlight current digit being added
+      if (currentStep <= n) {
+        var cx = startX + (currentStep - 1) * cellW + (cellW - 4) / 2;
+        ctx.fillStyle = C_HIGHLIGHT;
+        ctx.font = 'bold 16px sans-serif';
+        ctx.textAlign = 'center';
+      }
+    }
+
+    // Division step
+    if (currentStep > n) {
+      // Calculate sum once more for display
+      var total = digits.reduce(function(a, b) { return a + b; }, 0);
+      var divY = sumY + 30;
+      var remainder = total % 9;
+
+      ctx.fillStyle = C_HIGHLIGHT;
+      ctx.font = '15px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('总和 ' + total + ' ÷ 9', 20, divY);
+
+      // Long division visualization
+      if (currentStep > n) {
+        ctx.fillStyle = C_TEXT;
+        var quotient = Math.floor(total / 9);
+        ctx.fillText('= ' + quotient + '……余 ' + remainder, 20, divY + 28);
+
+        // Show remainder highlighted
+        if (currentStep > n + 1) {
+          ctx.fillStyle = 'rgba(34,197,94,0.15)';
+          ctx.fillRect(18, divY + 6, 180, 26);
+          ctx.strokeStyle = C_OK;
+          ctx.lineWidth = 2;
+          ctx.strokeRect(18, divY + 6, 180, 26);
+        }
+      }
+    }
+
+    // Result
+    if (currentStep > n + 2) {
+      var total = digits.reduce(function(a, b) { return a + b; }, 0);
+      var remainder = total % 9;
+      var resY = sumY + 30 + 30 + 30;
+      ctx.fillStyle = 'rgba(34,197,94,0.12)';
+      ctx.fillRect(18, resY - 2, 380, 36);
+      ctx.strokeStyle = C_OK;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(18, resY - 2, 380, 36);
+      ctx.fillStyle = C_OK;
+      ctx.font = 'bold 18px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('✅ 校验码 = ' + remainder, 28, resY + 26);
+
+      // Explanation
+      ctx.fillStyle = C_MUTED;
+      ctx.font = '12px sans-serif';
+      ctx.fillText('如果"前10位之和÷9的余数"≠校验码 → 数据有错误！', 28, resY + 52);
+    }
+
+    // Slots visual at bottom
+    if (currentStep > n + 2) {
+      var total = digits.reduce(function(a, b) { return a + b; }, 0);
+      var remainder = total % 9;
+      var slotY = sumY + 30 + 30 + 30 + 70;
+      ctx.fillStyle = C_MUTED;
+      ctx.font = '12px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('完整编码：', 20, slotY);
+
+      // Redraw all digits + check digit
+      for (var i = 0; i < n; i++) {
+        var x = startX + i * cellW;
+        ctx.fillStyle = 'rgba(37,65,95,0.25)';
+        ctx.fillRect(x, slotY, cellW - 4, 38);
+        ctx.strokeStyle = 'rgba(37,65,95,0.4)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x, slotY, cellW - 4, 38);
+        ctx.fillStyle = C_TEXT;
+        ctx.font = 'bold 16px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(digits[i], x + (cellW - 4) / 2, slotY + 26);
+      }
+      // Check digit
+      var cx = startX + n * cellW;
+      ctx.fillStyle = 'rgba(34,197,94,0.15)';
+      ctx.fillRect(cx, slotY, cellW - 4, 38);
+      ctx.strokeStyle = C_OK;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(cx, slotY, cellW - 4, 38);
+      ctx.fillStyle = C_OK;
+      ctx.font = 'bold 18px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(remainder, cx + (cellW - 4) / 2, slotY + 26);
+    }
+  }
+
+  function updateSteps() {
+    document.getElementById('step1-dot').className = 'step-dot' + (currentStep >= n + 1 ? ' done' : (currentStep >= 1 && currentStep <= n ? ' current' : ''));
+    document.getElementById('step2-dot').className = 'step-dot' + (currentStep >= n + 2 ? ' done' : (currentStep === n + 1 ? ' current' : ''));
+    document.getElementById('step3-dot').className = 'step-dot' + (currentStep >= n + 3 ? ' done' : (currentStep === n + 2 ? ' current' : ''));
+
+    var statusEl = document.getElementById('calc-status');
+    if (currentStep === 0) {
+      statusEl.textContent = '准备开始计算…';
+      statusEl.style.color = 'var(--muted)';
+    } else if (currentStep <= n) {
+      statusEl.textContent = '正在加第 ' + currentStep + ' 位数字：' + digits[currentStep - 1];
+      statusEl.style.color = 'var(--warn)';
+    } else if (currentStep === n + 1) {
+      var total = digits.reduce(function(a, b) { return a + b; }, 0);
+      statusEl.textContent = '求和完成！总和 = ' + total + '，接下来做除法取余…';
+      statusEl.style.color = 'var(--warn)';
+    } else if (currentStep === n + 2) {
+      var total = digits.reduce(function(a, b) { return a + b; }, 0);
+      var remainder = total % 9;
+      statusEl.textContent = total + ' ÷ 9 = ' + Math.floor(total / 9) + '……余 ' + remainder;
+      statusEl.style.color = 'var(--brand-2)';
+    } else {
+      var total = digits.reduce(function(a, b) { return a + b; }, 0);
+      var remainder = total % 9;
+      statusEl.textContent = '✅ 校验码 = ' + remainder + '。完整学号：' + digits.join('') + remainder;
+      statusEl.style.color = 'var(--ok)';
+      document.getElementById('calc-formula').textContent = '校验码 = (2+0+2+4+1+5+0+3+0+1) ÷ 9 的余数 = ' + total + ' ÷ 9 = ' + Math.floor(total / 9) + '……' + remainder + ' → 校验码=' + remainder;
+    }
+  }
+
+  function advanceStep() {
+    if (currentStep < n + 3) {
+      currentStep++;
+      draw();
+      updateSteps();
+      return true;
+    }
+    return false;
+  }
+
+  function resetAnim() {
+    if (animTimer) { clearInterval(animTimer); animTimer = null; }
+    isPlaying = false;
+    currentStep = 0;
+    draw();
+    updateSteps();
+    document.getElementById('calc-formula').textContent = '';
+    document.getElementById('btn-play-calc').textContent = '▶ 自动播放完整计算';
+  }
+
+  function playAuto() {
+    if (isPlaying) {
+      clearInterval(animTimer);
+      animTimer = null;
+      isPlaying = false;
+      document.getElementById('btn-play-calc').textContent = '▶ 自动播放完整计算';
+      return;
+    }
+    resetAnim();
+    isPlaying = true;
+    document.getElementById('btn-play-calc').textContent = '⏸ 暂停';
+    animTimer = setInterval(function() {
+      if (!advanceStep()) {
+        clearInterval(animTimer);
+        animTimer = null;
+        isPlaying = false;
+        document.getElementById('btn-play-calc').textContent = '▶ 自动播放完整计算';
+      }
+    }, stepDelay);
+  }
+
+  document.getElementById('btn-play-calc').addEventListener('click', function() {
+    if (window.TeachAnySync) window.TeachAnySync.notifyManualInteraction('canvas-checkdigit');
+    playAuto();
+  });
+  document.getElementById('btn-step-calc').addEventListener('click', function() {
+    if (isPlaying) { clearInterval(animTimer); animTimer = null; isPlaying = false; document.getElementById('btn-play-calc').textContent = '▶ 自动播放完整计算'; }
+    if (window.TeachAnySync) window.TeachAnySync.notifyManualInteraction('canvas-checkdigit');
+    advanceStep();
+  });
+  document.getElementById('btn-reset-calc').addEventListener('click', function() {
+    resetAnim();
+    // 用户手动重置 → 断开音频同步
+    if (window.TeachAnySync) window.TeachAnySync.notifyManualInteraction('canvas-checkdigit');
+  });
+
+  // ── 注册到音画同步系统 ──
+  if (window.TeachAnySync) {
+    window.TeachAnySync.register('canvas-checkdigit', {
+      setStep: function(n) {
+        n = Math.max(0, Math.min(13, n));
+        if (n !== currentStep) {
+          currentStep = n;
+          draw();
+          updateSteps();
+        }
+      },
+      reset: function() {
+        if (animTimer) { clearInterval(animTimer); animTimer = null; }
+        isPlaying = false;
+        currentStep = 0;
+        draw();
+        updateSteps();
+        document.getElementById('calc-formula').textContent = '';
+        document.getElementById('btn-play-calc').textContent = '▶ 自动播放完整计算';
+      },
+      getMaxSteps: function() { return 13; }
+    });
+  }
+
+  draw();
+})();
+</script>
+
+<!-- =============================================
+     Canvas 2: 模11校验码完整演示
+     ============================================= -->
+<script>
+(function() {
+  var canvas = document.getElementById('canvas-mod11');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+
+  // Example: first 17 digits of a real ID number
+  var id17 = [1,1,0,1,0,5,2,0,1,0,0,3,1,5,0,0,3];
+  var weights = [7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2];
+  var remainderMap = ['1','0','X','9','8','7','6','5','4','3','2'];
+  var n = 17;
+
+  var currentCol = -1; // which column is being computed (-1 = none)
+  var phase = 0; // 0=weighted sum, 1=mod result, 2=mapping
+  var runningSum = 0;
+
+  var animTimer = null;
+  var isPlaying = false;
+
+  var C_WARN = '#f59e0b';
+  var C_PURPLE = '#a78bfa';
+  var C_OK = '#22c55e';
+  var C_MUTED = '#64748b';
+  var C_TEXT = '#eef6ff';
+  var C_HIGHLIGHT = '#a78bfa';
+
+  function draw() {
+    var W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    // Title
+    ctx.fillStyle = C_PURPLE;
+    ctx.font = 'bold 14px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('国标模11加权校验码完整计算', 20, 22);
+    ctx.fillStyle = C_MUTED;
+    ctx.font = '11px sans-serif';
+    ctx.fillText('前17位数字 × 对应权重 → 求和 → ÷11取余 → 查表得校验码', 20, 40);
+
+    var cellW = 38;
+    var startX = 20;
+    var digitY = 56;
+    var weightY = 84;
+    var prodY = 112;
+    var sumY = 148;
+
+    // Draw column headers
+    ctx.fillStyle = C_MUTED;
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'center';
+    for (var i = 0; i < n; i++) {
+      var cx = startX + i * cellW + cellW / 2;
+      ctx.fillText(i + 1, cx, digitY - 4);
+    }
+
+    // Draw each column
+    for (var i = 0; i < n; i++) {
+      var x = startX + i * cellW;
+      var isActive = (currentCol === i);
+
+      // Digit
+      var digitBg = isActive ? 'rgba(245,158,11,0.18)' : 'rgba(37,65,95,0.15)';
+      ctx.fillStyle = digitBg;
+      ctx.fillRect(x, digitY, cellW - 2, 24);
+      ctx.strokeStyle = isActive ? C_WARN : 'rgba(37,65,95,0.35)';
+      ctx.lineWidth = isActive ? 2 : 1;
+      ctx.strokeRect(x, digitY, cellW - 2, 24);
+      ctx.fillStyle = isActive ? C_WARN : C_TEXT;
+      ctx.font = 'bold 14px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(id17[i], x + (cellW - 2) / 2, digitY + 17);
+
+      // Weight
+      var wtBg = isActive ? 'rgba(167,139,250,0.12)' : 'rgba(37,65,95,0.08)';
+      ctx.fillStyle = wtBg;
+      ctx.fillRect(x, weightY, cellW - 2, 20);
+      ctx.fillStyle = i <= currentCol ? C_PURPLE : C_MUTED;
+      ctx.font = '11px monospace';
+      ctx.fillText('×' + weights[i], x + (cellW - 2) / 2, weightY + 14);
+
+      // Product (show after this column)
+      if (i <= currentCol && currentCol >= 0) {
+        var prod = id17[i] * weights[i];
+        ctx.fillStyle = i === currentCol ? C_WARN : 'rgba(167,139,250,0.5)';
+        ctx.font = i === currentCol ? 'bold 13px monospace' : '11px monospace';
+        ctx.fillText(prod, x + (cellW - 2) / 2, prodY + 12);
+      }
+    }
+
+    // Running sum display
+    if (currentCol >= 0) {
+      // Recalculate sum up to currentCol
+      var sum = 0;
+      var sumText = '';
+      for (var i = 0; i <= currentCol; i++) {
+        var prod = id17[i] * weights[i];
+        sum += prod;
+        sumText += (i > 0 ? ' + ' : '') + prod;
+      }
+      if (sumText.length > 60) sumText = sumText.slice(0, 30) + '…+' + sumText.split('+').pop();
+
+      ctx.fillStyle = C_WARN;
+      ctx.font = '12px monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText('累加: ' + sumText + ' = ' + sum, 20, sumY);
+
+      // Phase 1: modulo
+      if (phase >= 1) {
+        var remainder = sum % 11;
+        ctx.fillStyle = C_PURPLE;
+        ctx.font = '15px monospace';
+        ctx.fillText(sum + ' ÷ 11 = ' + Math.floor(sum / 11) + '……余 ' + remainder, 20, sumY + 24);
+
+        // Phase 2: mapping
+        if (phase >= 2) {
+          ctx.fillStyle = C_OK;
+          ctx.font = 'bold 18px monospace';
+          var checkChar = remainderMap[remainder];
+          ctx.fillText('✅ 校验码 = ' + checkChar + '  (查表: 余数' + remainder + ' → ' + checkChar + ')', 20, sumY + 52);
+
+          // Complete ID display
+          ctx.fillStyle = C_MUTED;
+          ctx.font = '12px sans-serif';
+          ctx.textAlign = 'left';
+          var compY = sumY + 80;
+          ctx.fillText('完整身份证号:', 20, compY);
+
+          for (var i = 0; i < n; i++) {
+            var dx = 160 + i * 24;
+            ctx.fillStyle = C_TEXT;
+            ctx.font = 'bold 16px monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText(id17[i], dx, compY + 14);
+          }
+          ctx.fillStyle = C_OK;
+          ctx.font = 'bold 20px monospace';
+          ctx.fillText(checkChar, 160 + n * 24, compY + 14);
+
+          // Bottom explanation
+          ctx.fillStyle = C_MUTED;
+          ctx.font = '11px sans-serif';
+          ctx.textAlign = 'left';
+          var explY = compY + 36;
+          ctx.fillText('为什么用模11？', 20, explY);
+          ctx.fillText('• 11是质数 → 检错能力强', 24, explY + 16);
+          ctx.fillText('• 加权而非简单求和 → 相邻数字交换也能检测', 24, explY + 30);
+          ctx.fillText('• X = 罗马数字10 → 校验码必须1位', 24, explY + 44);
+        }
+      }
+    } else {
+      ctx.fillStyle = C_MUTED;
+      ctx.font = '12px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('等待计算开始…点击"自动演示"或"逐位计算"', 20, sumY);
+    }
+  }
+
+  function advanceColumn() {
+    if (currentCol < n - 1) {
+      currentCol++;
+      if (currentCol >= n - 1 && phase === 0) phase = 1;
+      if (phase === 1 && currentCol >= n - 1) phase = 2;
+      draw();
+      updateMod11Status();
+      return true;
+    } else if (phase < 2) {
+      phase++;
+      draw();
+      updateMod11Status();
+      return true;
+    }
+    return false;
+  }
+
+  function updateMod11Status() {
+    var el = document.getElementById('mod11-status');
+    if (currentCol < 0) {
+      el.textContent = '等待开始…';
+      el.style.color = 'var(--muted)';
+    } else if (currentCol < n - 1) {
+      el.textContent = '计算第 ' + (currentCol + 1) + ' 位：' + id17[currentCol] + ' × ' + weights[currentCol] + ' = ' + (id17[currentCol] * weights[currentCol]);
+      el.style.color = 'var(--warn)';
+    } else if (phase === 1) {
+      var sum = 0;
+      for (var i = 0; i < n; i++) sum += id17[i] * weights[i];
+      el.textContent = '加权求和完成，总和 = ' + sum + '，正在做 ÷11 取余…';
+      el.style.color = 'var(--brand-2)';
+    } else if (phase === 2) {
+      var sum = 0;
+      for (var i = 0; i < n; i++) sum += id17[i] * weights[i];
+      var r = sum % 11;
+      el.textContent = '✅ 余数 = ' + r + ' → 查表 → 校验码 = ' + remainderMap[r] + '。完成！';
+      el.style.color = 'var(--ok)';
+    }
+  }
+
+  function resetAll() {
+    if (animTimer) { clearInterval(animTimer); animTimer = null; }
+    isPlaying = false;
+    currentCol = -1;
+    phase = 0;
+    runningSum = 0;
+    draw();
+    updateMod11Status();
+    document.getElementById('btn-mod11-auto').textContent = '▶ 自动演示模11计算';
+  }
+
+  function playAuto() {
+    if (isPlaying) {
+      clearInterval(animTimer); animTimer = null; isPlaying = false;
+      document.getElementById('btn-mod11-auto').textContent = '▶ 自动演示模11计算';
+      return;
+    }
+    resetAll();
+    isPlaying = true;
+    document.getElementById('btn-mod11-auto').textContent = '⏸ 暂停';
+    animTimer = setInterval(function() {
+      if (!advanceColumn()) {
+        clearInterval(animTimer); animTimer = null; isPlaying = false;
+        document.getElementById('btn-mod11-auto').textContent = '▶ 自动演示模11计算';
+      }
+    }, 600);
+  }
+
+  document.getElementById('btn-mod11-auto').addEventListener('click', function() {
+    if (window.TeachAnySync) window.TeachAnySync.notifyManualInteraction('canvas-mod11');
+    playAuto();
+  });
+  document.getElementById('btn-mod11-step').addEventListener('click', function() {
+    if (isPlaying) { clearInterval(animTimer); animTimer = null; isPlaying = false; document.getElementById('btn-mod11-auto').textContent = '▶ 自动演示模11计算'; }
+    if (window.TeachAnySync) window.TeachAnySync.notifyManualInteraction('canvas-mod11');
+    advanceColumn();
+  });
+  document.getElementById('btn-mod11-reset').addEventListener('click', function() {
+    resetAll();
+    if (window.TeachAnySync) window.TeachAnySync.notifyManualInteraction('canvas-mod11');
+  });
+
+  // ── 注册到音画同步系统 ──
+  if (window.TeachAnySync) {
+    window.TeachAnySync.register('canvas-mod11', {
+      setStep: function(n) {
+        n = Math.max(0, Math.min(19, n));
+        if (n === 0) {
+          if (currentCol !== -1 || phase !== 0) { currentCol = -1; phase = 0; draw(); updateMod11Status(); }
+        } else if (n <= 17) {
+          var newCol = n - 1;
+          var newPhase = (newCol >= 16) ? 1 : 0;
+          if (currentCol !== newCol || phase !== newPhase) { currentCol = newCol; phase = newPhase; draw(); updateMod11Status(); }
+        } else {
+          if (currentCol !== 16 || phase !== 2) { currentCol = 16; phase = 2; draw(); updateMod11Status(); }
+        }
+      },
+      reset: function() {
+        if (animTimer) { clearInterval(animTimer); animTimer = null; }
+        isPlaying = false;
+        currentCol = -1;
+        phase = 0;
+        runningSum = 0;
+        draw();
+        updateMod11Status();
+        document.getElementById('btn-mod11-auto').textContent = '▶ 自动演示模11计算';
+      },
+      getMaxSteps: function() { return 19; }
+    });
+  }
+
+  draw();
+})();
+</script>
+
+<!-- =============================================
+     错误检测实验室
+     ============================================= -->
+<script>
+(function() {
+  // Simple rule: 10 digits, check = sum % 9
+  var BASE_DIGITS = [2,0,2,4,1,5,0,3,0,1];
+  var nDigits = BASE_DIGITS.length;
+  var currentDigits = BASE_DIGITS.slice();
+  var expectedCheck = 0;
+  var selectedIndex = -1;
+
+  function calcCheck(digits) {
+    var sum = digits.reduce(function(a, b) { return a + b; }, 0);
+    return sum % 9;
+  }
+
+  expectedCheck = calcCheck(BASE_DIGITS);
+
+  function renderDigits() {
+    var container = document.getElementById('error-lab-digits');
+    container.innerHTML = '';
+
+    for (var i = 0; i < nDigits; i++) {
+      var btn = document.createElement('button');
+      btn.className = 'id-digit-btn';
+      btn.textContent = currentDigits[i];
+      btn.setAttribute('data-index', i);
+      if (i === selectedIndex) btn.classList.add('selected');
+      btn.addEventListener('click', function() {
+        var idx = parseInt(this.getAttribute('data-index'));
+        if (selectedIndex === idx) {
+          // Cycle digit
+          currentDigits[idx] = (currentDigits[idx] + 1) % 10;
+          recheck();
+        } else {
+          selectedIndex = idx;
+          recheck();
+        }
+        renderDigits();
+      });
+      container.appendChild(btn);
+
+      // Space separator between data and check
+      if (i === nDigits - 1) {
+        var sep = document.createElement('span');
+        sep.style.cssText = 'width:8px';
+        container.appendChild(sep);
+      }
+    }
+
+    // Check digit display
+    var checkEl = document.createElement('span');
+    checkEl.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;width:38px;height:44px;border-radius:8px;font-family:monospace;font-size:18px;font-weight:700;margin:0 2px';
+    var actualCheck = calcCheck(currentDigits);
+    var isEqual = (actualCheck === expectedCheck);
+    var dataUnchanged = currentDigits.every(function(d, i) { return d === BASE_DIGITS[i]; });
+
+    if (dataUnchanged) {
+      checkEl.style.background = 'rgba(34,197,94,.15)';
+      checkEl.style.border = '2px solid #22c55e';
+      checkEl.style.color = '#22c55e';
+    } else if (isEqual) {
+      checkEl.style.background = 'rgba(245,158,11,.15)';
+      checkEl.style.border = '2px solid #f59e0b';
+      checkEl.style.color = '#f59e0b';
+    } else {
+      checkEl.style.background = 'rgba(239,68,68,.15)';
+      checkEl.style.border = '2px solid #ef4444';
+      checkEl.style.color = '#ef4444';
+    }
+    checkEl.textContent = expectedCheck;
+    container.appendChild(checkEl);
+
+    // Label
+    var label = document.createElement('span');
+    label.style.cssText = 'font-size:11px;color:#64748b;margin-left:4px';
+    label.textContent = '←校验码';
+    container.appendChild(label);
+  }
+
+  function recheck() {
+    var actualCheck = calcCheck(currentDigits);
+    var dataUnchanged = currentDigits.every(function(d, i) { return d === BASE_DIGITS[i]; });
+    var el = document.getElementById('error-lab-result');
+
+    if (dataUnchanged) {
+      el.innerHTML = '<span style="color:#22c55e">✅ 数据未被修改，校验码匹配！</span><br><span style="font-size:12px;color:#9fb4cc">前10位之和 = ' + currentDigits.reduce(function(a,b){return a+b},0) + '，÷9余' + actualCheck + ' = 校验码' + expectedCheck + '</span>';
+      el.style.background = 'rgba(34,197,94,.08)';
+      el.style.border = '1px solid rgba(34,197,94,.2)';
+    } else if (actualCheck === expectedCheck) {
+      el.innerHTML = '<span style="color:#f59e0b">⚠️ 数据被修改了，但校验码"碰巧"还对得上！</span><br><span style="font-size:12px;color:#9fb4cc">这就是简化版规则的弱点——改动的数字加起来刚好是9的倍数</span>';
+      el.style.background = 'rgba(245,158,11,.08)';
+      el.style.border = '1px solid rgba(245,158,11,.2)';
+    } else {
+      el.innerHTML = '<span style="color:#ef4444">❌ 数据被修改！校验码不匹配！</span><br><span style="font-size:12px;color:#9fb4cc">前10位之和÷9余' + actualCheck + ' ≠ 校验码' + expectedCheck + ' → 错误被检测到了！</span>';
+      el.style.background = 'rgba(239,68,68,.08)';
+      el.style.border = '1px solid rgba(239,68,68,.2)';
+    }
+  }
+
+  document.getElementById('btn-random-error').addEventListener('click', function() {
+    var idx = Math.floor(Math.random() * nDigits);
+    var origVal = BASE_DIGITS[idx];
+    var newVal = origVal;
+    while (newVal === origVal) {
+      newVal = Math.floor(Math.random() * 10);
+    }
+    currentDigits[idx] = newVal;
+    selectedIndex = idx;
+    recheck();
+    renderDigits();
+    if (window.TeachAnySync) window.TeachAnySync.notifyManualInteraction('error-lab-demo');
+  });
+
+  document.getElementById('btn-reset-error').addEventListener('click', function() {
+    currentDigits = BASE_DIGITS.slice();
+    selectedIndex = -1;
+    recheck();
+    renderDigits();
+    if (window.TeachAnySync) window.TeachAnySync.notifyManualInteraction('error-lab-demo');
+  });
+
+  renderDigits();
+  recheck();
+
+  // ── 注册到音画同步系统 ──
+  (function() {
+    var _reset = function() { currentDigits = BASE_DIGITS.slice(); selectedIndex = -1; recheck(); renderDigits(); };
+    var _randomErr = function() {
+      var idx = Math.floor(Math.random() * nDigits);
+      var origVal = BASE_DIGITS[idx], newVal = origVal;
+      while (newVal === origVal) { newVal = Math.floor(Math.random() * 10); }
+      currentDigits[idx] = newVal; selectedIndex = idx; recheck(); renderDigits();
+    };
+    if (window.TeachAnySync) {
+      window.TeachAnySync.register('error-lab-demo', {
+        reset: _reset,
+        doAction: function(action) {
+          if (action === 'reset') _reset();
+          else if (action === 'randomError') _randomErr();
+        }
+      });
+    }
+  })();
+})();
+</script>
+
+<!-- =============================================
+     Quiz 系统
+     ============================================= -->
+<script>
+var diagnosticHints = {
+  pretest: [
+    { correct: '对！编码就是把信息（地址、生日等）转化为有结构的数字。', wrong: '编码是用数字代表信息，而不仅是"数字本身"。身份证的18位每一位都有含义。' },
+    { correct: '正确！校验码由前17位通过数学规则算出来，用来检测数据错误。', wrong: '第18位是校验码，由前17位通过数学运算得到的，不是随机填的！' },
+    { correct: '对！27÷9=3余0，所以余数是0。', wrong: '27÷9=3……0，余数是0。当一个数能被9整除时余数是0。' }
+  ],
+  posttest: [
+    { correct: '对！最后一位由前17位算出，专门用来检测数据是否有误。', wrong: '最后一位是校验码，不是随便写的。它由前17位通过加权模11算出来。' },
+    { correct: '正确！加权求和→模11取余→查表，三步骤得出校验码。', wrong: '校验码=加权求和→÷11取余→查表映射。这就是完整的计算过程。' },
+    { correct: '对！改一位通常会被发现，因为校验码对不上了。', wrong: '改一位数字通常会让校验码不匹配，从而被检测出来。这是校验码的核心用途。' }
+  ],
+  conceptest: [
+    { correct: '对！X代表数字10。因为校验码只能占1位，而10要写成两位，所以用罗马数字X代替。', wrong: 'X不是乘号！它是罗马数字10。校验码只能占1位，10用X表示。' },
+    { correct: '正确！校验码能发现错误，但不能告诉你哪一位错了。这属于"检错码"，不是"纠错码"。', wrong: '校验码只能检测"数据不对"，不能纠正。纠正错误需要更复杂的编码（如QR码中的Reed-Solomon编码）。' },
+    { correct: '对！加权求和比简单求和检错能力更强——即使相邻两位交换位置，加权求和也会发现。', wrong: '模11比模9强因为11是质数且大于10，余数范围0~10有11种可能，而且加权能检测相邻交换错误。' }
+  ]
+};
+
+function buildQuiz(containerId, questions) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  var quizType = containerId.replace('-quiz', '');
+  var hints = diagnosticHints[quizType] || [];
+  container.innerHTML = '';
+  questions.forEach(function(q, qi) {
+    var div = document.createElement('div');
+    div.style.cssText = 'margin-bottom:18px';
+    div.innerHTML = '<p style="font-weight:600;margin:0 0 8px">' + (qi + 1) + '. ' + q.q + '</p>';
+    var optsDiv = document.createElement('div');
+    q.opts.forEach(function(opt, oi) {
+      var btn = document.createElement('button');
+      btn.className = 'quiz-option';
+      btn.textContent = String.fromCharCode(65 + oi) + '. ' + opt;
+      btn.addEventListener('click', function() {
+        if (btn.disabled) return;
+        var allBtns = optsDiv.querySelectorAll('.quiz-option');
+        allBtns.forEach(function(b) { b.disabled = true; });
+        var fb = document.createElement('p');
+        fb.className = 'quiz-feedback';
+        if (oi === q.ans) {
+          btn.classList.add('correct');
+          fb.style.color = 'var(--ok)';
+          fb.textContent = '\u2714 正确！' + (hints[qi] ? ' ' + hints[qi].correct : '');
+        } else {
+          btn.classList.add('wrong');
+          allBtns[q.ans].classList.add('correct');
+          fb.style.color = '#ef4444';
+          fb.textContent = '\u2718 答案 ' + String.fromCharCode(65 + q.ans) + '。' + (hints[qi] ? hints[qi].wrong : '');
+        }
+        optsDiv.appendChild(fb);
+      });
+      optsDiv.appendChild(btn);
+    });
+    div.appendChild(optsDiv);
+    container.appendChild(div);
+  });
+}
+
+buildQuiz('pretest-quiz', [
+  { q: '身份证的18位数字中，什么叫做"编码"？', opts: ['每一段数字代表特定的信息', '数字本身的大小很重要', '数字加起来等于某个值', '数字就是随便写的'], ans: 0 },
+  { q: '身份证最后一位校验码的作用是什么？', opts: ['让身份证更好看', '检测前面的数字有没有写错', '表示公元年份', '随便写的，没有特别用处'], ans: 1 },
+  { q: '27 ÷ 9 的余数是多少？', opts: ['3', '2', '0', '9'], ans: 2 }
+]);
+
+buildQuiz('conceptest-quiz', [
+  { q: '身份证校验码中的"X"代表什么？', opts: ['乘号', '未知数', '数字10', '表示女性'], ans: 2 },
+  { q: '校验码能"纠正"错误吗？', opts: ['能，它能自动修复', '能，但不能修复所有类型', '不能，它只能"发现"错误', '取决于错误的类型'], ans: 2 },
+  { q: '为什么身份证用"模11加权校验"而不是简单求和？', opts: ['因为11比9大', '因为11是质数，且加权能检测相邻交换', '因为身份证号有18位', '因为计算机用二进制'], ans: 1 }
+]);
+buildQuiz('posttest-quiz', [
+  { q: '身份证最后一位校验码是随便写的吗？', opts: ['是，随机生成的', '不是，由前17位算出来的', '是，按生日决定的', '不是，按性别决定的'], ans: 1 },
+  { q: '校验码的计算步骤是什么？', opts: ['简单求和÷9', '加权求和→模11→查表', '所有数字相乘÷17', '前6位÷后12位'], ans: 1 },
+  { q: '如果你把身份证某一位改错了，校验码能发现吗？', opts: ['不能', '通常能', '一定能100%发现', '取决于改的是第几位'], ans: 1 }
+]);
+</script>
+
+<!-- =============================================
+<script>
+(function() {
+  document.getElementById('tier1-check').addEventListener('click', function() {
+    document.getElementById('tier1-feedback').textContent = '\u2714 基础级参考：① 第7-14位代表出生日期（YYYYMMDD格式）；② 不是，最后一位是由前17位算出的校验码；③ 余数3就是校验码。';
+  });
+  document.getElementById('tier2-check').addEventListener('click', function() {
+    document.getElementById('tier2-feedback').textContent = '\u2714 进阶级参考：① 末位2是偶数→女；② 1+0+2+0+3+0+4+0+5+0=15，15÷9=1余6，校验码=6；③ 校验码像封条——如果有人动了数据，校验码就对不上了（答案不限，言之有理即可）。';
+  });
+  document.getElementById('tier3-check').addEventListener('click', function() {
+    document.getElementById('tier3-feedback').textContent = '\u2714 挑战级参考：① 例：年份25、班级03、序号15→学号250315，和=2+5+0+3+1+5=16，16÷7余2→校验码2，完整学号2503152。② 不会变！因为加9刚好是9的倍数，余数不变。这说明简单求和容易漏检——真正的身份证用模11+加权来避免这个问题。③ 加权：即使两位交换位置也能检测；模11：余数范围0~10共11种比9多种，容错空间大。';
+  });
+})();
+</script>
+
+<!-- 标准模块脚本 -->
+<script src="../scripts/ai-tutor.js"></script>
+<script src="../scripts/teachany-tutor-card.js" defer></script>
+<script src="../scripts/teachany-tts-narrator.js" defer></script>
+<script src="../scripts/teachany-section-hints.js" defer></script>
+<script src="../scripts/teachany-knowledge-graph.js" defer></script>
+<script src="../scripts/teachany-audio-player.js?v=bar-only-20260513" defer></script>
+</body>
+</html>

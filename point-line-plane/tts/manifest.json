@@ -1,0 +1,10 @@
+[
+  {"id":"s01-hero","src":"tts/s01-hero.mp3","size":125424,"label":"hero"},
+  {"id":"s02-point","src":"tts/s02-point.mp3","size":142128,"label":"point"},
+  {"id":"s03-point-to-line","src":"tts/s03-point-to-line.mp3","size":145728,"label":"point-to-line"},
+  {"id":"s04-three-line-types","src":"tts/s04-three-line-types.mp3","size":160704,"label":"three-line-types"},
+  {"id":"s05-geogebra-3points","src":"tts/s05-geogebra-3points.mp3","size":146304,"label":"geogebra-3points"},
+  {"id":"s06-line-to-plane","src":"tts/s06-line-to-plane.mp3","size":125424,"label":"line-to-plane"},
+  {"id":"s07-treasure-hunt","src":"tts/s07-treasure-hunt.mp3","size":155808,"label":"treasure-hunt"},
+  {"id":"s08-summary","src":"tts/s08-summary.mp3","size":157104,"label":"summary"}
+]

@@ -1,0 +1,63 @@
+/* TeachAny Audio Player Bar Styles */
+.teachany-audio-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--panel, #101d32);
+  border-top: 1px solid var(--line, #25415f);
+  padding: 8px 16px;
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: system-ui, sans-serif;
+  transition: transform .3s;
+  transform: translateY(100%);
+}
+.teachany-audio-bar.visible { transform: translateY(0); }
+.teachany-audio-bar .ta-bar-label {
+  font-size: 12px;
+  color: var(--muted, #9fb4cc);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 80px;
+  max-width: 200px;
+}
+.teachany-audio-bar .ta-bar-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--line, #25415f);
+  background: var(--card, #14233a);
+  color: var(--text, #eef6ff);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.teachany-audio-bar .ta-bar-btn:hover { background: var(--brand, #38bdf8); color: #000; }
+.teachany-audio-bar .ta-bar-progress {
+  flex: 1;
+  height: 3px;
+  background: var(--line, #25415f);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.teachany-audio-bar .ta-bar-progress-fill {
+  height: 100%;
+  background: var(--brand, #38bdf8);
+  border-radius: 2px;
+  transition: width .3s linear;
+  width: 0%;
+}
+.teachany-audio-bar .ta-bar-time {
+  font-size: 11px;
+  color: var(--muted, #9fb4cc);
+  min-width: 60px;
+  text-align: right;
+}

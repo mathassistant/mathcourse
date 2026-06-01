@@ -1,0 +1,1105 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>长方形和正方形的周长</title>
+<meta name="description" content="小学数学三年级几何探究课：通过动手操作发现长方形和正方形周长的计算规律">
+
+<meta name="course-id" content="perimeter-rectangle-square">
+<meta name="course-title" content="长方形和正方形的周长">
+<meta name="course-subject" content="math">
+<meta name="course-grade" content="elementary-3">
+<meta name="course-prereqs" content="">
+<meta name="course-next" content="">
+<meta name="course-version" content="1.1.0">
+<meta name="teachany-version" content="7.14.0">
+<meta name="teachany-node" content="math-g3-perimeter">
+<meta name="teachany-subject" content="math">
+<meta name="teachany-grade" content="3">
+<meta name="teachany-stage" content="elementary">
+<meta name="teachany-domain" content="geometry">
+<meta name="teachany-prerequisites" content="认识长方形和正方形">
+<meta name="teachany-lesson-type" content="inquiry-project">
+<meta name="teachany-free-mode" content="true">
+
+<style>
+:root {
+  --bg: #07111f;
+  --panel: #101d32;
+  --card: #14233a;
+  --line: #25415f;
+  --text: #eef6ff;
+  --muted: #9fb4cc;
+  --brand: #38bdf8;
+  --brand-2: #a78bfa;
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; max-width: 100%; overflow-x: hidden; scroll-behavior: smooth; }
+body {
+  padding-top: var(--safe-top);
+  padding-bottom: calc(18px + var(--safe-bottom));
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Source Han Sans SC", system-ui, sans-serif;
+  line-height: 1.7;
+  font-size: 16px;
+}
+a { color: #7dd3fc; }
+button, a, input, select, textarea { min-height: 44px; }
+img, video, canvas, svg { max-width: 100%; height: auto; }
+
+/* Brand Bar */
+.teachany-brand-bar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 16px;
+  background: rgba(7, 17, 31, .92); backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(148, 163, 184, .18);
+}
+.brand-logo { display: flex; align-items: center; gap: 8px; color: #f8fafc; text-decoration: none; font-weight: 800; }
+.brand-mark { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, var(--brand), var(--brand-2)); color: #07111f; font-weight: 900; }
+.brand-right { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+.brand-link { text-decoration: none; }
+.brand-version { color: #cbd5e1; font-family: ui-monospace, monospace; background: rgba(255,255,255,.08); padding: 4px 8px; border-radius: 999px; }
+
+/* Hero */
+.hero { padding: 64px 20px 38px; text-align: center; background: radial-gradient(circle at 20% 0%, rgba(56,189,248,.22), transparent 36%), radial-gradient(circle at 80% 10%, rgba(167,139,250,.18), transparent 34%); }
+h1 { font-size: clamp(28px, 6vw, 52px); line-height: 1.15; margin: 0 auto 16px; max-width: 960px; }
+.subtitle { color: var(--muted); font-size: clamp(16px, 2.8vw, 20px); max-width: 860px; margin: 0 auto; }
+
+/* Sections */
+.section { max-width: 1080px; margin: 0 auto; padding: 36px 20px; }
+.card { background: linear-gradient(180deg, rgba(20,35,58,.96), rgba(13,27,47,.96)); border: 1px solid rgba(148,163,184,.18); border-radius: 18px; padding: 22px; box-shadow: 0 16px 40px rgba(0,0,0,.18); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.objectives { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+
+/* Interactive Elements */
+.choice {
+  width: 100%; text-align: left;
+  border: 1px solid rgba(56,189,248,.24); border-radius: 14px;
+  background: rgba(56,189,248,.08); color: var(--text);
+  padding: 14px 16px; cursor: pointer; transition: all .2s;
+}
+.choice:hover { border-color: var(--brand); background: rgba(56,189,248,.16); }
+.choice.selected { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(56,189,248,.18); }
+.choice.correct { border-color: var(--ok) !important; background: rgba(34,197,94,.16) !important; }
+.choice.wrong { border-color: #ef4444 !important; background: rgba(239,68,68,.12) !important; }
+
+input, textarea { width: 100%; border-radius: 12px; border: 1px solid var(--line); background: #0b1628; color: var(--text); padding: 12px 14px; font-size: 16px; }
+.phase-tag { display: inline-flex; align-items: center; gap: 6px; color: #bae6fd; background: rgba(56,189,248,.12); border: 1px solid rgba(56,189,248,.25); border-radius: 999px; padding: 4px 10px; font-size: 13px; }
+.ta-standard-figure { margin: 24px auto 0; max-width: 980px; }
+.ta-standard-figure img { display: block; width: 100%; border-radius: 18px; border: 1px solid rgba(148,163,184,.18); background: #0b1628; }
+.ta-standard-figure figcaption { margin-top: 10px; color: var(--muted); font-size: 14px; text-align: center; }
+
+.canvas-wrap { overflow: auto; background: #081426; border: 1px solid rgba(148,163,184,.18); border-radius: 16px; padding: 12px; }
+.result { padding: 14px; border-radius: 12px; background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.25); }
+.warn { background: rgba(245,158,11,.1); border-color: rgba(245,158,11,.28); }
+.info-box { background: rgba(56,189,248,.08); border: 1px solid rgba(56,189,248,.2); border-radius: 12px; padding: 16px; margin-top: 14px; }
+
+/* Slider styling */
+.slider-group { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+.slider-group label { color: var(--muted); font-size: 14px; }
+.slider-group input[type="range"] { width: 100%; margin-top: 6px; accent-color: var(--brand); }
+.slider-group .value-display { color: var(--brand); font-weight: 700; font-size: 18px; }
+
+/* Formula cards */
+.formula-card { background: rgba(167,139,250,.08); border: 1px solid rgba(167,139,250,.24); border-radius: 16px; padding: 18px; text-align: center; }
+.formula-card .big-formula { font-size: 24px; font-weight: 800; color: var(--brand-2); font-family: ui-monospace, monospace; margin: 8px 0; }
+
+/* Discovery table */
+.discovery-table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+.discovery-table th, .discovery-table td { padding: 10px 12px; border: 1px solid var(--line); text-align: center; font-size: 14px; }
+.discovery-table th { background: rgba(56,189,248,.12); color: var(--brand); font-weight: 600; }
+.discovery-table td input { width: 70px; text-align: center; padding: 6px; min-height: auto; }
+
+/* AI Tutor section */
+.tutor-card { background: linear-gradient(135deg, rgba(56,189,248,.12), rgba(167,139,250,.12)); border: 1px solid rgba(167,139,250,.3); border-radius: 18px; padding: 24px; text-align: center; }
+.tutor-card h2 { color: var(--brand-2); }
+.tutor-input { display: flex; gap: 10px; margin-top: 14px; }
+.tutor-input input { flex: 1; }
+.tutor-input button { padding: 0 20px; background: linear-gradient(135deg, var(--brand), var(--brand-2)); color: #07111f; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.tutor-response { margin-top: 14px; text-align: left; color: var(--text); font-size: 15px; line-height: 1.8; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .teachany-brand-bar { padding: 8px 12px; }
+  .brand-name { display: none; }
+  .brand-right { gap: 8px; font-size: 12px; }
+  .hero { padding: 42px 16px 28px; }
+  .section { padding: 26px 16px; }
+  .grid, .objectives { grid-template-columns: 1fr !important; }
+  .card { padding: 18px; border-radius: 16px; }
+  .slider-group { grid-template-columns: 1fr; }
+  h2 { font-size: 22px; }
+  canvas.wide-canvas { min-width: 560px; }
+  .discovery-table { font-size: 12px; }
+  .discovery-table th, .discovery-table td { padding: 6px 8px; }
+}
+
+/* Animation */
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+.highlight-box { animation: pulse 2s ease-in-out infinite; }
+</style>
+<link rel="stylesheet" href="../scripts/ai-tutor.css">
+<link rel="stylesheet" href="../scripts/teachany-tutor-card.css">
+<link rel="stylesheet" href="../scripts/teachany-tts-narrator.css">
+<link rel="stylesheet" href="../scripts/teachany-section-hints.css">
+<link rel="stylesheet" href="../scripts/teachany-knowledge-graph.css">
+<link rel="stylesheet" href="../scripts/teachany-audio-player.css">
+</head>
+<body>
+
+<!-- Brand Bar -->
+<div class="teachany-brand-bar">
+  <a class="brand-logo" href="#" aria-label="TeachAny">
+    <span class="brand-mark">T</span><span class="brand-name">TeachAny</span>
+  </a>
+  <div class="brand-right">
+    <span style="color:#9fb4cc">小学数学 · 三年级</span>
+    <span class="brand-version">v1.0.0</span>
+  </div>
+</div>
+
+<!-- Hero -->
+<header class="hero" id="hero" data-tts="s01-hero" data-tsh="开场 - 学校要围花坛需要多长篱笆">
+  <h1>🏗️ 长方形和正方形的周长</h1>
+  <p class="subtitle">学校要围一个长方形花坛，需要买多长的篱笆？跟着 AI 学伴一起动手探究，自己发现周长的秘密！</p>
+</header>
+
+<div id="audio-config" data-teachany-audio hidden>
+  <script type="application/json" data-teachany-audio-playlist>
+[
+  {"id":"s01-hero","src":"tts/s01-hero.mp3","label":"开场引入","target":"hero"},
+  {"id":"s02-perimeter","src":"tts/s02-what-is-perimeter.mp3","label":"周长概念","target":"module-1"},
+  {"id":"s03-discovery","src":"tts/s03-discovery-lab.mp3","label":"探究实验","target":"discovery"},
+  {"id":"s04-formula","src":"tts/s04-formula.mp3","label":"公式总结","target":"formula-summary"},
+  {"id":"s05-concepTest","src":"tts/s05-concepTest.mp3","label":"概念辨析","target":"conceptest-1"},
+  {"id":"s06-practice","src":"tts/s06-practice.mp3","label":"分级练习","target":"scaffold-practice"},
+  {"id":"s07-synthesis","src":"tts/s07-synthesis.mp3","label":"综合挑战","target":"synthesis"},
+  {"id":"s08-summary","src":"tts/s08-summary.mp3","label":"课堂小结","target":"summary"}
+]
+  </script>
+</div>
+
+<!-- Hero Infographic -->
+<section class="section" id="hero-infographic">
+  <figure class="ta-standard-figure">
+    <img class="hero-cover-img" src="./assets/hero-infographic.svg" alt="长方形和正方形周长知识地图">
+    <figcaption>🔍 知识结构图：从认识图形 → 周长概念 → 公式推导 → 生活应用</figcaption>
+  </figure>
+</section>
+
+<!-- Problem Anchor -->
+<section id="problem-anchor" class="section">
+  <div class="card">
+    <span class="phase-tag">🎯 Problem Anchor</span>
+    <h2>这节探究课，你想先解决哪个问题？</h2>
+    <p style="color:var(--muted)">选一个你关心的问题，后面的探索和 AI 学伴都会围绕它展开。</p>
+    <div class="grid" id="problem-anchor-choices">
+      <button class="choice" data-anchor-choice="学校要给一个长8米、宽5米的长方形花坛围篱笆，一共需要多长的篱笆？">🏫 学校要给一个长8米、宽5米的长方形花坛围篱笆，一共需要多长的篱笆？</button>
+      <button class="choice" data-anchor-choice="小明沿着长30米、宽20米的操场跑了一圈，他跑了多少米？">🏃 小明沿着长30米、宽20米的操场跑了一圈，他跑了多少米？</button>
+      <button class="choice" data-anchor-choice="我想给一张正方形的照片做一个边框，照片边长12厘米，边框材料需要多长？">🖼️ 我想给一张正方形照片做边框，照片边长12厘米，需要多长的边框？</button>
+    </div>
+    <label style="display:block;margin-top:18px;color:var(--muted)">我还有其他问题
+      <input id="learner-question-input" placeholder="把你卡住的问题写在这里……">
+    </label>
+    <p id="anchor-feedback" class="result warn" style="margin-top:14px">👆 选择或输入后，本课会围绕你的问题展开。</p>
+  </div>
+</section>
+
+<!-- Learning Objectives -->
+<section id="objectives" class="section">
+  <div class="card">
+    <span class="phase-tag">📋 Learning Objectives</span>
+    <h2>学习目标</h2>
+    <ul class="objectives">
+      <li>🧭 <strong>理解周长</strong>：能指出长方形和正方形"一周"在哪里</li>
+      <li>🔍 <strong>动手探究</strong>：通过改变长和宽，观察周长如何变化</li>
+      <li>📐 <strong>发现公式</strong>：自己推导出 C = 2×(长+宽) 和 C = 4×边长</li>
+      <li>🏠 <strong>迁移应用</strong>：用周长公式解决生活中的围篱笆、跑道等问题</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== CONTENT SECTIONS ==================== -->
+
+<!-- Pre-test -->
+<section id="pretest" class="section">
+  <div class="card">
+    <span class="phase-tag">🧪 Pretest</span>
+    <h2>课前小测：你准备好了吗？</h2>
+    <p style="color:var(--muted)">先看看你对长方形和正方形的边了解多少。</p>
+    <p style="margin-top:14px;font-weight:600">❓ 一个长方形有几条边？其中对边有什么关系？</p>
+    <div class="grid">
+      <button class="choice" data-answer="wrong" onclick="pretestAnswer(this, false, '再想想：长方形有4条边，不是2条哦！')">A. 有2条边，一样长</button>
+      <button class="choice" data-answer="correct" onclick="pretestAnswer(this, true, '✅ 完全正确！长方形有4条边，对边相等——这是推导周长公式的关键！')">B. 有4条边，对边相等</button>
+      <button class="choice" data-answer="wrong" onclick="pretestAnswer(this, false, '正方形很特殊，但长方形不一定4条边都相等哦。')">C. 有4条边，四条边都相等</button>
+    </div>
+    <div class="result warn" id="pretest-feedback" style="margin-top:12px">点击你的答案，看看诊断反馈。</div>
+  </div>
+</section>
+
+<!-- Module 1: What is Perimeter -->
+<section id="module-1" class="section" data-tts="s02-perimeter" data-tsh="周长概念 - 小蚂蚁走一圈">
+  <div class="card">
+    <span class="phase-tag">📖 核心概念</span>
+    <h2>什么是"周长"？</h2>
+    <div class="card" style="margin-top:14px;background:rgba(56,189,248,.06);border-color:rgba(56,189,248,.16)">
+      <p><strong>📌 已经知道：</strong>长方形有4条边，对边相等；正方形4条边都相等。</p>
+      <p><strong>❓ 但是问题是：</strong>当我们需要知道"围一圈需要多长"时，不能一条边一条边去量，有没有更快的办法？</p>
+      <p><strong>🔬 所以这一节要解决：</strong>理解"周长"就是图形一周的长度，然后找到快速计算的方法。</p>
+    </div>
+
+    <!-- Visual: Perimeter tracing -->
+    <div class="canvas-wrap" style="margin-top:16px">
+      <canvas id="perimeter-demo" width="760" height="380" aria-label="周长概念演示"></canvas>
+    </div>
+    <p style="color:var(--muted);text-align:center;margin-top:8px;font-size:14px">👆 点击 <strong>"演示周长"</strong> 按钮，小蚂蚁会沿着图形的边走一圈——这一圈的总长度就是<strong>周长</strong>！</p>
+    <div style="text-align:center;margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="choice" style="width:auto;padding:10px 20px" onclick="if(window.TeachAnySync)window.TeachAnySync.notifyManualInteraction('perimeter-demo');demoPerimeter('rectangle')">📐 演示长方形周长</button>
+      <button class="choice" style="width:auto;padding:10px 20px" onclick="if(window.TeachAnySync)window.TeachAnySync.notifyManualInteraction('perimeter-demo');demoPerimeter('square')">🔲 演示正方形周长</button>
+    </div>
+    <div class="result warn" id="perimeter-demo-info" style="margin-top:12px;text-align:center">
+      什么是周长？<strong>封闭图形一周的长度</strong>，就是它的周长。
+    </div>
+  </div>
+</section>
+
+<!-- Module 2: Discovery Canvas -->
+<section id="discovery" class="section highlight-box" data-tts="s03-discovery" data-tsh="探究实验 - 改变长宽观察周长变化">
+  <div class="card">
+    <span class="phase-tag">🔬 探究实验</span>
+    <h2>动手发现：改变长和宽，周长怎么变？</h2>
+    <p style="color:var(--muted)">拖动下面的滑块改变长方形的<strong>长</strong>和<strong>宽</strong>，观察周长如何变化。你能发现什么规律？</p>
+
+    <!-- Interactive Canvas -->
+    <div class="canvas-wrap">
+      <canvas id="discovery-canvas" width="760" height="420" aria-label="周长探究互动画布"></canvas>
+    </div>
+
+    <!-- Sliders -->
+    <div class="slider-group">
+      <label>
+        📏 长（a）：<span class="value-display" id="length-val">8</span> cm
+        <input id="length-slider" type="range" min="1" max="15" step="1" value="8" oninput="if(window.TeachAnySync)window.TeachAnySync.notifyManualInteraction('discovery-canvas');updateDiscovery()">
+      </label>
+      <label>
+        📏 宽（b）：<span class="value-display" id="width-val">5</span> cm
+        <input id="width-slider" type="range" min="1" max="10" step="1" value="5" oninput="if(window.TeachAnySync)window.TeachAnySync.notifyManualInteraction('discovery-canvas');updateDiscovery()">
+      </label>
+    </div>
+
+    <!-- Live display -->
+    <div class="grid" style="margin-top:16px">
+      <div class="result">
+        <strong>🔢 逐边相加：</strong><br>
+        <span style="font-size:18px" id="side-by-side"></span>
+      </div>
+      <div class="result" style="background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.28)">
+        <strong>⚡ 一圈总长（周长）：</strong><br>
+        <span style="font-size:28px;font-weight:800;color:var(--brand-2)" id="perimeter-val"></span> cm
+      </div>
+    </div>
+
+    <!-- Discovery Table -->
+    <div class="info-box" style="margin-top:16px">
+      <h3 style="margin-top:0;color:var(--brand)">📝 探究记录表</h3>
+      <p style="color:var(--muted);font-size:14px">改变长和宽，把数据填入下表。观察最后一列，你发现了什么？</p>
+      <div style="overflow-x:auto">
+        <table class="discovery-table">
+          <thead>
+            <tr><th>序号</th><th>长 a (cm)</th><th>宽 b (cm)</th><th>a + b</th><th>周长 C (cm)</th><th>C ÷ (a+b) = ?</th></tr>
+          </thead>
+          <tbody id="discovery-tbody">
+          </tbody>
+        </table>
+      </div>
+      <button class="choice" style="width:auto;margin-top:10px;padding:8px 18px" onclick="addDiscoveryRow()">📝 记录当前数据</button>
+      <button class="choice" style="width:auto;margin-top:10px;padding:8px 18px" onclick="clearDiscoveryRows()">🗑️ 清空重来</button>
+    </div>
+
+    <!-- Pattern discovery -->
+    <div class="info-box" style="margin-top:16px;background:rgba(34,197,94,.06);border-color:rgba(34,197,94,.2)">
+      <h3 style="margin-top:0;color:var(--ok)">💡 你发现规律了吗？</h3>
+      <p>观察最后一列 <strong>"C ÷ (a+b)"</strong>，不管长和宽怎么变，这个值始终是 ____？</p>
+      <p style="font-size:13px;color:var(--muted)">这意味着：<strong>周长 = (长 + 宽) × ____</strong></p>
+      <div style="display:flex;gap:10px;margin-top:8px">
+        <input id="pattern-guess" placeholder="填入你发现的那个数" style="max-width:200px">
+        <button class="choice" style="width:auto;padding:8px 18px" onclick="checkPattern()">✅ 检查</button>
+      </div>
+      <p id="pattern-feedback" class="result warn" style="margin-top:8px"></p>
+    </div>
+  </div>
+</section>
+
+<!-- Inquiry Record -->
+<section id="inquiry-record" class="section">
+  <div class="card">
+    <span class="phase-tag">📓 Inquiry Record</span>
+    <h2>探究记录单</h2>
+    <div class="grid">
+      <label>💭 我的假设（在探索之前，你觉得周长和长、宽有什么关系？）
+        <textarea id="hypothesis-input" rows="3">我觉得长方形的周长可能等于……</textarea>
+      </label>
+      <label>📊 我的证据（从探究表中你观察到了什么？）
+        <textarea id="evidence-input" rows="3">我发现不管长和宽怎么变，C ÷ (a+b) 始终等于……</textarea>
+      </label>
+      <label>🎯 我的结论（周长公式是什么？正方形呢？）
+        <textarea id="conclusion-input" rows="3">长方形的周长 = (长 + 宽) × 2&#10;正方形的周长 = 边长 × 4</textarea>
+      </label>
+    </div>
+    <div class="result warn" style="margin-top:12px">✍️ 科学家就是这样工作的：先假设 → 做实验收集数据 → 找规律 → 得出结论！</div>
+  </div>
+</section>
+
+<!-- Formula Summary -->
+<section id="formula-summary" class="section" data-tts="s04-formula" data-tsh="公式总结 - C=(a+b)×2">
+  <div class="card">
+    <span class="phase-tag">📐 公式总结</span>
+    <h2>周长公式</h2>
+    <div class="grid">
+      <div class="formula-card">
+        <h3 style="color:var(--brand);margin-top:0">长方形周长</h3>
+        <p style="color:var(--muted)">长用 <strong>a</strong> 表示，宽用 <strong>b</strong> 表示</p>
+        <div class="big-formula">C = (a + b) × 2</div>
+        <p style="color:var(--muted);font-size:13px">也可以写成 C = 2a + 2b</p>
+      </div>
+      <div class="formula-card">
+        <h3 style="color:var(--brand-2);margin-top:0">正方形周长</h3>
+        <p style="color:var(--muted)">边长用 <strong>a</strong> 表示</p>
+        <div class="big-formula">C = 4 × a</div>
+        <p style="color:var(--muted);font-size:13px">正方形是特殊的长方形（a = b）</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Scaffold Practice -->
+<section id="scaffold-practice" class="section" data-tts="s06-practice" data-tsh="分级练习 - 从示范到独立">
+  <div class="card">
+    <span class="phase-tag">🏋️ Scaffold</span>
+    <h2>分级练习：从示范到独立</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>🅰️ 全支架示范</h3>
+        <p>一个长方形花坛，<strong>长 = 6 米，宽 = 4 米</strong>，它的周长是多少？</p>
+        <p style="color:var(--ok)">📝 解：a = 6, b = 4<br>C = (6 + 4) × 2 = 10 × 2 = <strong>20 米</strong></p>
+      </div>
+      <div class="card">
+        <h3>🅱️ 半支架练习</h3>
+        <p>一个正方形菜地，<strong>边长 = 25 米</strong>，周长是多少？</p>
+        <label>你的答案：
+          <input id="scaffold-half" placeholder="填入算式和结果">
+        </label>
+        <button class="choice" style="width:auto;margin-top:8px;padding:6px 14px" onclick="checkHalfScaffold()">检查</button>
+        <p id="scaffold-half-fb" style="margin-top:6px;font-size:14px"></p>
+      </div>
+      <div class="card">
+        <h3>🅲 独立完成</h3>
+        <p>小明绕着一个长 <strong>50 米、宽 30 米</strong> 的操场跑了<strong>2 圈</strong>，一共跑了多少米？</p>
+        <label>你的答案：
+          <input id="scaffold-independent" placeholder="先算一圈，再算两圈">
+        </label>
+        <button class="choice" style="width:auto;margin-top:8px;padding:6px 14px" onclick="checkIndependent()">检查</button>
+        <p id="scaffold-indep-fb" style="margin-top:6px;font-size:14px"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ConcepTest -->
+<section id="conceptest-1" class="section" data-tts="s05-concepTest" data-tsh="概念辨析 - 别掉进陷阱">
+  <div class="card">
+    <span class="phase-tag">🎯 ConcepTest</span>
+    <h2>概念辨析：别掉进陷阱！</h2>
+    <p>一个长方形的长是 10 厘米，宽是 5 厘米。以下哪个说法<strong>正确</strong>？</p>
+    <div class="grid">
+      <button class="choice" onclick="conceptestAnswer(this, false, '不对！如果长翻倍（10→20），周长从30变成50，并不是简单的翻倍关系哦。')">A. 如果把长变成原来的2倍，周长也变成原来的2倍</button>
+      <button class="choice" onclick="conceptestAnswer(this, true, '✅ 正确！正方形 C=4a，边长翻倍→周长翻倍。长方形则不能简单类推！')">B. 正方形的边长扩大2倍，周长也扩大2倍</button>
+      <button class="choice" onclick="conceptestAnswer(this, false, '周长是一圈的长度，不是面积。长+宽=15，但周长=30。混淆了周长和"半周长"的概念。')">C. 这个长方形的周长等于 10 + 5 = 15 厘米</button>
+      <button class="choice" onclick="conceptestAnswer(this, false, '长方形C=2(a+b)=30；正方形C=4×a，如果a=7.5，C=30，边长=7.5不是15。')">D. 周长是 30 厘米，改成正方形后边长就是 15 厘米</button>
+    </div>
+    <div class="result warn" id="conceptest-feedback" style="margin-top:12px">先独立判断，再看诊断反馈。</div>
+  </div>
+</section>
+
+<!-- Synthesis Tasks -->
+<section id="synthesis" class="section" data-tts="s07-synthesis" data-tsh="综合挑战 - 学以致用">
+  <div class="card">
+    <span class="phase-tag">🌟 Synthesis</span>
+    <h2>综合挑战：学以致用</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>🟢 Level 1 基础巩固</h3>
+        <p>一个长方形，长 12 厘米，宽 8 厘米，周长是多少？</p>
+        <label>答案：<input id="synth-l1" placeholder="___ cm"></label>
+        <button class="choice" style="width:auto;margin-top:8px;padding:6px 14px" onclick="checkSynthL1()">检查</button>
+        <p id="synth-l1-fb" style="font-size:14px;margin-top:6px"></p>
+      </div>
+      <div class="card">
+        <h3>🟡 Level 2 应用迁移</h3>
+        <p>王阿姨要给一块长方形桌布缝花边。桌布长 180 厘米，宽 90 厘米，至少需要多长的花边？</p>
+        <label>答案：<input id="synth-l2" placeholder="___ cm"></label>
+        <button class="choice" style="width:auto;margin-top:8px;padding:6px 14px" onclick="checkSynthL2()">检查</button>
+        <p id="synth-l2-fb" style="font-size:14px;margin-top:6px"></p>
+      </div>
+      <div class="card">
+        <h3>🔴 Level 3 开放挑战</h3>
+        <p>用一根 36 厘米长的铁丝围成一个长方形（长和宽都是整厘米数），你能围出几种不同的长方形？哪种围法面积看起来最大？</p>
+        <p style="color:var(--muted);font-size:13px">提示：长 + 宽 = 36 ÷ 2 = 18，找出所有 a+b=18 的整数对。</p>
+        <label>你找到几种？<input id="synth-l3" placeholder="例如：长17宽1, 长16宽2..."></label>
+        <p style="color:var(--warn);font-size:14px;margin-top:8px">💡 这个挑战其实就是"周长一定时，长和宽怎么分配"的问题——为以后学面积埋下伏笔！</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Post-test -->
+<section id="posttest" class="section">
+  <div class="card">
+    <span class="phase-tag">✅ Posttest</span>
+    <h2>课后检验：你真的学会了吗？</h2>
+    <p>学校操场是一个长 60 米、宽 40 米的长方形。体育老师让学生跑 3 圈热身，每个学生跑了多少米？</p>
+    <div class="grid">
+      <button class="choice" onclick="posttestAnswer(this, false, '这只是1圈的长度哦，再乘以3试试！')">A. 200 米</button>
+      <button class="choice" onclick="posttestAnswer(this, true, '✅ 太棒了！一圈=(60+40)×2=200米，3圈=200×3=600米。先算周长再乘圈数！')">B. 600 米</button>
+      <button class="choice" onclick="posttestAnswer(this, false, '混淆了面积和周长？或者把长宽直接相乘了。周长是一圈的长度，用公式C=2(a+b)哦。')">C. 2400 米</button>
+    </div>
+    <div class="result warn" id="posttest-feedback" style="margin-top:12px">选择后查看诊断。</div>
+  </div>
+</section>
+
+<!-- Summary -->
+<section id="summary" class="section" data-tts="s08-summary" data-tsh="课堂小结">
+  <div class="card">
+    <span class="phase-tag">📝 Summary</span>
+    <h2>课堂小结</h2>
+    <p style="color:var(--muted)">回到开头的问题——<strong id="summary-anchor-text">给花坛围篱笆、绕操场跑步、给照片做边框</strong>，这些问题的本质都是在求<strong>周长</strong>。</p>
+    <ul style="font-size:16px;line-height:2.2">
+      <li>🔍 <strong>周长</strong> = 封闭图形一周的长度</li>
+      <li>📐 <strong>长方形周长</strong> = (长 + 宽) × 2，即 C = 2(a+b)</li>
+      <li>🔲 <strong>正方形周长</strong> = 边长 × 4，即 C = 4a</li>
+      <li>🧠 <strong>探究方法</strong>：改变条件 → 收集数据 → 找规律 → 得公式 → 用公式解决问题</li>
+    </ul>
+    <div class="result" style="margin-top:14px">
+      🎉 <strong>恭喜你！</strong>你不仅学会了周长公式，更重要的是学会了"自己发现规律"的科学方法。这种探究能力比记住公式更宝贵！
+    </div>
+  </div>
+</section>
+
+<!-- Knowledge Graph -->
+<section class="section" id="knowledge-graph">
+  <div class="card">
+    <span class="phase-tag">🗺️ Knowledge Graph</span>
+    <h2>知识图谱</h2>
+    <p style="color:var(--muted)">看看这个知识点在整个数学学习中的位置：</p>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;justify-content:center">
+      <span class="phase-tag" style="background:rgba(100,116,139,.12);border-color:rgba(100,116,139,.25);color:#94a3b8">⬅️ 认识长方形和正方形</span>
+      <span style="color:var(--brand);font-size:20px">→</span>
+      <span class="phase-tag" style="background:rgba(56,189,248,.16);border-color:var(--brand)">📍 周长（你在这里）</span>
+      <span style="color:var(--brand);font-size:20px">→</span>
+      <span class="phase-tag" style="background:rgba(100,116,139,.12);border-color:rgba(100,116,139,.25);color:#94a3b8">面积 ➡️</span>
+      <span style="color:var(--brand);font-size:20px">→</span>
+      <span class="phase-tag" style="background:rgba(100,116,139,.12);border-color:rgba(100,116,139,.25);color:#94a3b8">三角形 ➡️</span>
+    </div>
+  </div>
+</section>
+
+<!-- AI Tutor Card -->
+<section class="section" id="ai-tutor">
+  <div class="tutor-card">
+    <span class="phase-tag">🤖 AI 学伴</span>
+    <h2>还有疑问？问 AI 学伴！</h2>
+    <p style="color:var(--muted)">AI 学伴不会直接告诉你答案，而是用引导式提问帮你自己想通。</p>
+    <div class="tutor-input">
+      <input id="tutor-question" placeholder="比如：为什么周长要用(长+宽)×2而不是长×宽？">
+      <button onclick="askTutor()">提问</button>
+    </div>
+    <div class="tutor-response" id="tutor-response">
+      <p style="color:var(--muted)">👋 你好！我是你的 AI 数学学伴。试着问我一个问题吧，我会用问题引导你思考。</p>
+      <p style="color:var(--muted);font-size:13px;margin-top:8px">试试问：<em>"长方形周长为什么是 (a+b)×2？"</em> 或 <em>"正方形是特殊的长方形吗？"</em></p>
+    </div>
+  </div>
+</section>
+
+<script>
+// ============ GLOBAL STATE ============
+window.__TEACHANY_LEARNER_QUESTION__ = '';
+
+function setTeachAnyLearnerQuestion(question) {
+  window.__TEACHANY_LEARNER_QUESTION__ = question || '';
+  const fb = document.getElementById('anchor-feedback');
+  if (fb) fb.textContent = question
+    ? '✅ 你的问题：「' + question + '」——接下来的探索将围绕这个问题展开。'
+    : '👆 选择或输入后，本课会围绕你的问题展开。';
+}
+
+// Problem anchor choices
+document.querySelectorAll('[data-anchor-choice]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-anchor-choice]').forEach(i => i.classList.remove('selected'));
+    btn.classList.add('selected');
+    setTeachAnyLearnerQuestion(btn.getAttribute('data-anchor-choice') || btn.textContent.trim());
+  });
+});
+document.getElementById('learner-question-input')?.addEventListener('input', e => {
+  setTeachAnyLearnerQuestion(e.target.value.trim());
+});
+
+// ============ PRETEST ============
+function pretestAnswer(btn, correct, feedback) {
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.choice').forEach(b => {
+    b.classList.remove('correct', 'wrong');
+    b.disabled = true;
+  });
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  document.getElementById('pretest-feedback').textContent = feedback;
+}
+
+// ============ PERIMETER DEMO CANVAS ============
+const demoCanvas = document.getElementById('perimeter-demo');
+const demoCtx = demoCanvas.getContext('2d');
+let demoAnimId = null;
+
+function drawStaticScene() {
+  const ctx = demoCtx;
+  const W = demoCanvas.width, H = demoCanvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // Background
+  ctx.fillStyle = '#081426';
+  ctx.fillRect(0, 0, W, H);
+
+  // Draw rectangle
+  const rx = 150, ry = 60, rw = 200, rh = 120;
+  ctx.strokeStyle = '#38bdf8';
+  ctx.lineWidth = 3;
+  ctx.setLineDash([]);
+  ctx.strokeRect(rx, ry, rw, rh);
+  ctx.fillStyle = 'rgba(56,189,248,0.08)';
+  ctx.fillRect(rx, ry, rw, rh);
+
+  // Labels
+  ctx.fillStyle = '#eef6ff';
+  ctx.font = '14px "PingFang SC", sans-serif';
+  ctx.textAlign = 'center';
+
+  // Top label
+  ctx.fillText('长 = a', rx + rw/2, ry - 12);
+  // Bottom label
+  ctx.fillText('长 = a', rx + rw/2, ry + rh + 24);
+  // Left label
+  ctx.save();
+  ctx.translate(rx - 24, ry + rh/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText('宽 = b', 0, 0);
+  ctx.restore();
+  // Right label
+  ctx.save();
+  ctx.translate(rx + rw + 24, ry + rh/2);
+  ctx.rotate(Math.PI/2);
+  ctx.fillText('宽 = b', 0, 0);
+  ctx.restore();
+
+  // Side length annotations
+  ctx.fillStyle = '#f59e0b';
+  ctx.font = '12px "PingFang SC", sans-serif';
+
+  // Draw square
+  const sx = 480, sy = 60, ss = 120;
+  ctx.strokeStyle = '#a78bfa';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(sx, sy, ss, ss);
+  ctx.fillStyle = 'rgba(167,139,250,0.08)';
+  ctx.fillRect(sx, sy, ss, ss);
+
+  ctx.fillStyle = '#eef6ff';
+  ctx.font = '14px "PingFang SC", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('边长 = a', sx + ss/2, sy - 12);
+  ctx.fillText('边长 = a', sx + ss/2, sy + ss + 24);
+  ctx.save();
+  ctx.translate(sx - 24, sy + ss/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText('边长 = a', 0, 0);
+  ctx.restore();
+
+  // Title
+  ctx.fillStyle = '#9fb4cc';
+  ctx.font = '16px "PingFang SC", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('长方形', 250, 240);
+  ctx.fillText('正方形', 540, 240);
+
+  // Perimeter formula preview
+  ctx.fillStyle = '#64748b';
+  ctx.font = '13px "PingFang SC", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('周长 = a+b+a+b', 250, 280);
+  ctx.fillText('周长 = a+a+a+a', 540, 280);
+
+  // Instruction at bottom
+  ctx.fillStyle = '#64748b';
+  ctx.font = '13px "PingFang SC", sans-serif';
+  ctx.fillText('点击下方按钮，看小蚂蚁走一圈！', 380, 340);
+}
+
+function demoPerimeter(type) {
+  if (demoAnimId) cancelAnimationFrame(demoAnimId);
+
+  const ctx = demoCtx;
+  const W = demoCanvas.width, H = demoCanvas.height;
+
+  const rx = type === 'square' ? 480 : 150;
+  const ry = 60;
+  const rw = type === 'square' ? 120 : 200;
+  const rh = type === 'square' ? 120 : 120;
+  const color = type === 'square' ? '#a78bfa' : '#38bdf8';
+
+  // Path: top -> right -> bottom -> left
+  const path = [
+    { x: rx, y: ry },           // top-left
+    { x: rx + rw, y: ry },      // top-right
+    { x: rx + rw, y: ry + rh }, // bottom-right
+    { x: rx, y: ry + rh },      // bottom-left
+    { x: rx, y: ry }            // back to top-left
+  ];
+
+  const totalSegments = 4;
+  const stepsPerSegment = 80;
+  const totalSteps = totalSegments * stepsPerSegment;
+  let step = 0;
+
+  // Distances
+  const segDists = [rw, rh, rw, rh];
+  let totalDist = 0;
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#081426';
+    ctx.fillRect(0, 0, W, H);
+
+    // Draw rectangle
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.setLineDash([]);
+    ctx.strokeRect(rx, ry, rw, rh);
+    ctx.fillStyle = color.replace(')', ',0.08)').replace('rgb', 'rgba');
+    if (!color.includes('rgba')) {
+      ctx.fillStyle = 'rgba(56,189,248,0.08)';
+    }
+    ctx.fillRect(rx, ry, rw, rh);
+
+    // Labels
+    ctx.fillStyle = '#eef6ff';
+    ctx.font = '14px "PingFang SC", sans-serif';
+    ctx.textAlign = 'center';
+    if (type === 'square') {
+      ctx.fillText('边长 = a', rx + rw/2, ry - 12);
+      ctx.fillText('边长 = a', rx + rw/2, ry + rh + 24);
+    } else {
+      ctx.fillText('长 = a', rx + rw/2, ry - 12);
+      ctx.fillText('宽 = b', rx + rw/2, ry + rh + 24);
+    }
+
+    // Draw traversed path
+    if (step > 0) {
+      ctx.strokeStyle = '#22c55e';
+      ctx.lineWidth = 5;
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(path[0].x, path[0].y);
+      for (let i = 0; i < 4 && (i * stepsPerSegment) < step; i++) {
+        const segStep = Math.min(step - i * stepsPerSegment, stepsPerSegment);
+        const frac = segStep / stepsPerSegment;
+        const next = path[i + 1];
+        const cx = path[i].x + (next.x - path[i].x) * frac;
+        const cy = path[i].y + (next.y - path[i].y) * frac;
+        ctx.lineTo(cx, cy);
+      }
+      ctx.stroke();
+    }
+
+    // Draw ant
+    const seg = Math.min(Math.floor(step / stepsPerSegment), 3);
+    const segStep = Math.min(step - seg * stepsPerSegment, stepsPerSegment);
+    const frac = segStep / stepsPerSegment;
+    const antX = path[seg].x + (path[seg + 1].x - path[seg].x) * frac;
+    const antY = path[seg].y + (path[seg + 1].y - path[seg].y) * frac;
+
+    // Ant body
+    ctx.fillStyle = '#f59e0b';
+    ctx.beginPath();
+    ctx.arc(antX, antY, 8, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Ant legs
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 1.5;
+    for (let a = 0; a < 6; a++) {
+      const angle = (a / 6) * Math.PI * 2 + step * 0.1;
+      const lx = antX + Math.cos(angle) * 12;
+      const ly = antY + Math.sin(angle) * 12;
+      ctx.beginPath();
+      ctx.moveTo(antX + Math.cos(angle) * 5, antY + Math.sin(angle) * 5);
+      ctx.lineTo(lx, ly);
+      ctx.stroke();
+    }
+
+    // Distance counter
+    totalDist = 0;
+    for (let i = 0; i < seg; i++) totalDist += segDists[i];
+    totalDist += segDists[seg] * frac;
+
+    ctx.fillStyle = '#eef6ff';
+    ctx.font = 'bold 16px "PingFang SC", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('🐜 走了 ' + totalDist.toFixed(1) + ' 个单位', rx + rw/2, ry + rh + 50);
+
+    const infoEl = document.getElementById('perimeter-demo-info');
+    if (infoEl) {
+      infoEl.innerHTML = '🐜 小蚂蚁已经走了 <strong>' + totalDist.toFixed(1) + '</strong> 个单位——这一圈的总长度就是<strong>周长</strong>！';
+      if (type === 'rectangle') {
+        infoEl.innerHTML += '<br>📐 长方形周长 = a + b + a + b = <strong>2 × (a + b)</strong>';
+      } else {
+        infoEl.innerHTML += '<br>🔲 正方形周长 = a + a + a + a = <strong>4 × a</strong>';
+      }
+    }
+
+    step++;
+    if (step < totalSteps) {
+      demoAnimId = requestAnimationFrame(animate);
+    } else {
+      demoAnimId = null;
+    }
+  }
+
+  animate();
+}
+
+drawStaticScene();
+
+// ============ DISCOVERY CANVAS ============
+const discCanvas = document.getElementById('discovery-canvas');
+const discCtx = discCanvas.getContext('2d');
+
+function drawDiscoveryCanvas() {
+  const lengthVal = parseInt(document.getElementById('length-slider').value);
+  const widthVal = parseInt(document.getElementById('width-slider').value);
+  document.getElementById('length-val').textContent = lengthVal;
+  document.getElementById('width-val').textContent = widthVal;
+
+  const ctx = discCtx;
+  const W = discCanvas.width, H = discCanvas.height;
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#081426';
+  ctx.fillRect(0, 0, W, H);
+
+  // Scale: max dim 15 -> 700px canvas area
+  const scale = 28;
+  const rw = lengthVal * scale;
+  const rh = widthVal * scale;
+  const rx = (W - rw) / 2;
+  const ry = (H - rh) / 2;
+
+  // Grid
+  ctx.strokeStyle = 'rgba(148,163,184,0.08)';
+  ctx.lineWidth = 0.5;
+  for (let x = 0; x < W; x += 28) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+  for (let y = 0; y < H; y += 28) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  // Rectangle
+  ctx.fillStyle = 'rgba(56,189,248,0.1)';
+  ctx.fillRect(rx, ry, rw, rh);
+  ctx.strokeStyle = '#38bdf8';
+  ctx.lineWidth = 3;
+  ctx.setLineDash([]);
+  ctx.strokeRect(rx, ry, rw, rh);
+
+  // Side labels with measurements
+  ctx.fillStyle = '#f59e0b';
+  ctx.font = 'bold 15px "PingFang SC", sans-serif';
+  ctx.textAlign = 'center';
+
+  // Top
+  ctx.fillText(lengthVal + ' cm', rx + rw/2, ry - 10);
+  // Bottom
+  ctx.fillText(lengthVal + ' cm', rx + rw/2, ry + rh + 22);
+  // Left
+  ctx.save();
+  ctx.translate(rx - 20, ry + rh/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText(widthVal + ' cm', 0, 0);
+  ctx.restore();
+  // Right
+  ctx.save();
+  ctx.translate(rx + rw + 20, ry + rh/2);
+  ctx.rotate(Math.PI/2);
+  ctx.fillText(widthVal + ' cm', 0, 0);
+  ctx.restore();
+
+  // Corner dots
+  const corners = [[rx, ry], [rx + rw, ry], [rx + rw, ry + rh], [rx, ry + rh]];
+  corners.forEach(([cx, cy]) => {
+    ctx.fillStyle = '#38bdf8';
+    ctx.beginPath();
+    ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // Perimeter visualization: draw border segments in different colors
+  const segColors = ['#38bdf8', '#a78bfa', '#22c55e', '#f59e0b'];
+  const segLabels = ['长 a', '宽 b', '长 a', '宽 b'];
+  const segs = [
+    [rx, ry, rx + rw, ry],
+    [rx + rw, ry, rx + rw, ry + rh],
+    [rx + rw, ry + rh, rx, ry + rh],
+    [rx, ry + rh, rx, ry]
+  ];
+
+  segs.forEach(([x1, y1, x2, y2], i) => {
+    ctx.strokeStyle = segColors[i];
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  });
+
+  // Legend
+  ctx.font = '12px "PingFang SC", sans-serif';
+  ctx.textAlign = 'left';
+  const legendX = 16, legendY = H - 70;
+  ['🔵 上面的长', '🟣 右边的宽', '🟢 下面的长', '🟠 左边的宽'].forEach((label, i) => {
+    ctx.fillStyle = segColors[i];
+    ctx.fillText(label, legendX + (i % 2) * 160, legendY + Math.floor(i/2) * 22);
+  });
+
+  // Update formula display
+  const perimeter = 2 * (lengthVal + widthVal);
+  document.getElementById('side-by-side').textContent =
+    lengthVal + ' + ' + widthVal + ' + ' + lengthVal + ' + ' + widthVal + ' = ' + (lengthVal + widthVal + lengthVal + widthVal) + ' cm';
+  document.getElementById('perimeter-val').textContent = perimeter;
+}
+
+function updateDiscovery() {
+  drawDiscoveryCanvas();
+}
+
+// ============ DISCOVERY TABLE ============
+const discoveryData = [];
+
+function addDiscoveryRow() {
+  const a = parseInt(document.getElementById('length-slider').value);
+  const b = parseInt(document.getElementById('width-slider').value);
+  const c = 2 * (a + b);
+  const ratio = (c / (a + b)).toFixed(2);
+  discoveryData.push({ a, b, sum: a+b, c, ratio });
+
+  const tbody = document.getElementById('discovery-tbody');
+  const tr = document.createElement('tr');
+  const idx = discoveryData.length;
+  tr.innerHTML = `<td>${idx}</td><td>${a}</td><td>${b}</td><td>${a+b}</td><td><strong>${c}</strong></td><td style="color:#f59e0b;font-weight:700">${ratio}</td>`;
+  tbody.appendChild(tr);
+
+  if (discoveryData.length >= 3) {
+    document.getElementById('pattern-feedback').textContent =
+      '👀 看到没？最后一列始终是 2.00！试着在下面输入"2"验证你的发现。';
+  }
+}
+
+function clearDiscoveryRows() {
+  discoveryData.length = 0;
+  document.getElementById('discovery-tbody').innerHTML = '';
+  document.getElementById('pattern-feedback').textContent = '';
+  document.getElementById('pattern-guess').value = '';
+}
+
+function checkPattern() {
+  const guess = parseInt(document.getElementById('pattern-guess').value);
+  const fb = document.getElementById('pattern-feedback');
+  if (guess === 2) {
+    fb.textContent = '🎉 太棒了！你发现了：周长 ÷ (长+宽) 始终 = 2！所以 周长 = (长+宽) × 2！这就是长方形周长公式的由来！';
+    fb.className = 'result';
+  } else if (isNaN(guess)) {
+    fb.textContent = '请先填入一个数字再检查哦。';
+  } else {
+    fb.textContent = '再仔细看看表格最后一列？试试不同的长和宽，那个比值是不是始终不变？';
+  }
+}
+
+// ============ SCAFFOLD CHECKS ============
+function checkHalfScaffold() {
+  const input = document.getElementById('scaffold-half').value.replace(/\s/g, '');
+  const fb = document.getElementById('scaffold-half-fb');
+  if (input.includes('100') || input === '100') {
+    fb.innerHTML = '✅ 正确！正方形 C = 4 × 25 = <strong>100 米</strong>';
+    fb.style.color = '#22c55e';
+  } else {
+    fb.innerHTML = '💡 提示：正方形 C = 4 × 边长，试试 4 × 25 = ？';
+    fb.style.color = '#f59e0b';
+  }
+}
+
+function checkIndependent() {
+  const input = document.getElementById('scaffold-independent').value.replace(/\s/g, '');
+  const fb = document.getElementById('scaffold-indep-fb');
+  if (input.includes('160') || input === '160') {
+    fb.innerHTML = '✅ 正确！一圈 = (50+30)×2=160m，2圈 = 160×2 = <strong>320 米</strong>';
+    fb.style.color = '#22c55e';
+  } else if (input.includes('320')) {
+    fb.innerHTML = '✅ 完全正确！一圈=160m，两圈=<strong>320 米</strong>，你考虑到了圈数！';
+    fb.style.color = '#22c55e';
+  } else {
+    fb.innerHTML = '💡 分两步：(1) 一圈周长 = (50+30)×2 = ?  (2) 两圈 = 一圈 × 2 = ?';
+    fb.style.color = '#f59e0b';
+  }
+}
+
+// ============ CONCEPTEST ============
+function conceptestAnswer(btn, correct, feedback) {
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.choice').forEach(b => {
+    b.classList.remove('correct', 'wrong');
+    b.disabled = true;
+  });
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  document.getElementById('conceptest-feedback').textContent = feedback;
+}
+
+// ============ POSTTEST ============
+function posttestAnswer(btn, correct, feedback) {
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.choice').forEach(b => {
+    b.classList.remove('correct', 'wrong');
+    b.disabled = true;
+  });
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  document.getElementById('posttest-feedback').textContent = feedback;
+}
+
+// ============ SYNTHESIS CHECKS ============
+function checkSynthL1() {
+  const input = document.getElementById('synth-l1').value.replace(/\s/g, '');
+  const fb = document.getElementById('synth-l1-fb');
+  if (input === '40' || input.includes('40')) {
+    fb.innerHTML = '✅ 正确！C = (12+8)×2 = <strong>40 cm</strong>';
+    fb.style.color = '#22c55e';
+  } else {
+    fb.innerHTML = '💡 C = (12+8)×2 = ？先算括号里的 12+8=20，再 ×2';
+    fb.style.color = '#f59e0b';
+  }
+}
+
+function checkSynthL2() {
+  const input = document.getElementById('synth-l2').value.replace(/\s/g, '');
+  const fb = document.getElementById('synth-l2-fb');
+  if (input === '540' || input.includes('540')) {
+    fb.innerHTML = '✅ 正确！C = (180+90)×2 = <strong>540 cm</strong>，需要至少 540 厘米的花边！';
+    fb.style.color = '#22c55e';
+  } else {
+    fb.innerHTML = '💡 C = (180+90)×2 = ？先算 180+90=270，再 ×2';
+    fb.style.color = '#f59e0b';
+  }
+}
+
+// ============ AI TUTOR (simulated with guided questioning) ============
+function askTutor() {
+  const question = document.getElementById('tutor-question').value.trim();
+  const responseEl = document.getElementById('tutor-response');
+  if (!question) { responseEl.innerHTML = '<p style="color:#f59e0b">请先输入你的问题哦！</p>'; return; }
+
+  const q = question.toLowerCase();
+
+  let answer = '';
+  if (q.includes('为什么') && q.includes('周长') && q.includes('长+宽')) {
+    answer = `
+      <p>🤔 <strong>好问题！</strong>让我用提问的方式帮你思考：</p>
+      <p>🔍 一个长方形有 <strong>4 条边</strong>。从上边开始走一圈：</p>
+      <p style="padding-left:20px">① 上边：长度 = <strong>长</strong><br>
+      ② 右边：长度 = <strong>宽</strong><br>
+      ③ 下边：长度 = <strong>长</strong><br>
+      ④ 左边：长度 = <strong>宽</strong></p>
+      <p>所以总长度 = 长 + 宽 + 长 + 宽 = <strong>2个长 + 2个宽 = 2×(长+宽)</strong></p>
+      <p>🎯 现在你明白了吗？试着回到上面的探究画布，把长和宽改成不同数字，验证一下！</p>
+    `;
+  } else if (q.includes('正方形') && (q.includes('特殊') || q.includes('长方形'))) {
+    answer = `
+      <p>🤔 <strong>敏锐的观察！</strong></p>
+      <p>✅ <strong>正方形确实是特殊的长方形</strong>——当长方形的长和宽相等时，就是正方形。</p>
+      <p>📐 把长方形周长公式 C = 2×(a+b) 中的 b 换成 a：<br>
+      C = 2×(a+a) = 2×(2a) = <strong>4a</strong>  ← 正好是正方形周长公式！</p>
+      <p>🎉 所以正方形的周长公式其实是长方形公式的"特例"，数学就是这么优雅！</p>
+    `;
+  } else if (q.includes('面积') || q.includes('一样')) {
+    answer = `
+      <p>🤔 <strong>这个问题非常重要！</strong>很多同学都会混淆周长和面积。</p>
+      <p>🔑 <strong>周长</strong> = 图形"一圈"的长度 → 用长度单位（cm, m）</p>
+      <p>🔑 <strong>面积</strong> = 图形"里面有多大" → 用面积单位（cm², m²）</p>
+      <p>💡 一个简单记忆法：<strong>周长是"围栏"，面积是"草坪"</strong>——围栏是一圈的长度，草坪是里面的空间。</p>
+      <p>📖 等你学完这一课，下一课就会学面积了！</p>
+    `;
+  } else {
+    answer = `
+      <p>🤔 让我用苏格拉底式提问帮你思考：</p>
+      <p>1️⃣ 你问题的核心是想搞清楚<strong>什么关系</strong>？</p>
+      <p>2️⃣ 回到上面的<strong>探究画布</strong>，拖动滑块改变长和宽，周长是怎么变化的？</p>
+      <p>3️⃣ 你观察到的规律，能用一个<strong>数学表达式</strong>写出来吗？</p>
+      <p>💬 试着把你的思考写在上面的 "探究记录单" 里，然后回来告诉我你的想法！</p>
+    `;
+  }
+  responseEl.innerHTML = answer;
+}
+
+// ============ INIT ============
+// ============ TeachAnySync Canvas Registrations ============
+if (window.TeachAnySync) {
+  window.TeachAnySync.register('perimeter-demo', {
+    currentStep: 0,
+    maxSteps: 2,
+    setStep: function(n) {
+      this.currentStep = n;
+      if (n === 0) { drawStaticScene(); }
+      else if (n === 1) { demoPerimeter('rectangle'); }
+      else if (n === 2) { demoPerimeter('square'); }
+    },
+    reset: function() {
+      if (demoAnimId) cancelAnimationFrame(demoAnimId);
+      demoAnimId = null;
+      this.currentStep = 0;
+      drawStaticScene();
+    },
+    getMaxSteps: function() { return this.maxSteps; }
+  });
+  window.TeachAnySync.register('discovery-canvas', {
+    reset: function() { updateDiscovery(); },
+    getMaxSteps: function() { return 1; }
+  });
+}
+drawDiscoveryCanvas();
+
+// Version display
+document.addEventListener('DOMContentLoaded', () => {
+  const cv = document.querySelector('meta[name="course-version"]')?.content;
+  if (cv) document.querySelector('.brand-version').textContent = 'v' + cv;
+});
+</script>
+
+<script src="../scripts/ai-tutor.js"></script>
+<script src="../scripts/teachany-tutor-card.js" defer></script>
+<script src="../scripts/teachany-tts-narrator.js" defer></script>
+<script src="../scripts/teachany-section-hints.js" defer></script>
+<script src="../scripts/teachany-knowledge-graph.js" defer></script>
+<script src="../scripts/teachany-audio-player.js?v=bar-only-20260513" defer></script>
+</body>
+</html>

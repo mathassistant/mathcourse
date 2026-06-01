@@ -1,0 +1,10 @@
+[
+  {"id":"s01-hero","src":"tts/s01-hero.mp3","size":149184,"label":"hero"},
+  {"id":"s02-abt","src":"tts/s02-abt.mp3","size":127728,"label":"abt"},
+  {"id":"s03-formation","src":"tts/s03-formation.mp3","size":146448,"label":"formation"},
+  {"id":"s04-analogy-bridge","src":"tts/s04-analogy-bridge.mp3","size":166896,"label":"analogy-bridge"},
+  {"id":"s05-inquiry-lab","src":"tts/s05-inquiry-lab.mp3","size":157680,"label":"inquiry-lab"},
+  {"id":"s06-formula","src":"tts/s06-formula.mp3","size":161856,"label":"formula"},
+  {"id":"s07-practice","src":"tts/s07-practice.mp3","size":181872,"label":"practice"},
+  {"id":"s08-summary","src":"tts/s08-summary.mp3","size":220896,"label":"summary"}
+]

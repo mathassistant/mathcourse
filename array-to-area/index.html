@@ -1,0 +1,985 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>从方阵到面积——乘法与几何的奇妙联结</title>
+<meta name="description" content="通过排方阵的生活场景，找到乘法与面积之间的奇妙联系。每行几人就是长，排了几行就是宽，总数就是面积！">
+
+<meta name="course-id" content="array-to-area">
+<meta name="course-title" content="从方阵到面积——乘法与几何的奇妙联结">
+<meta name="course-subject" content="math">
+<meta name="course-grade" content="elementary-3">
+<meta name="course-prereqs" content="">
+<meta name="course-next" content="perimeter-rectangle-square">
+<meta name="course-version" content="0.2.0">
+<meta name="teachany-version" content="7.14.0">
+<meta name="teachany-node" content="math-elementary-area-rectangle">
+<meta name="teachany-subject" content="math">
+<meta name="teachany-grade" content="3">
+<meta name="teachany-stage" content="elementary">
+<meta name="teachany-domain" content="geometry">
+<meta name="teachany-prerequisites" content="">
+<meta name="teachany-lesson-type" content="inquiry-project">
+<meta name="teachany-free-mode" content="false">
+
+<link rel="stylesheet" href="../scripts/ai-tutor.css">
+<link rel="stylesheet" href="../scripts/teachany-tutor-card.css">
+<link rel="stylesheet" href="../scripts/teachany-tts-narrator.css">
+<link rel="stylesheet" href="../scripts/teachany-section-hints.css">
+<link rel="stylesheet" href="../scripts/teachany-knowledge-graph.css">
+<link rel="stylesheet" href="../scripts/teachany-audio-player.css">
+
+<style>
+:root {
+  --bg: #07111f;
+  --panel: #101d32;
+  --card: #14233a;
+  --line: #25415f;
+  --text: #eef6ff;
+  --muted: #9fb4cc;
+  --brand: #38bdf8;
+  --brand-2: #a78bfa;
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; max-width: 100%; overflow-x: hidden; scroll-behavior: smooth; }
+body {
+  padding-top: var(--safe-top);
+  padding-bottom: calc(18px + var(--safe-bottom));
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Source Han Sans SC", system-ui, sans-serif;
+  line-height: 1.7;
+  font-size: 16px;
+}
+a { color: #7dd3fc; }
+button, a, input, select, textarea { min-height: 44px; }
+img, video, canvas, svg { max-width: 100%; height: auto; }
+.teachany-brand-bar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 16px;
+  background: rgba(7, 17, 31, .92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(148, 163, 184, .18);
+}
+.brand-logo { display: flex; align-items: center; gap: 8px; color: #f8fafc; text-decoration: none; font-weight: 800; }
+.brand-mark { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, var(--brand), var(--brand-2)); color: #07111f; font-weight: 900; }
+.brand-right { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+.brand-link { text-decoration: none; }
+.brand-version { color: #cbd5e1; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: rgba(255,255,255,.08); padding: 4px 8px; border-radius: 999px; }
+.brand-skill-version { color: #94a3b8; }
+.hero {
+  padding: 64px 20px 38px; text-align: center;
+  background: radial-gradient(circle at 20% 0%, rgba(245,158,11,.22), transparent 36%), radial-gradient(circle at 80% 10%, rgba(34,197,94,.18), transparent 34%);
+}
+h1 { font-size: clamp(28px, 6vw, 48px); line-height: 1.15; margin: 0 auto 16px; max-width: 960px; }
+.subtitle { color: var(--muted); font-size: clamp(16px, 2.8vw, 20px); max-width: 860px; margin: 0 auto; }
+.section { max-width: 1080px; margin: 0 auto; padding: 36px 20px; }
+.card { background: linear-gradient(180deg, rgba(20,35,58,.96), rgba(13,27,47,.96)); border: 1px solid rgba(148,163,184,.18); border-radius: 18px; padding: 22px; box-shadow: 0 16px 40px rgba(0,0,0,.18); }
+.grid, .objectives { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.choice { width: 100%; text-align: left; border: 1px solid rgba(245,158,11,.24); border-radius: 14px; background: rgba(245,158,11,.08); color: var(--text); padding: 14px 16px; cursor: pointer; }
+.choice.selected { border-color: var(--warn); box-shadow: 0 0 0 3px rgba(245,158,11,.18); }
+input, textarea { width: 100%; border-radius: 12px; border: 1px solid var(--line); background: #0b1628; color: var(--text); padding: 12px 14px; font-size: 16px; }
+.phase-tag { display: inline-flex; align-items: center; gap: 6px; color: #fde68a; background: rgba(245,158,11,.12); border: 1px solid rgba(245,158,11,.25); border-radius: 999px; padding: 4px 10px; font-size: 13px; }
+.ta-standard-figure { margin: 24px auto 0; max-width: 980px; }
+.ta-standard-figure img { display: block; width: 100%; border-radius: 18px; border: 1px solid rgba(148,163,184,.18); background: #0b1628; }
+.ta-standard-figure figcaption { margin-top: 10px; color: var(--muted); font-size: 14px; text-align: center; }
+.canvas-wrap { overflow: auto; background: #081426; border: 1px solid rgba(148,163,184,.18); border-radius: 16px; padding: 12px; }
+.result { padding: 14px; border-radius: 12px; background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.25); }
+.warn { background: rgba(245,158,11,.1); border-color: rgba(245,158,11,.28); }
+.slider-group { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
+.slider-group label { font-size: 14px; color: var(--muted); min-width: 60px; }
+.slider-group input[type=range] { flex: 1; accent-color: var(--warn); }
+.slider-group span { font-weight: 700; color: var(--warn); min-width: 30px; text-align: center; font-size: 18px; }
+.toggle-btn { padding: 8px 18px; border-radius: 20px; border: 2px solid var(--warn); background: rgba(245,158,11,.1); color: var(--warn); cursor: pointer; font-weight: 600; font-size: 14px; transition: all .2s; }
+.toggle-btn.active { background: var(--warn); color: #07111f; }
+.quiz-option { display: block; width: 100%; text-align: left; border: 1px solid var(--line); border-radius: 10px; background: rgba(20,35,58,.4); color: var(--text); padding: 10px 14px; margin: 6px 0; cursor: pointer; font-size: 15px; }
+.quiz-option.correct { border-color: var(--ok); background: rgba(34,197,94,.15); }
+.quiz-option.wrong { border-color: #ef4444; background: rgba(239,68,68,.15); }
+.quiz-feedback { font-size: 13px; margin-top: 4px; }
+@media (max-width: 600px) {
+  .teachany-brand-bar { padding: 8px 12px; }
+  .brand-name { display: none; }
+  .brand-right { gap: 8px; font-size: 12px; }
+  .hero { padding: 42px 16px 28px; }
+  .section { padding: 26px 16px; }
+  .grid, .objectives { grid-template-columns: 1fr !important; }
+  .card { padding: 18px; border-radius: 16px; }
+  h2 { font-size: 22px; }
+  canvas.wide-canvas { min-width: 560px; }
+}
+</style>
+</head>
+<body>
+<div class="teachany-brand-bar">
+  <a class="brand-logo" href="https://weponusa.github.io/teachany/" aria-label="TeachAny Gallery">
+    <img src="https://weponusa.github.io/teachany-courseware/assets/teachany-logo.png" alt="TeachAny" style="width:26px;height:26px;border-radius:7px;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-grid'"><span class="brand-mark" style="display:none">T</span><span class="brand-name">TeachAny</span>
+  </a>
+  <div class="brand-right">
+    <a class="brand-link" href="https://weponusa.github.io/teachany/">Gallery</a>
+    <span class="brand-version">v<span id="course-version-display">0.1.0</span><span class="brand-skill-version"> · skill v<span id="skill-version-display">7.14.0</span></span></span>
+  </div>
+</div>
+
+<header class="hero" id="hero" data-tts="s01-hero" data-tsh="开场 - 运动会排方阵，每人站1m²，占了多大地方？">
+  <h1>从方阵到面积<br>乘法与几何的奇妙联结</h1>
+  <p class="subtitle">运动会要排方阵了！每行6人，排5行——总共多少人？如果每人站在1平方米的格子里，这个方阵占多大地方？</p>
+</header>
+
+<section class="section" id="hero-infographic" data-tsh="知识结构主图 - 方阵→类比桥→面积">
+  <figure class="ta-standard-figure">
+    <img class="hero-cover-img" src="./assets/hero-infographic.svg" alt="方阵到面积知识结构图">
+    <figcaption>一条类比桥连接两个世界：方阵（乘法算人数）与面积（长×宽算格子数）</figcaption>
+  </figure>
+</section>
+
+<!-- ===== ABT 叙事引入 ===== -->
+<section class="section" id="abt-narrative" data-tts="s02-abt" data-tsh="ABT叙事 - 为什么学？从真实场景出发">
+  <div class="card">
+    <span class="phase-tag">Why Learn This?</span>
+    <h2>从运动会到数学发现</h2>
+
+    <p><strong>运动会排方阵：每行6人×5行=30人</strong>——乘法，秒算。<br>
+    <strong>数学课问面积：长6cm×宽5cm=？</strong>——犹豫了……</p>
+    <p style="color:var(--warn);font-weight:600">等等——这不就是同一件事吗？</p>
+    <p style="color:var(--muted)"><strong>And</strong> 结构完全一样。<strong>But</strong> 课本当两件事教。<strong>Therefore</strong> 这节课把它们打通。</p>
+    <div class="result" style="margin-top:12px"><strong>核心洞见：</strong>方阵模型是"翻译器"——把"每行几人×几行"翻译成"长×宽"。</div>
+  </div>
+</section>
+
+<div id="audio-config" data-teachany-audio hidden>
+  <script type="application/json" data-teachany-audio-playlist>
+[
+  {"id":"s01-hero","src":"tts/s01-hero.mp3","label":"开场引入","target":"hero"},
+  {"id":"s02-abt","src":"tts/s02-abt.mp3","label":"ABT叙事","target":"abt-narrative"},
+  {"id":"s03-formation","src":"tts/s03-formation.mp3","label":"方阵中的乘法","target":"array-multiplication"},
+  {"id":"s04-analogy-bridge","src":"tts/s04-analogy-bridge.mp3","label":"类比桥","target":"analogy-bridge"},
+  {"id":"s05-inquiry-lab","src":"tts/s05-inquiry-lab.mp3","label":"探究实验","target":"area-formula"},
+  {"id":"s06-formula","src":"tts/s06-formula.mp3","label":"公式总结","target":"formula-summary"},
+  {"id":"s07-practice","src":"tts/s07-practice.mp3","label":"分层练习","target":"tiered-practice"},
+  {"id":"s08-summary","src":"tts/s08-summary.mp3","label":"课堂小结","target":"summary"}
+]
+  </script>
+</div>
+
+<section id="problem-anchor" class="section" data-tts="problem-anchor" data-tsh="问题锚点 - 选一个你关心的问题">
+  <div class="card">
+    <span class="phase-tag">Problem Anchor</span>
+    <h2>今天的课件可以帮你解决什么问题？</h2>
+    <p style="color:var(--muted)">先选一个你关心的问题。后面的例子、提示和 AI 学伴都会围绕这个问题来帮你推进。</p>
+    <div class="grid" id="problem-anchor-choices">
+      <button class="choice" data-anchor-choice="运动会排方阵，每行8人排6行，总共多少人？">运动会排方阵，每行8人排6行，总共多少人？</button>
+      <button class="choice" data-anchor-choice="一块长方形菜地，长8米宽6米，面积是多少？">一块长方形菜地，长8米宽6米，面积是多少？</button>
+      <button class="choice" data-anchor-choice="为什么长×宽就是面积？跟乘法有什么关系？">为什么长×宽就是面积？跟乘法有什么关系？</button>
+    </div>
+    <label style="display:block;margin-top:18px;color:var(--muted)">我有自己的问题
+      <input id="learner-question-input" placeholder="把你卡住的问题写在这里">
+    </label>
+    <p id="anchor-feedback" class="result warn" style="margin-top:14px">选择或输入后，本课会围绕你的问题展开。</p>
+  </div>
+</section>
+
+<section id="objectives" class="section" data-tts="objectives" data-tsh="学习目标">
+  <div class="card">
+    <span class="phase-tag">Learning Objectives</span>
+    <h2>学习目标</h2>
+    <ul class="objectives">
+      <li>理解方阵（矩形排列）与乘法算式的关系</li>
+      <li>通过类比发现「每行人数 → 长」、「行数 → 宽」</li>
+      <li>掌握长方形面积 = 长 × 宽</li>
+      <li>能用方阵模型解决简单面积问题</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== 前测 ===== -->
+<section class="section" id="pretest" data-tsh="前测 - 看看你目前的理解">
+  <div class="card">
+    <span class="phase-tag">Pre-Test</span>
+    <h2>课前小测</h2>
+    <p style="color:var(--muted)">3道题，帮你看看自己目前的水平。不会也没关系，学完再测一次！</p>
+    <div id="pretest-quiz"></div>
+  </div>
+</section>
+
+<!-- ===== 模块1：方阵中的乘法 ===== -->
+<section class="section" id="array-multiplication" data-tts="s03-formation" data-tsh="模块1 - 方阵中的乘法">
+  <div class="card">
+    <span class="phase-tag">Core Concept</span>
+    <h2>第一步：方阵中的乘法</h2>
+    <p>运动会上，同学们排成一个<strong>长方形方阵</strong>。每行人数都一样多，行与行对齐——整整齐齐！</p>
+    <p style="color:var(--muted)">已知：每行 6 人，共 5 行。总共多少人？</p>
+
+    <div class="result" style="margin-bottom:16px">
+      <strong>想一想：</strong>你用什么方法算出来的？<br>
+      • 一行一行加：6+6+6+6+6 = 30<br>
+      • 用乘法：6 × 5 = 30<br>
+      <span style="color:var(--muted);font-size:14px">两种方法答案一样！乘法就是"相同加数连加"的简便写法。</span>
+    </div>
+
+    <!-- Canvas：方阵动画 -->
+    <div class="canvas-wrap" style="text-align:center">
+      <canvas id="canvas-formation" width="640" height="320" class="wide-canvas"></canvas>
+      <div style="margin-top:10px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button id="btn-play-formation" style="padding:8px 20px;border-radius:20px;border:none;background:var(--warn);color:#07111f;font-weight:700;cursor:pointer">▶ 播放队列动画</button>
+        <button id="btn-reset-formation" style="padding:8px 20px;border-radius:20px;border:1px solid var(--muted);background:transparent;color:var(--muted);cursor:pointer">↺ 重置</button>
+        <button id="btn-step-formation" style="padding:8px 20px;border-radius:20px;border:1px solid var(--warn);background:rgba(245,158,11,.1);color:var(--warn);cursor:pointer">📋 逐行添加</button>
+      </div>
+    </div>
+    <div style="margin-top:12px;text-align:center;font-size:14px;color:var(--muted)">
+      每行 6 人 × 5 行 = <span id="formation-total" style="font-weight:700;color:var(--warn);font-size:20px">0</span> 人
+    </div>
+  </div>
+</section>
+
+<!-- ===== 模块2：从方阵到方格 ===== -->
+<section class="section" id="analogy-bridge" data-tts="s04-analogy-bridge" data-tsh="模块2 - 从方阵到方格：类比桥">
+  <div class="card">
+    <span class="phase-tag">Analogy Bridge</span>
+    <h2>第二步：从方阵到方格 —— 发现类比桥</h2>
+    <p>现在把每个同学替换成一个<strong>1厘米×1厘米的小方格</strong>……</p>
+    <div class="grid" style="margin-top:16px">
+      <div class="card" style="background:rgba(245,158,11,.04);border-color:rgba(245,158,11,.2)">
+        <h3 style="color:var(--warn)">方阵视角（乘法）</h3>
+        <p style="font-size:14px">每行 6 个"人"<br>共 5 行<br>总人数 = 6 × 5 = 30</p>
+        <p style="font-size:13px;color:var(--muted)">数的是"有几个东西"</p>
+      </div>
+      <div class="card" style="background:rgba(167,139,250,.04);border-color:rgba(167,139,250,.2)">
+        <h3 style="color:var(--brand-2)">面积视角（几何）</h3>
+        <p style="font-size:14px">每行 6 个"小方格" → 长 = 6 厘米<br>共 5 行 → 宽 = 5 厘米<br>总面积 = 6 × 5 = 30 平方厘米</p>
+        <p style="font-size:13px;color:var(--muted)">数的是"占了多少地方"</p>
+      </div>
+    </div>
+
+    <div class="result" style="margin-top:16px">
+      <strong>类比发现：</strong><br>
+      每行的人数 ←→ 长方形的 <strong>长</strong><br>
+      排了几行 ←→ 长方形的 <strong>宽</strong><br>
+      总人数（乘法） ←→ 总面积（长×宽）<br>
+      <span style="color:var(--ok)">核心：数"人"还是数"格"，算法完全一样！</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 模块3：面积 = 长 × 宽（互动实验） ===== -->
+<section class="section" id="area-formula" data-tts="s05-inquiry-lab" data-tsh="模块3 - 面积=长×宽 互动探究实验">
+  <div class="card">
+    <span class="phase-tag">Inquiry Lab</span>
+    <h2>第三步：探究实验 —— 调一调，看一看</h2>
+    <p>拖动下面的滑块，改变<strong>每行人数（长）</strong>和<strong>行数（宽）</strong>，观察方阵和方格的变化！</p>
+
+    <div class="slider-group">
+      <label>每行人数（长）：</label>
+      <input type="range" id="slider-cols" min="1" max="10" value="6" step="1">
+      <span id="val-cols">6</span>
+    </div>
+    <div class="slider-group">
+      <label>行数（宽）：</label>
+      <input type="range" id="slider-rows" min="1" max="8" value="5" step="1">
+      <span id="val-rows">5</span>
+    </div>
+
+    <div style="margin:12px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <button id="btn-view-people" class="toggle-btn active">👥 方阵视角</button>
+      <button id="btn-view-grid" class="toggle-btn">📐 方格视角</button>
+      <span style="margin-left:auto;font-size:14px;color:var(--muted)">点击切换视角</span>
+    </div>
+
+    <div class="canvas-wrap" style="text-align:center">
+      <canvas id="canvas-grid" width="640" height="360" class="wide-canvas"></canvas>
+    </div>
+
+    <div style="margin-top:12px;text-align:center;font-size:15px;color:var(--muted)">
+      <span id="label-perspective" style="font-weight:600;color:var(--warn)">方阵视角</span>：
+      每行 <strong id="label-cols">6</strong> × <strong id="label-rows">5</strong> 行 = <strong id="label-total" style="color:var(--ok);font-size:22px">30</strong>
+      <span id="label-unit" style="color:var(--muted)">人</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 模块4：总结公式 ===== -->
+<section class="section" id="formula-summary" data-tts="s06-formula" data-tsh="模块4 - 公式总结">
+  <div class="card">
+    <span class="phase-tag">Formula</span>
+    <h2>第四步：公式总结</h2>
+    <div class="grid" style="margin-top:16px">
+      <div class="card" style="background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.25)">
+        <h3 style="color:var(--warn)">乘法口诀</h3>
+        <p style="font-size:28px;text-align:center;font-weight:700;margin:12px 0;font-family:monospace">每行人数 × 行数<br>= 总人数</p>
+        <p style="font-size:14px;color:var(--muted);text-align:center">数"有几个东西"</p>
+      </div>
+      <div class="card" style="background:rgba(34,197,94,.06);border-color:rgba(34,197,94,.25)">
+        <h3 style="color:var(--ok)">类比桥</h3>
+        <p style="text-align:center;font-size:14px;margin:12px 0;color:var(--muted)">
+          每行人数 = <strong>长</strong><br>
+          行数 = <strong>宽</strong><br>
+          总人数 = <strong>面积</strong>
+        </p>
+      </div>
+      <div class="card" style="background:rgba(167,139,250,.06);border-color:rgba(167,139,250,.25)">
+        <h3 style="color:var(--brand-2)">面积公式</h3>
+        <p style="font-size:28px;text-align:center;font-weight:700;margin:12px 0;font-family:monospace">长 × 宽<br>= 面积</p>
+        <p style="font-size:14px;color:var(--muted);text-align:center">数"占了多少格"</p>
+      </div>
+    </div>
+    <div class="result" style="margin-top:16px">
+      <strong>长方形面积 = 长 × 宽</strong><br>
+      单位：如果长和宽用"厘米"表示，面积就是"平方厘米"（cm²）。<br>
+      平方厘米就是"边长为1厘米的小正方形"的大小。
+    </div>
+  </div>
+</section>
+
+<!-- ===== ConcepTest ===== -->
+<section class="section" id="conceptest" data-tsh="ConcepTest - 概念理解检查">
+  <div class="card">
+    <span class="phase-tag">Concept Check</span>
+    <h2>概念检查：你真正理解了吗？</h2>
+    <div id="conceptest-quiz"></div>
+  </div>
+</section>
+
+<!-- ===== 三段式分层练习 ===== -->
+<section class="section" id="tiered-practice" data-tts="s07-practice" data-tsh="三段式分层练习 - 基础→进阶→挑战">
+  <div class="card">
+    <span class="phase-tag">Practice</span>
+    <h2>分层练习：选你的挑战级别</h2>
+
+    <div class="result" style="margin-bottom:16px">
+      <h3>Level 1 · 基础</h3>
+      <p>1. 每行 7 人，排了 4 行，总共多少人？<br>
+      2. 画一个长 5 厘米、宽 3 厘米的长方形，满铺 1cm×1cm 小方格，数一数有几格？<br>
+      3. 一块长方形瓷砖，长 8cm，宽 6cm，面积是多少平方厘米？</p>
+      <p id="tier1-feedback" style="font-size:13px;color:var(--muted)"></p>
+      <button id="tier1-check" style="margin-top:8px;padding:6px 14px;border-radius:8px;border:1px solid var(--ok);background:rgba(34,197,94,.1);color:var(--ok);cursor:pointer">我完成了，检查一下</button>
+    </div>
+
+    <div class="result warn" style="margin-bottom:16px">
+      <h3>Level 2 · 进阶</h3>
+      <p>1. 学校操场要铺草皮，长 30 米、宽 20 米，如果用 1m×1m 的草皮方块，需要多少块？<br>
+      2. 一个长方形长增加 2 厘米，宽不变。面积增加多少？（用方阵模型想想看）<br>
+      3. 已知面积 = 24 cm²，长 = 6 cm，宽是多少？</p>
+      <p id="tier2-feedback" style="font-size:13px;color:var(--muted)"></p>
+      <button id="tier2-check" style="margin-top:8px;padding:6px 14px;border-radius:8px;border:1px solid var(--warn);background:rgba(245,158,11,.1);color:var(--warn);cursor:pointer">我完成了，检查一下</button>
+    </div>
+
+    <div class="result" style="background:rgba(167,139,250,.08);border-color:rgba(167,139,250,.25)">
+      <h3>Level 3 · 挑战</h3>
+      <p>1. 用 24 个小正方块（边长 1cm），你能拼出几种不同的长方形？写出每种的长和宽。<br>
+      2. 挑战：长和宽都是整数厘米，面积等于 36 cm² 的长方形有几种？<br>
+      3. 一个 L 形图形，可以"切"成哪两个长方形来算面积？</p>
+      <p id="tier3-feedback" style="font-size:13px;color:var(--muted)"></p>
+      <button id="tier3-check" style="margin-top:8px;padding:6px 14px;border-radius:8px;border:1px solid var(--brand-2);background:rgba(167,139,250,.1);color:var(--brand-2);cursor:pointer">我完成了，检查一下</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 易错点 ===== -->
+<section class="section" id="common-mistakes" data-tsh="易错点提醒">
+  <div class="card">
+    <span class="phase-tag">Common Mistakes</span>
+    <h2>小心！这3个坑最容易踩</h2>
+    <div class="grid" style="margin-top:16px">
+      <div class="card" style="background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2)">
+        <h3 style="color:#ef4444">坑1：单位和单位² 搞混</h3>
+        <p style="font-size:13px;color:var(--muted)">长 5cm、宽 3cm → 面积 15 <strong>cm²</strong>，不是 15 cm！面积用"平方单位"，就像数的是"格子的个数"。</p>
+      </div>
+      <div class="card" style="background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2)">
+        <h3 style="color:#ef4444">坑2：把周长当面积</h3>
+        <p style="font-size:13px;color:var(--muted)">周长是"绕一圈"的长度（长+宽）×2；面积是"铺满"的格子数（长×宽）。别搞反！</p>
+      </div>
+      <div class="card" style="background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2)">
+        <h3 style="color:#ef4444">坑3：不画图直接猜</h3>
+        <p style="font-size:13px;color:var(--muted)">遇到面积问题，先画一个方阵/方格图！看图比空想准得多。方阵就是你最可靠的"面积计算器"。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 后测 ===== -->
+<section class="section" id="posttest" data-tsh="后测 - 对比前测看进步">
+  <div class="card">
+    <span class="phase-tag">Post-Test</span>
+    <h2>课后检测</h2>
+    <p style="color:var(--muted)">学完了，再来测一次！和前测对比，看看进步了多少。</p>
+    <div id="posttest-quiz"></div>
+  </div>
+</section>
+
+<!-- ===== 小结 ===== -->
+<section class="section" id="summary" data-tts="s08-summary" data-tsh="小结 - 回顾整节课">
+  <div class="card">
+    <span class="phase-tag">Summary</span>
+    <h2>小结：你今天发现了什么？</h2>
+    <div class="result">
+      <strong>核心发现：</strong><br>
+      1. 方阵里<strong>每行人数 × 行数 = 总人数</strong>（这就是乘法）<br>
+      2. 把"人"换成"小方格"：<strong>每行格数 × 行数 = 总格数</strong><br>
+      3. 每行格数就是<strong>长</strong>，行数就是<strong>宽</strong>，总格数就是<strong>面积</strong><br>
+      4. 所以：<strong>长方形面积 = 长 × 宽</strong>
+    </div>
+    <p style="margin-top:12px;color:var(--muted)">面积公式不是"背"出来的，是从方阵模型里<strong>推理</strong>出来的。以后忘了公式，就想想"每行几人×几行"！</p>
+    <p style="color:var(--brand)">下一课预告：周长 = (长+宽)×2，跟面积有什么不同？</p>
+  </div>
+</section>
+
+<!-- ===== 知识图谱 ===== -->
+<section class="section" id="knowledge-graph" data-tts="knowledge-graph" data-tsh="知识图谱">
+  <div class="card">
+    <span class="phase-tag">Knowledge Graph</span>
+    <h2>知识图谱</h2>
+    <p style="color:var(--muted)">本节点的前置、后续和同域知识。</p>
+    <div data-teachany-kg="math-elementary-area-rectangle">
+      <canvas class="tkg-fallback-canvas" width="720" height="120" aria-label="知识图谱互动画布占位" style="display:block;width:100%;max-height:140px;border-radius:12px;"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AI 学伴 ===== -->
+<section class="section" id="teachany-ai-tutor-card" data-tts="ai-tutor" data-tsh="AI 学伴">
+  <div data-teachany-tutor-card></div>
+</section>
+
+<script>
+window.__TEACHANY_LEARNER_QUESTION__ = '';
+window.__TEACHANY_TUTOR_CONFIG__ = {
+  courseId: 'array-to-area',
+  courseTitle: '从方阵到面积——乘法与几何的奇妙联结',
+  subject: 'math',
+  grade: '3',
+  nodeId: 'math-elementary-area-rectangle',
+  lessonType: 'inquiry-project',
+  getLearnerQuestion: () => window.__TEACHANY_LEARNER_QUESTION__ || '',
+  getContext: () => {
+    var current = document.querySelector('section.current-section') || (location.hash ? document.querySelector(location.hash) : null);
+    return (current || document.body).innerText.slice(0, 3000);
+  }
+};
+
+function setTeachAnyLearnerQuestion(question) {
+  window.__TEACHANY_LEARNER_QUESTION__ = question || '';
+  var feedback = document.getElementById('anchor-feedback');
+  if (feedback) feedback.textContent = question ? '你的问题：' + question : '选择或输入后，本课会围绕你的问题展开。';
+}
+
+document.querySelectorAll('[data-anchor-choice]').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('[data-anchor-choice]').forEach(function(item) { item.classList.remove('selected'); });
+    btn.classList.add('selected');
+    setTeachAnyLearnerQuestion(btn.getAttribute('data-anchor-choice') || btn.textContent.trim());
+  });
+});
+document.getElementById('learner-question-input').addEventListener('input', function(event) {
+  setTeachAnyLearnerQuestion(event.target.value.trim());
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  var courseVersion = document.querySelector('meta[name="course-version"]').content;
+  var skillVersion = document.querySelector('meta[name="teachany-version"]').content;
+  if (courseVersion) document.getElementById('course-version-display').textContent = courseVersion;
+  if (skillVersion) document.getElementById('skill-version-display').textContent = skillVersion.replace(/^v/, '');
+});
+</script>
+
+<!-- =============================================
+     Canvas 互动：队列形成动画
+     ============================================= -->
+<script>
+(function() {
+  var canvas = document.getElementById('canvas-formation');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+
+  var COLS = 6, ROWS = 5;
+  var CELL = 48;
+  var ox = (canvas.width - COLS * CELL) / 2;
+  var oy = (canvas.height - ROWS * CELL) / 2;
+
+  var currentRows = 0; // how many rows are filled
+  var animating = false;
+  var stepMode = false;
+  var animFrame = 0;
+  var animationTimer = null;
+
+  function drawGridAndPeople() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // background grid
+    for (var r = 0; r < ROWS; r++) {
+      for (var c = 0; c < COLS; c++) {
+        var x = ox + c * CELL, y = oy + r * CELL;
+        ctx.fillStyle = r < currentRows ? 'rgba(245,158,11,0.08)' : 'rgba(37,65,95,0.15)';
+        ctx.fillRect(x + 2, y + 2, CELL - 4, CELL - 4);
+        ctx.strokeStyle = r < currentRows ? 'rgba(245,158,11,0.3)' : 'rgba(37,65,95,0.3)';
+        ctx.strokeRect(x + 2, y + 2, CELL - 4, CELL - 4);
+      }
+    }
+
+    // draw people (circles with smiley faces)
+    for (var r = 0; r < currentRows; r++) {
+      for (var c = 0; c < COLS; c++) {
+        var cx = ox + c * CELL + CELL / 2;
+        var cy = oy + r * CELL + CELL / 2;
+
+        // body circle
+        ctx.beginPath();
+        ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+        ctx.fillStyle = '#f59e0b';
+        ctx.fill();
+        ctx.strokeStyle = '#d97706';
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+
+        // eyes
+        ctx.fillStyle = '#07111f';
+        ctx.beginPath();
+        ctx.arc(cx - 5, cy - 3, 2.5, 0, Math.PI * 2);
+        ctx.arc(cx + 5, cy - 3, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // smile
+        ctx.beginPath();
+        ctx.arc(cx, cy + 2, 6, 0.1 * Math.PI, 0.9 * Math.PI);
+        ctx.strokeStyle = '#07111f';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      }
+    }
+
+    // labels
+    if (currentRows > 0) {
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = '12px sans-serif';
+      ctx.textAlign = 'right';
+      for (var r = 0; r < currentRows; r++) {
+        ctx.fillText('第' + (r + 1) + '行', ox - 8, oy + r * CELL + CELL / 2 + 4);
+      }
+    }
+
+    // row count at bottom
+    ctx.fillStyle = '#9fb4cc';
+    ctx.font = '13px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(currentRows + ' / ' + ROWS + ' 行', canvas.width / 2, oy + ROWS * CELL + 22);
+
+    // column count at top
+    ctx.fillStyle = '#f59e0b';
+    ctx.fillText('每行 ' + COLS + ' 人', canvas.width / 2, oy - 8);
+  }
+
+  function updateTotalLabel() {
+    var total = COLS * currentRows;
+    var el = document.getElementById('formation-total');
+    if (el) el.textContent = total;
+  }
+
+  function addRow() {
+    if (currentRows >= ROWS) return false;
+    currentRows++;
+    drawGridAndPeople();
+    updateTotalLabel();
+    return true;
+  }
+
+  function resetFormation() {
+    currentRows = 0;
+    drawGridAndPeople();
+    updateTotalLabel();
+  }
+
+  function playAnimation() {
+    if (animating) return;
+    resetFormation();
+    animating = true;
+    stepMode = false;
+    var step = 0;
+    animationTimer = setInterval(function() {
+      if (step < ROWS) {
+        currentRows++;
+        drawGridAndPeople();
+        updateTotalLabel();
+        step++;
+      } else {
+        clearInterval(animationTimer);
+        animationTimer = null;
+        animating = false;
+      }
+    }, 500);
+  }
+
+  document.getElementById('btn-play-formation').addEventListener('click', function() {
+    if (animating) {
+      clearInterval(animationTimer);
+      animationTimer = null;
+      animating = false;
+    }
+    if (window.TeachAnySync) window.TeachAnySync.notifyManualInteraction('canvas-formation');
+    playAnimation();
+  });
+
+  document.getElementById('btn-reset-formation').addEventListener('click', function() {
+    if (animating) {
+      clearInterval(animationTimer);
+      animationTimer = null;
+      animating = false;
+    }
+    resetFormation();
+  });
+
+  document.getElementById('btn-step-formation').addEventListener('click', function() {
+    if (animating) {
+      clearInterval(animationTimer);
+      animationTimer = null;
+      animating = false;
+    }
+    addRow();
+  });
+
+  // initial render
+  drawGridAndPeople();
+})();
+</script>
+
+<script>
+/* =============================================
+     TeachAnySync Canvas Registrations
+     ============================================= */
+if (window.TeachAnySync) {
+  window.TeachAnySync.register('canvas-formation', {
+    currentStep: 0,
+    maxSteps: 5,
+    setStep: function(n) {
+      // This canvas uses rows-based animation
+      var canvas = document.getElementById('canvas-formation');
+      if (!canvas) return;
+      // Reset and replay to step n
+      if (n === 0) { /* handled by reset */ }
+      else {
+        // Directly set the row count
+        var rows = Math.min(n, 5);
+        // We can't easily set internal variables, so we do a reset + step approach
+        // For now, just note that formation animation is handled via manual buttons
+      }
+    },
+    reset: function() {
+      var el = document.getElementById('formation-total');
+      if (el) el.textContent = '0';
+    },
+    getMaxSteps: function() { return this.maxSteps; }
+  });
+
+  window.TeachAnySync.register('canvas-grid', {
+    reset: function() { /* handled by slider update */ },
+    getMaxSteps: function() { return 1; }
+  });
+}
+</script>
+
+<!-- =============================================
+     Canvas 互动：方阵↔面积网格切换
+     ============================================= -->
+<script>
+(function() {
+  var canvas = document.getElementById('canvas-grid');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+
+  var COLS = 6, ROWS = 5;
+  var CELL = 48;
+  var ox, oy;
+  var viewMode = 'people'; // 'people' or 'grid'
+
+  function recalcOffset() {
+    ox = (canvas.width - COLS * CELL) / 2;
+    oy = (canvas.height - ROWS * CELL) / 2;
+  }
+
+  function draw() {
+    recalcOffset();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (viewMode === 'people') {
+      drawPeopleView();
+    } else {
+      drawGridView();
+    }
+
+    // dimension labels
+    ctx.fillStyle = '#9fb4cc';
+    ctx.font = 'bold 13px sans-serif';
+    ctx.textAlign = 'center';
+    // width label at bottom
+    ctx.fillText('长 = ' + COLS, ox + COLS * CELL / 2, oy + ROWS * CELL + 22);
+    // height label at left
+    ctx.save();
+    ctx.translate(ox - 14, oy + ROWS * CELL / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText('宽 = ' + ROWS, 0, 0);
+    ctx.restore();
+  }
+
+  function drawPeopleView() {
+    // background grid
+    for (var r = 0; r < ROWS; r++) {
+      for (var c = 0; c < COLS; c++) {
+        var x = ox + c * CELL, y = oy + r * CELL;
+        ctx.fillStyle = 'rgba(245,158,11,0.06)';
+        ctx.fillRect(x + 2, y + 2, CELL - 4, CELL - 4);
+        ctx.strokeStyle = 'rgba(245,158,11,0.2)';
+        ctx.strokeRect(x + 2, y + 2, CELL - 4, CELL - 4);
+      }
+    }
+
+    // draw people
+    for (var r = 0; r < ROWS; r++) {
+      for (var c = 0; c < COLS; c++) {
+        var cx = ox + c * CELL + CELL / 2;
+        var cy = oy + r * CELL + CELL / 2;
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, 12, 0, Math.PI * 2);
+        ctx.fillStyle = '#f59e0b';
+        ctx.fill();
+        ctx.strokeStyle = '#d97706';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        ctx.fillStyle = '#07111f';
+        ctx.beginPath();
+        ctx.arc(cx - 4, cy - 3, 2, 0, Math.PI * 2);
+        ctx.arc(cx + 4, cy - 3, 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(cx, cy + 2, 5, 0.1 * Math.PI, 0.9 * Math.PI);
+        ctx.strokeStyle = '#07111f';
+        ctx.lineWidth = 1.3;
+        ctx.stroke();
+      }
+    }
+  }
+
+  function drawGridView() {
+    // filled grid with measurement markings
+    for (var r = 0; r < ROWS; r++) {
+      for (var c = 0; c < COLS; c++) {
+        var x = ox + c * CELL, y = oy + r * CELL;
+        // alternating colors
+        var shade = (r + c) % 2 === 0 ? 'rgba(167,139,250,0.12)' : 'rgba(167,139,250,0.06)';
+        ctx.fillStyle = shade;
+        ctx.fillRect(x + 1, y + 1, CELL - 2, CELL - 2);
+        ctx.strokeStyle = 'rgba(167,139,250,0.35)';
+        ctx.lineWidth = 0.8;
+        ctx.strokeRect(x + 1, y + 1, CELL - 2, CELL - 2);
+
+        // cell number
+        var num = r * COLS + c + 1;
+        ctx.fillStyle = '#9fb4cc';
+        ctx.font = '10px monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(num, x + CELL / 2, y + CELL / 2);
+      }
+    }
+
+    // measurement arrows
+    // top horizontal arrow
+    ctx.strokeStyle = '#a78bfa';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(ox, oy - 16);
+    ctx.lineTo(ox + COLS * CELL, oy - 16);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(ox, oy - 20);
+    ctx.lineTo(ox, oy - 12);
+    ctx.moveTo(ox + COLS * CELL, oy - 20);
+    ctx.lineTo(ox + COLS * CELL, oy - 12);
+    ctx.stroke();
+
+    // left vertical arrow
+    ctx.beginPath();
+    ctx.moveTo(ox - 16, oy);
+    ctx.lineTo(ox - 16, oy + ROWS * CELL);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(ox - 20, oy);
+    ctx.lineTo(ox - 12, oy);
+    ctx.moveTo(ox - 20, oy + ROWS * CELL);
+    ctx.lineTo(ox - 12, oy + ROWS * CELL);
+    ctx.stroke();
+
+    // area label inside
+    ctx.fillStyle = '#a78bfa';
+    ctx.font = 'bold 16px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(COLS + '×' + ROWS + ' = ' + (COLS * ROWS), ox + COLS * CELL / 2, oy + ROWS * CELL / 2 - 4);
+    ctx.font = '12px sans-serif';
+    ctx.fillText('cm²', ox + COLS * CELL / 2, oy + ROWS * CELL / 2 + 14);
+  }
+
+  function updateUI() {
+    document.getElementById('val-cols').textContent = COLS;
+    document.getElementById('val-rows').textContent = ROWS;
+    document.getElementById('label-cols').textContent = COLS;
+    document.getElementById('label-rows').textContent = ROWS;
+    document.getElementById('label-total').textContent = COLS * ROWS;
+
+    if (viewMode === 'people') {
+      document.getElementById('label-perspective').textContent = '方阵视角';
+      document.getElementById('label-perspective').style.color = 'var(--warn)';
+      document.getElementById('label-unit').textContent = '人';
+      document.getElementById('btn-view-people').classList.add('active');
+      document.getElementById('btn-view-grid').classList.remove('active');
+    } else {
+      document.getElementById('label-perspective').textContent = '方格视角';
+      document.getElementById('label-perspective').style.color = 'var(--brand-2)';
+      document.getElementById('label-unit').textContent = 'cm²';
+      document.getElementById('btn-view-grid').classList.add('active');
+      document.getElementById('btn-view-people').classList.remove('active');
+    }
+    draw();
+  }
+
+  document.getElementById('slider-cols').addEventListener('input', function() {
+    COLS = parseInt(this.value);
+    if (window.TeachAnySync) window.TeachAnySync.notifyManualInteraction('canvas-grid');
+    updateUI();
+  });
+
+  document.getElementById('slider-rows').addEventListener('input', function() {
+    ROWS = parseInt(this.value);
+    if (window.TeachAnySync) window.TeachAnySync.notifyManualInteraction('canvas-grid');
+    updateUI();
+  });
+
+  document.getElementById('btn-view-people').addEventListener('click', function() {
+    viewMode = 'people';
+    updateUI();
+  });
+
+  document.getElementById('btn-view-grid').addEventListener('click', function() {
+    viewMode = 'grid';
+    updateUI();
+  });
+
+  updateUI();
+})();
+</script>
+
+<!-- =============================================
+     Quiz 系统
+     ============================================= -->
+<script>
+var diagnosticHints = {
+  pretest: [
+    { correct: '对！每行 7 人 × 4 行 = 28 人。这就是乘法的实际意义——相同加数连加。', wrong: '每行 7 人，排了 4 行，7×4=28。不是连加，用乘法更快！' },
+    { correct: '正确！面积=长×宽=5×3=15，单位是平方厘米（cm²）。', wrong: '面积=长×宽=5×3=15 cm²。"平方厘米"是面积单位，不是长度单位。' },
+    { correct: '对！每行人数就是"长"，行数就是"宽"。方阵和面积是一个模型！', wrong: '方阵和面积是同一个模型！每行人数对应长，行数对应宽。这就是今天的类比桥。' }
+  ],
+  posttest: [
+    { correct: '正确！8×6=48m²。长×宽=面积。', wrong: '面积=长×宽=8×6=48m²。记住：结果是"平方"单位！' },
+    { correct: '对！12÷4=3。宽=面积÷长，就像方阵中行数=总人数÷每行人数。', wrong: '宽=面积÷长=12÷4=3cm。类比方阵：行数=总人数÷每行人数。' },
+    { correct: '正确！6×6=36，正方形是"特殊的长方形"——长=宽！', wrong: '正方形边长6cm，面积=6×6=36cm²。正方形是长=宽的特殊长方形！' }
+  ],
+  conceptest: [
+    { correct: '对！面积数的是"铺满的格子数"，不是绕一圈的长度。', wrong: '周长是"绕一圈"的长度=(长+宽)×2，面积是"铺满"的格子数=长×宽。' },
+    { correct: '正确！8×6=48，跟"每行8人×6行"完全一样。', wrong: '8×6=48m²。长=每行人数，宽=行数，计算完全相同！' },
+    { correct: '对！铺满格子数，就是面积。方阵模型是面积公式的本质。', wrong: '面积就是"铺满"的格子数。每个格子是一个"平方单位"（如cm²），数的是有多少个这样的格子。' }
+  ]
+};
+
+function buildQuiz(containerId, questions) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  var quizType = containerId.replace('-quiz', '');
+  var hints = diagnosticHints[quizType] || [];
+  container.innerHTML = '';
+  questions.forEach(function(q, qi) {
+    var div = document.createElement('div');
+    div.style.cssText = 'margin-bottom:18px';
+    div.innerHTML = '<p style="font-weight:600;margin:0 0 8px">' + (qi + 1) + '. ' + q.q + '</p>';
+    var optsDiv = document.createElement('div');
+    q.opts.forEach(function(opt, oi) {
+      var btn = document.createElement('button');
+      btn.className = 'quiz-option';
+      btn.textContent = String.fromCharCode(65 + oi) + '. ' + opt;
+      btn.addEventListener('click', function() {
+        if (btn.disabled) return;
+        var allBtns = optsDiv.querySelectorAll('.quiz-option');
+        allBtns.forEach(function(b) { b.disabled = true; });
+        var fb = document.createElement('p');
+        fb.className = 'quiz-feedback';
+        if (oi === q.ans) {
+          btn.classList.add('correct');
+          fb.style.color = 'var(--ok)';
+          fb.textContent = '\u2714 正确！' + (hints[qi] ? ' ' + hints[qi].correct : '');
+        } else {
+          btn.classList.add('wrong');
+          allBtns[q.ans].classList.add('correct');
+          fb.style.color = '#ef4444';
+          fb.textContent = '\u2718 答案 ' + String.fromCharCode(65 + q.ans) + '。' + (hints[qi] ? hints[qi].wrong : '');
+        }
+        optsDiv.appendChild(fb);
+      });
+      optsDiv.appendChild(btn);
+    });
+    div.appendChild(optsDiv);
+    container.appendChild(div);
+  });
+}
+
+// 前测
+buildQuiz('pretest-quiz', [
+  { q: '每行7人，排了4行，总共多少人？', opts: ['24人', '28人', '11人', '7人'], ans: 1 },
+  { q: '长方形长5cm、宽3cm，面积是多少？', opts: ['15cm²', '15cm', '8cm²', '16cm²'], ans: 0 },
+  { q: '方阵模型和面积公式有什么相同之处？', opts: ['完全没关系', '都需要绕一圈', '每行人数→长，行数→宽', '都需要量周长'], ans: 2 }
+]);
+
+// 后测
+buildQuiz('posttest-quiz', [
+  { q: '操场长8米、宽6米，面积是多少？', opts: ['48m²', '48m', '28m²', '14m²'], ans: 0 },
+  { q: '面积=12cm²，长=4cm，宽=？', opts: ['2cm', '3cm', '6cm', '8cm'], ans: 1 },
+  { q: '正方形边长6cm，面积是多少？', opts: ['24cm²', '36cm', '36cm²', '12cm²'], ans: 2 }
+]);
+
+// ConcepTest
+buildQuiz('conceptest-quiz', [
+  { q: '面积和周长有什么区别？', opts: ['都一样', '面积是绕一圈，周长是铺满', '面积是铺满的格子数，周长是绕一圈的长度', '面积和周长都用乘法'], ans: 2 },
+  { q: '每行8人×6行=48人的方阵，对应的长方形面积说法正确吗？长=8m, 宽=6m, 面积=48m²', opts: ['正确，一一对应', '不对，面积和人数不能比', '面积应该是14m²', '不知道'], ans: 0 },
+  { q: '"面积=长×宽"这个公式的本质是什么？', opts: ['老师规定的', '长+宽+长+宽', '数"铺满的格子"——每行格子数×行数', '周长的一半'], ans: 2 }
+]);
+</script>
+
+<!-- =============================================
+     三段式分层练习检查按钮
+     ============================================= -->
+<script>
+(function() {
+  document.getElementById('tier1-check').addEventListener('click', function() {
+    document.getElementById('tier1-feedback').textContent = '\u2714 基础级参考：① 7×4=28人；② 5×3=15格；③ 8×6=48cm²。注意单位是"平方厘米"！';
+  });
+  document.getElementById('tier2-check').addEventListener('click', function() {
+    document.getElementById('tier2-feedback').textContent = '\u2714 进阶级参考：① 30×20=600块；② 增加的面积=2×宽（想想方阵多加一行的效果）；③ 24÷6=4cm。';
+  });
+  document.getElementById('tier3-check').addEventListener('click', function() {
+    document.getElementById('tier3-feedback').textContent = '\u2714 挑战级参考：① 1×24, 2×12, 3×8, 4×6共4种；② 1×36, 2×18, 3×12, 4×9, 6×6共5种；③ 切分成两个长方形分别算面积然后相加。';
+  });
+})();
+</script>
+
+<!-- 标准模块脚本 -->
+<script src="../scripts/ai-tutor.js"></script>
+<script src="../scripts/teachany-tutor-card.js" defer></script>
+<script src="../scripts/teachany-tts-narrator.js" defer></script>
+<script src="../scripts/teachany-section-hints.js" defer></script>
+<script src="../scripts/teachany-knowledge-graph.js" defer></script>
+<script src="../scripts/teachany-audio-player.js?v=bar-only-20260513" defer></script>
+</body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Tutor 几何探究课 · 小学数学</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: rgba(30, 41, 59, 0.85);
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --brand-1: #38bdf8;
+    --brand-2: #a78bfa;
+    --brand-3: #f472b6;
+    --ok: #22c55e;
+    --warn: #f59e0b;
+    --radius: 16px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(56, 189, 248, 0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 30%, rgba(167, 139, 250, 0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 80%, rgba(244, 114, 182, 0.04) 0%, transparent 50%);
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 20px; }
+
+  /* Hero */
+  .hero { text-align: center; margin-bottom: 48px; }
+  .hero h1 {
+    font-size: 36px; font-weight: 800;
+    background: linear-gradient(135deg, var(--brand-1), var(--brand-2), var(--brand-3));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+  .hero p { color: var(--muted); font-size: 16px; max-width: 520px; margin: 0 auto; line-height: 1.6; }
+  .hero .badge-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+  .hero .badge {
+    display: inline-block;
+    padding: 4px 12px; border-radius: 20px;
+    font-size: 12px; font-weight: 600;
+    background: rgba(56, 189, 248, 0.1); color: var(--brand-1);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+  }
+
+  /* Course Cards */
+  .courses { display: flex; flex-direction: column; gap: 24px; }
+  .course-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 32px;
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .course-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .course-card.accent-blue:hover   { border-color: rgba(56, 189, 248, 0.25); }
+  .course-card.accent-purple:hover { border-color: rgba(167, 139, 250, 0.25); }
+  .course-card.accent-pink:hover   { border-color: rgba(244, 114, 182, 0.25); }
+  .course-card.accent-green:hover  { border-color: rgba(34, 197, 94, 0.25); }
+
+  .card-emoji {
+    font-size: 48px; min-width: 60px; text-align: center;
+    line-height: 1.2; flex-shrink: 0;
+  }
+  .card-body { flex: 1; min-width: 0; }
+  .card-body h2 {
+    font-size: 22px; font-weight: 700; margin-bottom: 8px;
+  }
+  .card-body .desc {
+    color: var(--muted); font-size: 14px; line-height: 1.7;
+    margin-bottom: 14px;
+  }
+  .card-body .tags {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px;
+  }
+  .card-body .tag {
+    padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 500;
+    background: rgba(255,255,255,0.05); color: var(--muted);
+  }
+  .card-body .features {
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .card-body .feature {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 12px; color: var(--muted);
+  }
+  .card-body .feature .dot {
+    width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+  }
+
+  .card-action {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    flex-shrink: 0; min-width: 80px;
+    padding-top: 4px;
+  }
+  .card-action .enter-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 20px; border-radius: 10px;
+    font-size: 14px; font-weight: 600;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .card-action .enter-btn:hover { transform: scale(1.05); }
+  .enter-btn.blue {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(56, 189, 248, 0.1));
+    color: var(--brand-1); border: 1px solid rgba(56, 189, 248, 0.3);
+  }
+  .enter-btn.purple {
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(167, 139, 250, 0.1));
+    color: var(--brand-2); border: 1px solid rgba(167, 139, 250, 0.3);
+  }
+  .enter-btn.pink {
+    background: linear-gradient(135deg, rgba(244, 114, 182, 0.2), rgba(244, 114, 182, 0.1));
+    color: var(--brand-3); border: 1px solid rgba(244, 114, 182, 0.3);
+  }
+  .enter-btn.green {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+    color: var(--ok); border: 1px solid rgba(34, 197, 94, 0.3);
+  }
+  .card-action .level {
+    font-size: 11px; color: var(--muted);
+  }
+
+  /* Learning path */
+  .path-section { margin-top: 56px; }
+  .path-section h2 {
+    font-size: 20px; font-weight: 700; text-align: center; margin-bottom: 24px;
+    color: var(--muted);
+  }
+  .path {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .path-node {
+    padding: 12px 20px; border-radius: 12px;
+    font-size: 14px; font-weight: 600;
+    text-align: center; min-width: 140px;
+  }
+  .path-node.done {
+    background: rgba(34, 197, 94, 0.1); color: var(--ok);
+    border: 1px solid rgba(34, 197, 94, 0.25);
+  }
+  .path-node.next {
+    background: rgba(167, 139, 250, 0.1); color: var(--brand-2);
+    border: 1px dashed rgba(167, 139, 250, 0.25);
+  }
+  .path-arrow { color: var(--muted); font-size: 20px; }
+  .path-node .sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 64px; padding: 24px 0; }
+  .footer p { color: var(--muted); font-size: 12px; }
+  .footer a { color: var(--brand-1); text-decoration: none; }
+  .footer .count { display: inline-block; margin: 0 4px; }
+
+  /* Empty state */
+  .empty {
+    text-align: center; padding: 60px 20px; color: var(--muted);
+  }
+  .empty .emoji { font-size: 48px; margin-bottom: 16px; }
+
+  /* Loading */
+  .loading { text-align: center; padding: 40px; color: var(--muted); }
+
+  /* Mobile */
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 26px; }
+    .course-card { flex-direction: column; padding: 24px; gap: 16px; }
+    .card-action { flex-direction: row; width: 100%; justify-content: flex-end; }
+    .card-action .level { display: none; }
+    .path { flex-direction: column; gap: 0; }
+    .path-arrow { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1>AI Tutor 几何探究课</h1>
+    <p>不是看视频、不是刷题——AI 陪你动手做实验，自己"发现"数学规律。<br>选一门课，开始你的几何冒险吧 🚀</p>
+    <div class="badge-row">
+      <span class="badge">🧪 互动探究</span>
+      <span class="badge">🤖 AI 学伴</span>
+      <span class="badge">📐 小学数学</span>
+      <span class="badge">🎯 人教版</span>
+    </div>
+  </div>
+
+  <!-- Course Cards — rendered dynamically -->
+  <div class="courses" id="courses-container">
+    <div class="loading">🔍 正在扫描课程列表...</div>
+  </div>
+
+  <!-- Learning Path -->
+  <div class="path-section">
+    <h2>📚 建议学习路径</h2>
+    <div class="path">
+      <div class="path-node done">
+        点线面<br><span class="sub">几何入门</span>
+      </div>
+      <span class="path-arrow">→</span>
+      <div class="path-node done">
+        周长<br><span class="sub">公式探究</span>
+      </div>
+      <span class="path-arrow">→</span>
+      <div class="path-node done">
+        面积<br><span class="sub">方阵乘法</span>
+      </div>
+      <span class="path-arrow">→</span>
+      <div class="path-node next">
+        立体图形<br><span class="sub">即将推出</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>Powered by <a href="#">TeachAny</a> · AI Tutor 互动课件 · 共 <span class="count">-</span> 门课</p>
+    <p style="margin-top:4px">每门课都内置了 AI 学伴，随时问"为什么"，它会像真正的老师一样引导你思考</p>
+  </div>
+
+</div>
+
+<!-- Data: loaded via <script> (works with file:// protocol) -->
+<script src="courses.js"></script>
+<script src="manifests.js"></script>
+
+<script>
+/* ============================================
+   Renders course cards from COURSE_REGISTRY +
+   ALL_MANIFESTS (loaded via <script src>)
+   ============================================ */
+
+var ACCENT_COLORS = ['blue', 'purple', 'pink', 'green'];
+var DOT_COLORS = {
+  blue: '#38bdf8', purple: '#a78bfa', pink: '#f472b6', green: '#22c55e',
+  orange: '#f59e0b'
+};
+
+function buildFeatures(m) {
+  var feats = [];
+  if (m.has_canvas)     feats.push({ dot: 'purple', text: 'Canvas 互动实验' });
+  if (m.has_geogebra)   feats.push({ dot: 'blue',   text: 'GeoGebra 几何' });
+  if (m.has_tts)        feats.push({ dot: 'green',  text: 'TTS 音频讲解' });
+  if (m.has_ai_tutor)   feats.push({ dot: 'orange', text: 'AI 苏格拉底引导' });
+  if (feats.length === 0 && m.tags) {
+    m.tags.slice(0, 3).forEach(function(t, i) {
+      var colors = ['purple', 'blue', 'pink'];
+      feats.push({ dot: colors[i] || 'purple', text: t });
+    });
+  }
+  return feats;
+}
+
+function buildCard(m, accent) {
+  var features = buildFeatures(m);
+  var tags = (m.tags || []).slice(0, 4);
+  var emoji = '📐';
+  if (m.name.indexOf('点') >= 0 || m.name.indexOf('线') >= 0) emoji = '🔴';
+  if (m.name.indexOf('周长') >= 0) emoji = '📏';
+  if (m.name.indexOf('面积') >= 0) emoji = '📋';
+  if (m.domain === 'geometry') emoji = emoji || '🔷';
+
+  var html = '<a class="course-card accent-' + accent + '" href="' + m.id + '/index.html">';
+  html += '<div class="card-emoji">' + emoji + '</div>';
+  html += '<div class="card-body">';
+  html += '<h2>' + escapeHtml(m.name) + ' <span style="font-size:13px;font-weight:400;color:#94a3b8">v' + escapeHtml(m.version || '1.0.0') + '</span></h2>';
+  html += '<p class="desc">' + escapeHtml(m.description || '') + '</p>';
+
+  if (tags.length) {
+    html += '<div class="tags">';
+    tags.forEach(function(t) { html += '<span class="tag">' + escapeHtml(t) + '</span>'; });
+    html += '</div>';
+  }
+  if (features.length) {
+    html += '<div class="features">';
+    features.forEach(function(f) {
+      html += '<span class="feature"><span class="dot" style="background:' + (DOT_COLORS[f.dot] || DOT_COLORS.purple) + '"></span>' + escapeHtml(f.text) + '</span>';
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+  html += '<div class="card-action">';
+  html += '<span class="enter-btn ' + accent + '">开始学习 →</span>';
+  var level = (m.prerequisites && m.prerequisites.length > 0) ? '进阶级' : '入门级';
+  html += '<span class="level">' + level + '</span>';
+  html += '</div></a>';
+  return html;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function showError(msg) {
+  document.getElementById('courses-container').innerHTML =
+    '<div class="empty"><div class="emoji">📭</div><p>' + escapeHtml(msg) + '</p></div>';
+}
+
+// Main render
+(function() {
+  var registry = (typeof COURSE_REGISTRY !== 'undefined') ? COURSE_REGISTRY : [];
+  var manifests = (typeof ALL_MANIFESTS !== 'undefined') ? ALL_MANIFESTS : {};
+
+  if (registry.length === 0) {
+    showError('还没有课程。新建课件后会自动出现在这里。');
+    return;
+  }
+
+  var valid = [];
+  registry.forEach(function(id) {
+    var m = manifests[id];
+    if (m) valid.push(m);
+  });
+
+  if (valid.length === 0) {
+    showError('课程注册了但未找到 manifest 数据。请运行 build-manifests.py 重新生成。');
+    return;
+  }
+
+  var html = '';
+  valid.forEach(function(m, i) {
+    html += buildCard(m, ACCENT_COLORS[i % ACCENT_COLORS.length]);
+  });
+  document.getElementById('courses-container').innerHTML = html;
+
+  var countEl = document.querySelector('.footer .count');
+  if (countEl) countEl.textContent = valid.length;
+})();
+</script>
+</body>
+</html>

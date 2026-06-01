@@ -1,0 +1,1090 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>点线面：几何世界的元老</title>
+<meta name="description" content="小学三年级几何入门探究课。点动成线、线动成面——从看得见的记号到看不见的数学抽象。">
+
+<meta name="course-id" content="point-line-plane">
+<meta name="course-title" content="点线面：几何世界的元老">
+<meta name="course-subject" content="math">
+<meta name="course-grade" content="elementary-3">
+<meta name="course-prereqs" content="">
+<meta name="course-next" content="">
+<meta name="course-version" content="0.2.0">
+<meta name="teachany-version" content="7.14.0">
+<meta name="teachany-node" content="math-g1-point-line-plane">
+<meta name="teachany-subject" content="math">
+<meta name="teachany-grade" content="3">
+<meta name="teachany-stage" content="elementary">
+<meta name="teachany-domain" content="geometry">
+<meta name="teachany-prerequisites" content="">
+<meta name="teachany-lesson-type" content="inquiry-project">
+<meta name="teachany-free-mode" content="true">
+
+<link rel="stylesheet" href="../scripts/ai-tutor.css">
+<link rel="stylesheet" href="../scripts/teachany-tutor-card.css">
+<link rel="stylesheet" href="../scripts/teachany-tts-narrator.css">
+<link rel="stylesheet" href="../scripts/teachany-section-hints.css">
+<link rel="stylesheet" href="../scripts/teachany-knowledge-graph.css">
+<link rel="stylesheet" href="../scripts/teachany-audio-player.css">
+
+<style>
+:root {
+  --bg: #07111f;
+  --panel: #101d32;
+  --card: #14233a;
+  --line: #25415f;
+  --text: #eef6ff;
+  --muted: #9fb4cc;
+  --brand: #38bdf8;
+  --brand-2: #a78bfa;
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; max-width: 100%; overflow-x: hidden; scroll-behavior: smooth; }
+body {
+  padding-top: var(--safe-top);
+  padding-bottom: calc(18px + var(--safe-bottom));
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Source Han Sans SC", system-ui, sans-serif;
+  line-height: 1.7;
+  font-size: 16px;
+}
+a { color: #7dd3fc; }
+button, a, input, select, textarea { min-height: 44px; }
+img, video, canvas, svg { max-width: 100%; height: auto; }
+.teachany-brand-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: rgba(7, 17, 31, .92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(148, 163, 184, .18);
+}
+.brand-logo { display: flex; align-items: center; gap: 8px; color: #f8fafc; text-decoration: none; font-weight: 800; }
+.brand-mark { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, var(--brand), var(--brand-2)); color: #07111f; font-weight: 900; }
+.brand-right { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+.brand-link { text-decoration: none; }
+.brand-version { color: #cbd5e1; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: rgba(255,255,255,.08); padding: 4px 8px; border-radius: 999px; }
+.brand-skill-version { color: #94a3b8; }
+.hero {
+  padding: 64px 20px 38px;
+  text-align: center;
+  background: radial-gradient(circle at 20% 0%, rgba(56,189,248,.22), transparent 36%), radial-gradient(circle at 80% 10%, rgba(167,139,250,.18), transparent 34%);
+}
+h1 { font-size: clamp(28px, 6vw, 52px); line-height: 1.15; margin: 0 auto 16px; max-width: 960px; }
+.subtitle { color: var(--muted); font-size: clamp(16px, 2.8vw, 20px); max-width: 860px; margin: 0 auto; }
+.section { max-width: 1080px; margin: 0 auto; padding: 36px 20px; }
+.card { background: linear-gradient(180deg, rgba(20,35,58,.96), rgba(13,27,47,.96)); border: 1px solid rgba(148,163,184,.18); border-radius: 18px; padding: 22px; box-shadow: 0 16px 40px rgba(0,0,0,.18); }
+.grid, .objectives { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.choice { width: 100%; text-align: left; border: 1px solid rgba(56,189,248,.24); border-radius: 14px; background: rgba(56,189,248,.08); color: var(--text); padding: 14px 16px; cursor: pointer; }
+.choice.selected { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(56,189,248,.18); }
+input, textarea { width: 100%; border-radius: 12px; border: 1px solid var(--line); background: #0b1628; color: var(--text); padding: 12px 14px; font-size: 16px; }
+.phase-tag { display: inline-flex; align-items: center; gap: 6px; color: #bae6fd; background: rgba(56,189,248,.12); border: 1px solid rgba(56,189,248,.25); border-radius: 999px; padding: 4px 10px; font-size: 13px; }
+.ta-standard-figure { margin: 24px auto 0; max-width: 980px; }
+.ta-standard-figure img { display: block; width: 100%; border-radius: 18px; border: 1px solid rgba(148,163,184,.18); background: #0b1628; }
+.ta-standard-figure figcaption { margin-top: 10px; color: var(--muted); font-size: 14px; text-align: center; }
+.canvas-wrap { overflow: auto; background: #081426; border: 1px solid rgba(148,163,184,.18); border-radius: 16px; padding: 12px; }
+.result { padding: 14px; border-radius: 12px; background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.25); }
+.warn { background: rgba(245,158,11,.1); border-color: rgba(245,158,11,.28); }
+.quiz-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 12px 16px;
+  margin: 8px 0;
+  border: 1px solid rgba(148,163,184,.2);
+  border-radius: 12px;
+  background: rgba(20,35,58,.6);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 15px;
+  transition: border-color .2s;
+}
+.quiz-option:hover { border-color: var(--brand); }
+.quiz-option.correct { border-color: var(--ok); background: rgba(34,197,94,.12); }
+.quiz-option.wrong { border-color: #ef4444; background: rgba(239,68,68,.1); }
+.quiz-option:disabled { cursor: default; }
+.quiz-feedback { margin-top: 10px; font-size: 14px; }
+.geogebra-wrap {
+  position: relative;
+  width: 100%;
+  padding-top: 62.5%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #0f172a;
+  border: 1px solid rgba(148,163,184,.18);
+}
+.geogebra-wrap iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: 0;
+}
+.hint-text { font-size: 13px; color: var(--muted); margin-top: 8px; }
+.inline-demo { margin: 16px 0; }
+.treasure-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; margin-top: 16px; }
+.treasure-item {
+  padding: 10px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(148,163,184,.2);
+  background: rgba(20,35,58,.5);
+  text-align: center;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all .15s;
+}
+.treasure-item:hover { border-color: var(--brand); background: rgba(56,189,248,.1); }
+.treasure-item.found-point { border-color: var(--brand); background: rgba(56,189,248,.15); }
+.treasure-item.found-line { border-color: var(--teal-600, #1D9E75); background: rgba(29,158,117,.12); }
+.treasure-item.found-plane { border-color: var(--purple-600, #534AB7); background: rgba(83,74,183,.12); }
+.dimension-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0; }
+.dim-card { text-align: center; padding: 28px 16px; border-radius: 16px; border: 1px solid rgba(148,163,184,.18); background: rgba(20,35,58,.6); }
+.dim-card .dim-icon { font-size: 36px; margin-bottom: 8px; }
+.dim-card .dim-name { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+.dim-card .dim-desc { font-size: 13px; color: var(--muted); }
+.line-types { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px; }
+.line-type-card { text-align: center; padding: 18px 12px; border-radius: 14px; border: 1px solid rgba(148,163,184,.15); background: rgba(20,35,58,.4); }
+.line-type-card .lt-icon { font-size: 28px; margin-bottom: 6px; }
+.line-type-card .lt-name { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+.line-type-card .lt-desc { font-size: 12px; color: var(--muted); }
+h2 { font-size: clamp(22px, 4vw, 28px); margin: 0 0 12px; }
+h3 { font-size: 18px; margin: 0 0 8px; }
+@media (max-width: 600px) {
+  .teachany-brand-bar { padding: 8px 12px; }
+  .brand-name { display: none; }
+  .brand-right { gap: 8px; font-size: 12px; }
+  .hero { padding: 42px 16px 28px; }
+  .section { padding: 26px 16px; }
+  .grid, .objectives { grid-template-columns: 1fr !important; }
+  .card { padding: 18px; border-radius: 16px; }
+  .dimension-cards, .line-types { grid-template-columns: 1fr; }
+  h2 { font-size: 22px; }
+  canvas.wide-canvas { min-width: 560px; }
+}
+</style>
+</head>
+<body>
+<div class="teachany-brand-bar">
+  <a class="brand-logo" href="https://weponusa.github.io/teachany/" aria-label="TeachAny Gallery">
+    <span class="brand-mark">T</span><span class="brand-name">TeachAny</span>
+  </a>
+  <div class="brand-right">
+    <a class="brand-link" href="https://weponusa.github.io/teachany/">Gallery</a>
+    <span class="brand-version">v<span id="course-version-display">0.1.0</span><span class="brand-skill-version"> · skill v<span id="skill-version-display">7.14.0</span></span></span>
+  </div>
+</div>
+
+<header class="hero" id="hero" data-tts="s01-hero" data-tsh="开场 - 从身边的几何开始思考">
+  <h1>点线面：几何世界的元老</h1>
+  <p class="subtitle">笔尖按下去是一个点，拉直的绳子是一条线，桌面是一片面——几何世界从这三个"元老"开始</p>
+</header>
+
+<section class="section" id="hero-infographic" data-tsh="知识结构主图 - 先看完整学习地图">
+  <figure class="ta-standard-figure">
+    <img class="hero-cover-img" src="./assets/hero-infographic.svg" onerror="this.src='./assets/hero-infographic.svg'" alt="点线面知识结构：0维的点、1维的线、2维的面，点动成线，线动成面">
+    <figcaption>点（0维）→ 线（1维）→ 面（2维）：运动让维度升级</figcaption>
+  </figure>
+</section>
+
+<div id="audio-config" data-teachany-audio hidden>
+  <script type="application/json" data-teachany-audio-playlist>
+[
+  {"id":"s01-hero","src":"tts/s01-hero.mp3","label":"开场引入","target":"hero"},
+  {"id":"s02-point","src":"tts/s02-point.mp3","label":"认识点","target":"what-is-point"},
+  {"id":"s03-point-to-line","src":"tts/s03-point-to-line.mp3","label":"点动成线","target":"point-to-line"},
+  {"id":"s04-three-line-types","src":"tts/s04-three-line-types.mp3","label":"三种线","target":"three-line-types"},
+  {"id":"s05-geogebra","src":"tts/s05-geogebra-3points.mp3","label":"GeoGebra实验","target":"geogebra-3points"},
+  {"id":"s06-line-to-plane","src":"tts/s06-line-to-plane.mp3","label":"线动成面","target":"line-to-plane"},
+  {"id":"s07-treasure","src":"tts/s07-treasure-hunt.mp3","label":"教室寻宝","target":"classroom-treasure"},
+  {"id":"s08-summary","src":"tts/s08-summary.mp3","label":"课堂小结","target":"summary"}
+]
+  </script>
+</div>
+
+<section id="problem-anchor" class="section" data-tts="problem-anchor" data-tsh="问题锚点 - 先确定你今天想解决的问题">
+  <div class="card">
+    <span class="phase-tag">Problem Anchor</span>
+    <h2>今天的课件可以帮你解决什么问题？</h2>
+    <p style="color:var(--muted)">先选一个你关心的问题，后面的互动和 AI 学伴都会围绕它来展开。</p>
+    <div class="grid" id="problem-anchor-choices">
+      <button class="choice" data-anchor-choice="我画的圆点和数学里的"点"一样吗？为什么点没有大小？">我画的圆点和数学里的"点"一样吗？为什么点没有大小？</button>
+      <button class="choice" data-anchor-choice="点和线之间有什么关系？"点动成线"是什么意思？">点和线之间有什么关系？"点动成线"是什么意思？</button>
+      <button class="choice" data-anchor-choice="我们身边的万物，由什么"最小单位"构成？几何世界是怎么建起来的？">我们身边的万物，由什么"最小单位"构成？几何世界是怎么建起来的？</button>
+    </div>
+    <label style="display:block;margin-top:18px;color:var(--muted)">我有自己的问题
+      <input id="learner-question-input" placeholder="把你卡住的问题写在这里">
+    </label>
+    <p id="anchor-feedback" class="result warn" style="margin-top:14px">选择或输入后，本课会围绕你的问题展开。</p>
+  </div>
+</section>
+
+<section id="objectives" class="section" data-tts="objectives" data-tsh="学习目标">
+  <div class="card">
+    <span class="phase-tag">Learning Objectives</span>
+    <h2>学习目标</h2>
+    <ul class="objectives">
+      <li>能从生活中指认点、线、面的实例，区分"记号"与数学概念</li>
+      <li>能解释"点动成线、线动成面"，用手势或工具演示这一过程</li>
+      <li>能说出直线、射线、线段的区别，会正确命名</li>
+      <li>理解"两点确定一条直线""不共线三点确定一个平面"</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="pretest" data-tsh="前测 - 看看你对点线面了解多少">
+  <div class="card">
+    <span class="phase-tag">Pre-test</span>
+    <h2>课前小测</h2>
+    <p style="color:var(--muted)">先试试看，错了也没关系，学完你就知道了！</p>
+    <div id="pretest-quiz"></div>
+  </div>
+</section>
+
+<section class="section" id="what-is-point" data-tts="s02-point" data-tsh="认识点 - 从笔尖到记号到抽象">
+  <div class="card">
+    <span class="phase-tag">Explore: Point</span>
+    <h2>一、点——只有位置，没有大小</h2>
+    <p>用你的食指尖按一下桌面——那个<strong>接触的地方</strong>，就是一个点。</p>
+    <p style="color:var(--muted)">在纸上画一个圆点，写上字母 <strong>A</strong>。这就是<strong>点 A</strong>。</p>
+
+    <div class="inline-demo">
+      <canvas id="canvas-point-demo" width="640" height="120" style="display:block;width:100%;max-width:640px;margin:0 auto;border-radius:12px;background:#0b1628;border:1px solid rgba(148,163,184,.18)"></canvas>
+      <p class="hint-text" style="text-align:center">点击画布任意位置，画一个点。用你最细的笔尖还能画出更小的点吗？数学里的点——<strong>想多小就多小</strong></p>
+    </div>
+
+    <div class="result" style="margin-top:16px">
+      <strong>思考：</strong>如果我让你画一个"比刚才小一半"的点，你还能画吗？再小一半呢？<br>
+      <span style="color:var(--muted)">→ 答案：你可以一直画下去！因为数学里的<strong>点没有大小</strong>——你画出来的圆点只是一个"记号"，用来告诉你"这里有一个点"。真正的点，只告诉你<strong>位置</strong>在哪。</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="point-to-line" data-tts="s03-point-to-line" data-tsh="点动成线 - 拖一个点，看它画出什么">
+  <div class="card">
+    <span class="phase-tag">Experiment</span>
+    <h2>二、点动成线 —— 拖一个点，看它留下什么</h2>
+    <p>下面这个实验是今天的<strong>核心发现</strong>。拖动蓝色的点向右滑——</p>
+
+    <div class="canvas-wrap">
+      <canvas id="canvas-point-motion" width="720" height="200" class="wide-canvas" style="display:block;margin:0 auto;touch-action:none"></canvas>
+    </div>
+    <div style="display:flex;justify-content:center;gap:12px;margin-top:10px;flex-wrap:wrap">
+      <button id="btn-move-slow" style="padding:8px 16px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer">慢速演示</button>
+      <button id="btn-move-fast" style="padding:8px 16px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer">快速演示</button>
+      <button id="btn-move-reset" style="padding:8px 16px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer">重置</button>
+      <span id="point-motion-dist" style="line-height:44px;color:var(--warn);font-weight:600">距离: 0</span>
+    </div>
+    <p class="hint-text" style="text-align:center;margin-top:8px">💡 你也可以在画布上<strong>直接拖拽</strong>蓝色的点！</p>
+
+    <div class="result" style="margin-top:16px">
+      <strong>发现：</strong>一个点滑过去，留下的轨迹就是一条<strong>线</strong>。<br>
+      <span style="color:var(--muted)">→ 换句话说：无数个点密密麻麻排在一起，就组成了一条线。这就是"<strong>点动成线</strong>"。</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="three-line-types" data-tts="s04-three-line-types" data-tsh="三种线 - 线段、射线、直线">
+  <div class="card">
+    <span class="phase-tag">Concept</span>
+    <h2>三种线：线段、射线、直线</h2>
+    <p style="color:var(--muted)">它们都是"线"，但"端点"不一样——</p>
+
+    <div class="line-types">
+      <div class="line-type-card">
+        <div class="lt-icon">━━━</div>
+        <div class="lt-name">线段 AB</div>
+        <div class="lt-desc">两个端点，有限长<br>像一根筷子<br>可以测量长度</div>
+      </div>
+      <div class="line-type-card">
+        <div class="lt-icon">●━━→</div>
+        <div class="lt-name">射线 AB</div>
+        <div class="lt-desc">一个端点，向一方无限延伸<br>像手电筒的光<br>有起点，无终点</div>
+      </div>
+      <div class="line-type-card">
+        <div class="lt-icon">←━━→</div>
+        <div class="lt-name">直线 AB</div>
+        <div class="lt-desc">没有端点，向两方无限延伸<br>像拉直的无限长的绳<br>无起点，无终点</div>
+      </div>
+    </div>
+
+    <div class="result" style="margin-top:16px">
+      <strong>命名规则：</strong>过点 A 和点 B 的直线 → <strong>直线 AB</strong> 或 <strong>直线 BA</strong><br>
+      <span style="color:var(--muted)">注意：线段 AB、射线 AB、直线 AB 是三种不同的东西！</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="geogebra-3points" data-tts="s05-geogebra" data-tsh="GeoGebra 实验 - 三点能确定一个平面吗？">
+  <div class="card">
+    <span class="phase-tag">GeoGebra Lab</span>
+    <h2>三、三点定面实验</h2>
+    <p>拖动下面三个彩色的点，看看什么情况下它们能确定一个平面，什么情况下不能。</p>
+
+    <div class="geogebra-wrap">
+      <iframe
+        src="https://www.geogebra.org/geometry?lang=zh_CN"
+        style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"
+        allowfullscreen
+        loading="lazy"
+        sandbox="allow-scripts allow-same-origin">
+      </iframe>
+    </div>
+    <p class="hint-text">💡 在 GeoGebra 中画三个点：用"点"工具点三下。试着把三个点排成一条直线——你会发现什么？</p>
+
+    <div class="result" style="margin-top:16px">
+      <strong>发现：</strong>三个点如果<strong>不共线</strong>（不在同一条直线上），它们就确定了一个平面。<br>
+      <span style="color:var(--muted)">→ 如果三点共线呢？它们在一条线上——只能确定一条线，不能确定一个面。所以：<strong>不共线三点确定一个平面</strong>。</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="line-to-plane" data-tts="s06-line-to-plane" data-tsh="线动成面 - 一条线平移扫出一个面">
+  <div class="card">
+    <span class="phase-tag">Experiment</span>
+    <h2>四、线动成面 —— 扫出来的新维度</h2>
+    <p>你有直尺吗？把直尺的侧边紧贴桌面，横着滑过去——直尺侧边扫过的地方，就是一个<strong>面</strong>。</p>
+
+    <div class="inline-demo">
+      <canvas id="canvas-line-sweep" width="640" height="180" style="display:block;width:100%;max-width:640px;margin:0 auto;border-radius:12px;background:#0b1628;border:1px solid rgba(148,163,184,.18)"></canvas>
+    </div>
+    <div style="display:flex;justify-content:center;gap:12px;margin-top:10px">
+      <button id="btn-sweep-demo" style="padding:8px 16px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer">演示线动成面</button>
+      <button id="btn-sweep-reset" style="padding:8px 16px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer">重置</button>
+    </div>
+
+    <!-- 维度升级过程示意图 -->
+    <figure class="ta-standard-figure" style="margin-top:18px">
+      <svg viewBox="0 0 720 220" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round"/>
+          </marker>
+          <marker id="arrD" viewBox="0 0 10 10" refX="5" refY="8" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M1 2L5 8L9 2" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round"/>
+          </marker>
+        </defs>
+
+        <!-- 步骤1：点（0维） -->
+        <g transform="translate(20,20)">
+          <rect x="0" y="0" width="180" height="140" rx="14" fill="#14233a" stroke="#38bdf8" stroke-width="1.2"/>
+          <text x="90" y="28" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#f87171" font-weight="600">0 维</text>
+          <circle cx="90" cy="70" r="7" fill="#38bdf8"/>
+          <text x="90" y="108" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#38bdf8" font-weight="600">● 点</text>
+          <text x="90" y="128" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#9fb4cc">只有位置，没有大小</text>
+          <!-- 运动方向提示：向右的箭头 -->
+          <line x1="50" y1="70" x2="130" y2="70" stroke="#f87171" stroke-width="1.2" marker-end="url(#arrR)" stroke-dasharray="4 3"/>
+          <text x="90" y="60" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#f87171">向 → 平移</text>
+        </g>
+
+        <!-- 连接箭头① -->
+        <line x1="202" y1="90" x2="248" y2="90" stroke="#f87171" stroke-width="1.8" marker-end="url(#arrR)"/>
+        <text x="225" y="80" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#f87171" font-weight="600">维度+1</text>
+        <text x="225" y="110" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#9fb4cc">点动成线</text>
+
+        <!-- 步骤2：线（1维） -->
+        <g transform="translate(250,20)">
+          <rect x="0" y="0" width="180" height="140" rx="14" fill="#14233a" stroke="#2dd4bf" stroke-width="1.2"/>
+          <text x="90" y="28" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#f87171" font-weight="600">1 维</text>
+          <line x1="30" y1="75" x2="150" y2="75" stroke="#2dd4bf" stroke-width="3" stroke-linecap="round"/>
+          <!-- 长度标注 -->
+          <line x1="30" y1="95" x2="30" y2="85" stroke="#2dd4bf" stroke-width="0.8"/>
+          <line x1="150" y1="95" x2="150" y2="85" stroke="#2dd4bf" stroke-width="0.8"/>
+          <line x1="30" y1="95" x2="150" y2="95" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="3 2"/>
+          <text x="90" y="110" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#2dd4bf">有了长度</text>
+          <text x="90" y="128" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#2dd4bf" font-weight="600">━ 线</text>
+          <text x="90" y="146" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#9fb4cc">有长度，无宽度</text>
+          <!-- 运动方向提示：向下的箭头 -->
+          <line x1="155" y1="50" x2="155" y2="120" stroke="#f87171" stroke-width="1.2" marker-end="url(#arrD)" stroke-dasharray="4 3"/>
+          <text x="168" y="88" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#f87171">向↓平移</text>
+        </g>
+
+        <!-- 连接箭头② -->
+        <line x1="432" y1="90" x2="478" y2="90" stroke="#f87171" stroke-width="1.8" marker-end="url(#arrR)"/>
+        <text x="455" y="80" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#f87171" font-weight="600">维度+1</text>
+        <text x="455" y="110" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#9fb4cc">线动成面</text>
+
+        <!-- 步骤3：面（2维） -->
+        <g transform="translate(480,20)">
+          <rect x="0" y="0" width="200" height="140" rx="14" fill="#14233a" stroke="#a78bfa" stroke-width="1.2"/>
+          <text x="100" y="28" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#f87171" font-weight="600">2 维</text>
+          <rect x="35" y="50" width="130" height="55" rx="2" fill="rgba(167,139,250,0.14)" stroke="#a78bfa" stroke-width="1.8"/>
+          <!-- 长标注 -->
+          <line x1="35" y1="120" x2="165" y2="120" stroke="#a78bfa" stroke-width="0.8" stroke-dasharray="2 2"/>
+          <text x="100" y="134" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#a78bfa">有了长</text>
+          <!-- 宽标注 -->
+          <line x1="175" y1="55" x2="185" y2="45" stroke="#a78bfa" stroke-width="0.8" stroke-dasharray="2 2"/>
+          <text x="192" y="52" text-anchor="start" font-family="sans-serif" font-size="10" fill="#a78bfa">有了宽</text>
+          <text x="100" y="152" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#a78bfa" font-weight="600">▣ 面</text>
+          <text x="100" y="170" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#9fb4cc">有长宽，无厚度</text>
+        </g>
+
+        <!-- 底部总结 -->
+        <rect x="60" y="186" width="600" height="26" rx="8" fill="rgba(248,113,113,0.08)" stroke="rgba(248,113,113,0.2)" stroke-width="0.6"/>
+        <text x="360" y="203" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#f87171" font-weight="600">运动让维度升级：点（0维）→ 线（1维）→ 面（2维）</text>
+      </svg>
+      <figcaption>点动成线（向→平移）→ 线动成面（向↓平移），每平移一次，维度 +1</figcaption>
+    </figure>
+
+    <div class="result" style="margin-top:14px">
+      <strong>维度升级规则：</strong><br>
+      点（0维）+ 平移 → 线（1维，有了长度）<br>
+      线（1维）+ 平移 → 面（2维，有了长和宽）<br>
+      面（2维）+ 平移 → 体（3维，有了长宽高——下次学！）
+    </div>
+  </div>
+</section>
+
+<section class="section" id="classroom-treasure" data-tts="s07-treasure" data-tsh="教室寻宝 - 在身边找到点线面">
+  <div class="card">
+    <span class="phase-tag">Game</span>
+    <h2>五、教室寻宝：点线面在哪里？</h2>
+    <p>点击下面的物品，判断它是点、线还是面的实例。</p>
+
+    <div class="treasure-grid" id="treasure-grid"></div>
+    <p id="treasure-score" style="margin-top:16px;font-weight:600;text-align:center"></p>
+  </div>
+</section>
+
+<section class="section" id="conceptest" data-tsh="ConcepTest - 判断对错，检验理解">
+  <div class="card">
+    <span class="phase-tag">ConcepTest</span>
+    <h2>概念辨析：判断题</h2>
+    <p style="color:var(--muted)">下面这些说法对吗？对着你的理解来打个勾！</p>
+    <div id="conceptest-quiz"></div>
+  </div>
+</section>
+
+<!-- #8: 五镜头深层理解 -->
+<section class="section" id="five-lenses" data-tsh="五镜头深度学习 - 从五个角度理解点线面">
+  <div class="card">
+    <span class="phase-tag">Deep Understanding</span>
+    <h2>换个角度看看：五个"镜头"重新理解点线面</h2>
+    <div class="grid" style="margin-top:16px">
+      <div class="card" style="background:rgba(20,35,58,.5)">
+        <h3>1. 物理镜头</h3>
+        <p style="color:var(--muted);font-size:14px">如果一直放大一个点——放大100倍、1000倍、10000倍——它还是点吗？</p>
+        <p style="font-size:13px">现实中任何东西放大后都有"大小"。数学的点是一种<strong>理想化</strong>——就像物理学里的"质点"。</p>
+      </div>
+      <div class="card" style="background:rgba(20,35,58,.5)">
+        <h3>2. 运动镜头</h3>
+        <p style="color:var(--muted);font-size:14px">维度是怎么"长"出来的？</p>
+        <p style="font-size:13px">平移一次，维度 +1。点→线→面→体——运动是维度的"制造机"。</p>
+      </div>
+      <div class="card" style="background:rgba(20,35,58,.5)">
+        <h3>3. 集合镜头</h3>
+        <p style="color:var(--muted);font-size:14px">线就是无数个点的集合？</p>
+        <p style="font-size:13px">是的。一条线段上的点<strong>多到数不清</strong>——这就是"连续"的概念，为以后学实数轴埋下伏笔。</p>
+      </div>
+      <div class="card" style="background:rgba(20,35,58,.5)">
+        <h3>4. 关系镜头</h3>
+        <p style="color:var(--muted);font-size:14px">两个点、三个点……分别能确定什么？</p>
+        <p style="font-size:13px">2点→线 | 3点不共线→面 | 4点不共面→体。点数越多，能确定的结构越高维。</p>
+      </div>
+      <div class="card" style="background:rgba(20,35,58,.5)">
+        <h3>5. 应用镜头</h3>
+        <p style="color:var(--muted);font-size:14px">点线面在哪些地方用到？</p>
+        <p style="font-size:13px">GPS定位（点）、导航路线（线）、地图（面）——你手机里的地图App背后就是点线面！</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- #10: 三段式作业分层 -->
+<section class="section" id="tiered-practice" data-tsh="三段式分层练习 - 基础→进阶→挑战">
+  <div class="card">
+    <span class="phase-tag">Practice</span>
+    <h2>分层练习：选你的挑战级别</h2>
+
+    <div class="result" style="margin-bottom:16px">
+      <h3>Level 1 · 基础</h3>
+      <p>1. 在纸上画两个点 A 和 B，过它们画一条直线。换个方向再试试——能画出第二条吗？<br>
+      2. 说出教室里 3 个"点"的实例、3 个"线"的实例、3 个"面"的实例。<br>
+      3. 画一条线段，量出它的长度。再画一条从同一端点出发的射线。</p>
+      <p id="tier1-feedback" style="font-size:13px;color:var(--muted)"></p>
+      <button id="tier1-check" style="margin-top:8px;padding:6px 14px;border-radius:8px;border:1px solid var(--ok);background:rgba(34,197,94,.1);color:var(--ok);cursor:pointer">我完成了，检查一下</button>
+    </div>
+
+    <div class="result warn" style="margin-bottom:16px">
+      <h3>Level 2 · 进阶</h3>
+      <p>1. 用 4 个点放在纸上（任意位置），过每两个点画直线——最多能画出几条？<br>
+      2. 如果三个点共线了，它们能确定一个平面吗？为什么？<br>
+      3. 画一条线段 AB，再画它的中点 C。点 C 把线段分成了什么关系？</p>
+      <p id="tier2-feedback" style="font-size:13px;color:var(--muted)"></p>
+      <button id="tier2-check" style="margin-top:8px;padding:6px 14px;border-radius:8px;border:1px solid var(--warn);background:rgba(245,158,11,.1);color:var(--warn);cursor:pointer">我完成了，检查一下</button>
+    </div>
+
+    <div class="result" style="background:rgba(167,139,250,.08);border-color:rgba(167,139,250,.25)">
+      <h3>Level 3 · 挑战</h3>
+      <p>1. 空间中的 4 个点，任意三点不共线，它们最多能确定几个平面？（提示：想想三棱锥）<br>
+      2. 一张纸可以看作一个平面的一部分。把它对折——折痕是什么？折痕把平面分成了什么？<br>
+      3. 挑战：只用直尺和铅笔，在纸上画出三条两两相交但不共点的直线——它们能确定几个平面？</p>
+      <p id="tier3-feedback" style="font-size:13px;color:var(--muted)"></p>
+      <button id="tier3-check" style="margin-top:8px;padding:6px 14px;border-radius:8px;border:1px solid var(--brand-2);background:rgba(167,139,250,.1);color:var(--brand-2);cursor:pointer">我完成了，检查一下</button>
+    </div>
+  </div>
+</section>
+
+<!-- #18: 易错点覆盖 -->
+<section class="section" id="common-mistakes" data-tsh="易错点提醒 - 多数同学在这里会踩坑">
+  <div class="card">
+    <span class="phase-tag">Common Mistakes</span>
+    <h2>小心！这 4 个坑最容易踩</h2>
+    <div class="grid" style="margin-top:16px">
+      <div class="card" style="background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2)">
+        <h3 style="color:#ef4444">坑1：记号 ≠ 本体</h3>
+        <p style="font-size:13px;color:var(--muted)">"我画的点不就是点吗？" — 不，你画的是记号。真正的点<strong>没有大小</strong>，你想画多小都行，但永远画不到"零大小"。</p>
+      </div>
+      <div class="card" style="background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2)">
+        <h3 style="color:#ef4444">坑2：端点 ≠ 线的一部分</h3>
+        <p style="font-size:13px;color:var(--muted)">"线段的端点也是线段的一部分吗？" — 是的，端点属于线段！但射线只有一个端点，直线<strong>没有端点</strong>。</p>
+      </div>
+      <div class="card" style="background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2)">
+        <h3 style="color:#ef4444">坑3：面有边界吗？</h3>
+        <p style="font-size:13px;color:var(--muted)">"平面就是这张纸的大小吧？" — 不对。<strong>平面向四面八方无限延伸</strong>，纸只是它的一小片。就像直线可以无限延长一样。</p>
+      </div>
+      <div class="card" style="background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2)">
+        <h3 style="color:#ef4444">坑4：三种"线"搞混</h3>
+        <p style="font-size:13px;color:var(--muted)">线段有 2 个端点（可测量）、射线有 1 个端点（向一方无限）、直线有 0 个端点（向两方无限）。<strong>"直线 AB"和"线段 AB"写法一样但东西完全不同</strong>——靠上下文区分！</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="posttest" data-tsh="后测 - 看看学完之后进步了多少">
+  <div class="card">
+    <span class="phase-tag">Post-test</span>
+    <h2>课后检测</h2>
+    <p style="color:var(--muted)">学完了再来试试！</p>
+    <div id="posttest-quiz"></div>
+  </div>
+</section>
+
+<section class="section" id="summary" data-tts="s08-summary" data-tsh="总结 - 今天学到的三个元老">
+  <div class="card">
+    <span class="phase-tag">Summary</span>
+    <h2>小结：记住这三句话</h2>
+    <div class="result" style="font-size:17px;line-height:2">
+      1. <strong>点</strong>只有位置，没有大小 —— 你画的圆点只是记号<br>
+      2. <strong>点动成线，线动成面</strong> —— 运动增加维度<br>
+      3. <strong>不共线三点</strong>确定一个平面 —— 如果三点排成直线，就只确定了线
+    </div>
+    <div class="result warn" style="margin-top:14px">
+      <strong>开放思考：</strong>用 4 个点，最少能确定几个平面？最多呢？<br>
+      <span style="color:var(--muted)">提示：想想正方体的 8 个顶点……</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="knowledge-graph" data-tts="knowledge-graph" data-tsh="知识图谱">
+  <div class="card">
+    <span class="phase-tag">Knowledge Graph</span>
+    <h2>知识图谱</h2>
+    <p style="color:var(--muted)">本节点的前置、后续和同域知识由标准知识图谱模块自动渲染。</p>
+    <div data-teachany-kg="math-g1-point-line-plane">
+      <canvas class="tkg-fallback-canvas" width="720" height="120" aria-label="知识图谱互动画布占位" style="display:block;width:100%;max-height:140px;border-radius:12px;"></canvas>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="teachany-ai-tutor-card" data-tts="ai-tutor" data-tsh="AI 学伴 - 先诊断卡点，再给最小提示">
+  <div data-teachany-tutor-card></div>
+</section>
+
+<script>
+window.__TEACHANY_LEARNER_QUESTION__ = '';
+window.__TEACHANY_TUTOR_CONFIG__ = {
+  courseId: 'point-line-plane',
+  courseTitle: '点线面：几何世界的元老',
+  subject: 'math',
+  grade: 3,
+  nodeId: 'math-g1-point-line-plane',
+  lessonType: 'inquiry-project',
+  getLearnerQuestion: () => window.__TEACHANY_LEARNER_QUESTION__ || '',
+  getContext: () => {
+    var current = document.querySelector('section.current-section') || (location.hash ? document.querySelector(location.hash) : null);
+    return (current || document.body).innerText.slice(0, 3000);
+  }
+};
+
+function setTeachAnyLearnerQuestion(question) {
+  window.__TEACHANY_LEARNER_QUESTION__ = question || '';
+  var fb = document.getElementById('anchor-feedback');
+  if (fb) fb.textContent = question ? '\u4f60\u7684\u95ee\u9898\uff1a' + question : '\u9009\u62e9\u6216\u8f93\u5165\u540e\uff0c\u672c\u8bfe\u4f1a\u56f4\u7ed5\u4f60\u7684\u95ee\u9898\u5c55\u5f00\u3002';
+}
+
+document.querySelectorAll('[data-anchor-choice]').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('[data-anchor-choice]').forEach(function(item) { item.classList.remove('selected'); });
+    btn.classList.add('selected');
+    setTeachAnyLearnerQuestion(btn.getAttribute('data-anchor-choice') || btn.textContent.trim());
+  });
+});
+document.getElementById('learner-question-input').addEventListener('input', function(e) {
+  setTeachAnyLearnerQuestion(e.target.value.trim());
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  var cv = document.querySelector('meta[name="course-version"]');
+  var sv = document.querySelector('meta[name="teachany-version"]');
+  if (cv) document.getElementById('course-version-display').textContent = cv.content;
+  if (sv) document.getElementById('skill-version-display').textContent = sv.content.replace(/^v/, '');
+});
+
+if (location.hostname === 'localhost' || location.search.includes('debug')) {
+  var checks = [
+    ['course-id meta', function() { return !!document.querySelector('meta[name="course-id"]').content; }],
+    ['viewport-fit', function() { return document.querySelector('meta[name="viewport"]').content.includes('viewport-fit=cover'); }],
+    ['brand bar', function() { return !!document.querySelector('.teachany-brand-bar'); }],
+    ['problem anchor', function() { return !!document.getElementById('problem-anchor'); }],
+    ['audio playlist', function() { return !!document.querySelector('[data-teachany-audio-playlist]'); }],
+    ['AI tutor card', function() { return !!document.querySelector('[data-teachany-tutor-card]'); }],
+    ['knowledge graph API', function() { return !!document.querySelector('[data-teachany-kg]'); }],
+    ['standard module links', function() { return ['ai-tutor.css','teachany-tutor-card.css','teachany-tts-narrator.css','teachany-section-hints.css','teachany-knowledge-graph.css','teachany-audio-player.css'].every(function(n) { return document.documentElement.innerHTML.includes(n); }); }],
+    ['standard module scripts', function() { return ['ai-tutor.js','teachany-tutor-card.js','teachany-tts-narrator.js','teachany-section-hints.js','teachany-knowledge-graph.js','teachany-audio-player.js'].every(function(n) { return document.documentElement.innerHTML.includes(n); }); }]
+  ];
+  checks.forEach(function(pair) {
+    var ok = Boolean(pair[1]());
+    console[ok ? 'log' : 'warn']('[TeachAny self-check] ' + (ok ? 'PASS' : 'MISSING') + ' ' + pair[0]);
+  });
+}
+</script>
+
+<script>
+/* ========================================
+   Canvas 1: 点动成线
+   ======================================== */
+(function() {
+  var canvas = document.getElementById('canvas-point-motion');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var rect = canvas.getBoundingClientRect();
+  var scale = canvas.width / rect.width;
+  var ball = { x: 80, y: 100, r: 10 };
+  var trail = [];
+  var dragging = false;
+  var dist = 0;
+
+  function redraw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = 'rgba(20,35,58,.6)';
+    ctx.setLineDash([4, 8]);
+    ctx.beginPath();
+    ctx.moveTo(60, 100);
+    ctx.lineTo(canvas.width - 60, 100);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    if (trail.length > 1) {
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(trail[0].x, trail[0].y);
+      for (var i = 1; i < trail.length; i++) {
+        ctx.lineTo(trail[i].x, trail[i].y);
+      }
+      ctx.stroke();
+      ctx.lineWidth = 1;
+    }
+
+    for (var i = 0; i < trail.length; i++) {
+      var alpha = 0.3 + 0.7 * (i / trail.length);
+      ctx.fillStyle = 'rgba(56,189,248,' + alpha.toFixed(2) + ')';
+      ctx.beginPath();
+      ctx.arc(trail[i].x, trail[i].y, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.fillStyle = '#38bdf8';
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.lineWidth = 1;
+
+    ctx.fillStyle = '#eef6ff';
+    ctx.font = '13px sans-serif';
+    ctx.fillText('\u62d6\u62fd\u6211', ball.x - 20, ball.y - 18);
+
+    document.getElementById('point-motion-dist').textContent = '\u8ddd\u79bb: ' + dist + 'px';
+  }
+
+  function addTrail() {
+    trail.push({ x: ball.x, y: ball.y });
+    if (trail.length > 1) {
+      var last = trail[trail.length - 2];
+      dist += Math.abs(ball.x - last.x);
+    }
+  }
+
+  function animate(from, to, steps, cb) {
+    var step = 0;
+    function tick() {
+      if (step >= steps) { if (cb) cb(); return; }
+      ball.x = from + (to - from) * (step / steps);
+      addTrail();
+      redraw();
+      step++;
+      requestAnimationFrame(tick);
+    }
+    tick();
+  }
+
+  canvas.addEventListener('pointerdown', function(e) {
+    e.preventDefault();
+    var r2 = canvas.getBoundingClientRect();
+    var sx = canvas.width / r2.width;
+    var mx = (e.clientX - r2.left) * sx;
+    var my = (e.clientY - r2.top) * sx;
+    if (Math.hypot(mx - ball.x, my - ball.y) < ball.r + 16) {
+      dragging = true;
+      canvas.setPointerCapture(e.pointerId);
+    }
+  });
+
+  canvas.addEventListener('pointermove', function(e) {
+    if (!dragging) return;
+    e.preventDefault();
+    var r2 = canvas.getBoundingClientRect();
+    var sx = canvas.width / r2.width;
+    var mx = Math.max(ball.r, Math.min(canvas.width - ball.r, (e.clientX - r2.left) * sx));
+    ball.x = mx;
+    addTrail();
+    redraw();
+  });
+
+  canvas.addEventListener('pointerup', function() { dragging = false; });
+
+  document.getElementById('btn-move-slow').addEventListener('click', function() {
+    if (window.TeachAnySync) window.TeachAnySync.notifyManualInteraction('canvas-point-motion');
+    trail = []; dist = 0; ball.x = 80;
+    animate(80, canvas.width - 80, 200);
+  });
+  document.getElementById('btn-move-fast').addEventListener('click', function() {
+    trail = []; dist = 0; ball.x = 80;
+    animate(80, canvas.width - 80, 60);
+  });
+  document.getElementById('btn-move-reset').addEventListener('click', function() {
+    trail = []; dist = 0; ball.x = 80;
+    redraw();
+  });
+
+  redraw();
+})();
+
+/* ========================================
+   Canvas 2: 点画布
+   ======================================== */
+(function() {
+  var c2 = document.getElementById('canvas-point-demo');
+  if (!c2) return;
+  var cx = c2.getContext('2d');
+  c2.addEventListener('click', function(e) {
+    var r = c2.getBoundingClientRect();
+    var sx = c2.width / r.width;
+    var x = (e.clientX - r.left) * sx;
+    var y = (e.clientY - r.top) * sx;
+    cx.fillStyle = '#38bdf8';
+    cx.beginPath();
+    cx.arc(x, y, 4, 0, Math.PI * 2);
+    cx.fill();
+    cx.fillStyle = '#eef6ff';
+    cx.font = '11px sans-serif';
+    cx.fillText('·', x - 3, y - 10);
+  });
+})();
+
+/* ========================================
+   TeachAnySync Canvas Registrations
+   ======================================== */
+if (window.TeachAnySync) {
+  window.TeachAnySync.register('canvas-point-motion', {
+    reset: function() {
+      var canvas = document.getElementById('canvas-point-motion');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    },
+    getMaxSteps: function() { return 3; }
+  });
+
+  window.TeachAnySync.register('canvas-line-sweep', {
+    reset: function() {
+      var c3 = document.getElementById('canvas-line-sweep');
+      if (!c3) return;
+      var ctx3 = c3.getContext('2d');
+      ctx3.clearRect(0, 0, c3.width, c3.height);
+    },
+    getMaxSteps: function() { return 1; }
+  });
+}
+
+/* ========================================
+   Canvas 3: 线动成面
+   ======================================== */
+(function() {
+  var c3 = document.getElementById('canvas-line-sweep');
+  if (!c3) return;
+  var ctx3 = c3.getContext('2d');
+  var sweepProgress = 0;
+  var sweeping = false;
+
+  function drawSweep(progress) {
+    ctx3.clearRect(0, 0, c3.width, c3.height);
+    var startX = 80;
+    var startY = 50;
+    var lineH = 80;
+    var sweepW = (c3.width - 160) * progress;
+
+    ctx3.strokeStyle = '#a78bfa';
+    ctx3.lineWidth = 3;
+    ctx3.beginPath();
+    ctx3.moveTo(startX, startY);
+    ctx3.lineTo(startX, startY + lineH);
+    ctx3.stroke();
+    ctx3.lineWidth = 1;
+
+    ctx3.fillStyle = 'rgba(167,139,250,0.15)';
+    ctx3.fillRect(startX, startY, sweepW, lineH);
+    ctx3.strokeStyle = 'rgba(167,139,250,0.5)';
+    ctx3.strokeRect(startX, startY, sweepW, lineH);
+
+    if (progress > 0.02) {
+      ctx3.strokeStyle = 'rgba(167,139,250,0.3)';
+      ctx3.setLineDash([4, 4]);
+      ctx3.beginPath();
+      ctx3.moveTo(startX + sweepW, startY);
+      ctx3.lineTo(startX + sweepW, startY + lineH);
+      ctx3.stroke();
+      ctx3.setLineDash([]);
+    }
+
+    ctx3.fillStyle = '#eef6ff';
+    ctx3.font = '13px sans-serif';
+    ctx3.fillText('\u7ebf\u5411\u53f3\u5e73\u79fb \u2192 \u626b\u51fa\u9762', startX + 10, startY + lineH + 24);
+    ctx3.fillStyle = '#9fb4cc';
+    ctx3.font = '12px sans-serif';
+    ctx3.fillText((progress * 100).toFixed(0) + '%', startX + sweepW + 4, startY + lineH / 2 + 4);
+  }
+
+  document.getElementById('btn-sweep-demo').addEventListener('click', function() {
+    if (window.TeachAnySync) window.TeachAnySync.notifyManualInteraction('canvas-line-sweep');
+    if (sweeping) return;
+    sweeping = true;
+    sweepProgress = 0;
+    var start = Date.now();
+    function tick() {
+      var elapsed = Date.now() - start;
+      sweepProgress = Math.min(1, elapsed / 2000);
+      drawSweep(sweepProgress);
+      if (sweepProgress < 1) requestAnimationFrame(tick);
+      else sweeping = false;
+    }
+    tick();
+  });
+  document.getElementById('btn-sweep-reset').addEventListener('click', function() {
+    sweepProgress = 0;
+    sweeping = false;
+    drawSweep(0);
+  });
+
+  drawSweep(0);
+})();
+
+/* ========================================
+   教室寻宝游戏
+   ======================================== */
+(function() {
+  var items = [
+    { name: '\u7c89\u7b14\u5c16', type: 'point', hint: '\u63a5\u89e6\u9ed1\u677f\u7684\u90a3\u4e00\u70b9' },
+    { name: '\u684c\u89d2', type: 'point', hint: '\u4e24\u6761\u684c\u6cbf\u7684\u4ea4\u70b9' },
+    { name: '\u9ed1\u677f\u8fb9\u6846', type: 'line', hint: '\u957f\u957f\u7684\u76f4\u8fb9' },
+    { name: '\u62c9\u76f4\u7684\u7ef3\u5b50', type: 'line', hint: '\u4e24\u4eba\u62c9\u7d27\u7684\u8df3\u7ef3' },
+    { name: '\u684c\u9762', type: 'plane', hint: '\u5e73\u5e73\u7684\u4e00\u5927\u7247' },
+    { name: '\u5730\u9762\u74f7\u7816', type: 'plane', hint: '\u65b9\u65b9\u6b63\u6b63\u7684\u4e00\u5757' },
+    { name: '\u7a97\u6237\u8fb9\u6846', type: 'line', hint: '\u56db\u6761\u76f4\u8fb9\u7ec4\u6210\u7684\u6846' },
+    { name: '\u7c89\u7b14\u76d2\u9876\u9762', type: 'plane', hint: '\u76d2\u5b50\u7684\u4e0a\u9762' },
+    { name: '\u7c89\u7b14', type: 'line', hint: '\u7ec6\u957f\u7684\u5706\u67f1' }
+  ];
+
+  var types = ['point', 'line', 'plane'];
+  var typeColors = { point: '#38bdf8', line: '#1D9E75', plane: '#a78bfa' };
+  var typeCls = { point: 'found-point', line: 'found-line', plane: 'found-plane' };
+  var found = {};
+
+  var grid = document.getElementById('treasure-grid');
+  var scoreEl = document.getElementById('treasure-score');
+
+  items.forEach(function(item, i) {
+    var div = document.createElement('div');
+    div.className = 'treasure-item';
+    div.textContent = item.name;
+    div.addEventListener('click', function() {
+      if (found[i]) return;
+      var typeBtns = types.map(function(t) {
+        var cn = t === 'point' ? '\u70b9' : t === 'line' ? '\u7ebf' : '\u9762';
+        return '<button style="margin:4px;padding:6px 14px;border-radius:8px;border:1px solid ' + typeColors[t] + ';background:rgba(20,35,58,.6);color:' + typeColors[t] + ';cursor:pointer" data-type="' + t + '">' + cn + '</button>';
+      }).join('');
+
+      var overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:100;display:flex;align-items:center;justify-content:center';
+      overlay.innerHTML = '<div style="background:var(--panel);padding:24px;border-radius:16px;max-width:320px;text-align:center"><p style="margin:0 0 12px;font-size:16px">' + item.name + ' 是？</p>' + typeBtns + '<p style="margin-top:12px;font-size:12px;color:var(--muted)">' + item.hint + '</p></div>';
+      document.body.appendChild(overlay);
+
+      overlay.querySelectorAll('button').forEach(function(b) {
+        b.addEventListener('click', function() {
+          var chosen = b.getAttribute('data-type');
+          found[i] = { chosen: chosen, correct: item.type };
+          div.classList.add(typeCls[chosen]);
+          if (chosen === item.type) {
+            div.style.borderWidth = '2px';
+          } else {
+            div.style.opacity = '0.6';
+          }
+          document.body.removeChild(overlay);
+          updateScore();
+        });
+      });
+    });
+    grid.appendChild(div);
+  });
+
+  function updateScore() {
+    var keys = Object.keys(found);
+    var correct = 0;
+    keys.forEach(function(k) { if (found[k].chosen === found[k].correct) correct++; });
+    scoreEl.textContent = '\u5df2\u5206\u7c7b ' + keys.length + '/' + items.length + '  \u6b63\u786e ' + correct + ' \u4e2a';
+  }
+})();
+
+/* ========================================
+   前测
+   ======================================== */
+(function() {
+  var questions = [
+    { q: '\u4e0b\u5217\u54ea\u4e2a\u662f\u201c\u70b9\u201d\u7684\u5b9e\u4f8b\uff1f', opts: ['\u4e00\u5f20\u7eb8', '\u4e24\u6761\u76f4\u7ebf\u7684\u4ea4\u70b9', '\u4e00\u6839\u7ef3\u5b50', '\u4e00\u4e2a\u684c\u9762'], ans: 1 },
+    { q: '\u201c\u7ebf\u6bb5\u201d\u6709\u51e0\u4e2a\u7aef\u70b9\uff1f', opts: ['0 \u4e2a', '1 \u4e2a', '2 \u4e2a', '\u65e0\u6570\u4e2a'], ans: 2 },
+    { q: '\u201c\u70b9\u52a8\u6210\u7ebf\u201d\u662f\u4ec0\u4e48\u610f\u601d\uff1f', opts: ['\u70b9\u548c\u7ebf\u662f\u540c\u4e00\u4e2a\u4e1c\u897f', '\u4e00\u4e2a\u70b9\u79fb\u52a8\u7559\u4e0b\u7684\u8f68\u8ff9\u5c31\u662f\u7ebf', '\u7ebf\u6bd4\u70b9\u5927', '\u70b9\u80fd\u53d8\u6210\u7ebf'], ans: 1 }
+  ];
+  buildQuiz('pretest-quiz', questions);
+})();
+
+/* ========================================
+   后测
+   ======================================== */
+(function() {
+  var questions = [
+    { q: '\u6570\u5b66\u91cc\u7684\u201c\u70b9\u201d\u6709\u5927\u5c0f\u5417\uff1f', opts: ['\u6709\uff0c\u5c31\u662f\u5706\u70b9\u7684\u5927\u5c0f', '\u6ca1\u6709\uff0c\u53ea\u6709\u4f4d\u7f6e', '\u6709\uff0c\u6bd4\u9488\u5c16\u8fd8\u5c0f', '\u53d6\u51b3\u4e8e\u7b14\u7684\u7c97\u7ec6'], ans: 1 },
+    { q: '\u4e0d\u5171\u7ebf\u4e09\u70b9\u80fd\u786e\u5b9a\u4ec0\u4e48\uff1f', opts: ['\u4e00\u6761\u76f4\u7ebf', '\u4e00\u4e2a\u5e73\u9762', '\u4e00\u4e2a\u70b9', '\u4ec0\u4e48\u4e5f\u786e\u5b9a\u4e0d\u4e86'], ans: 1 },
+    { q: '\u201c\u7ebf\u52a8\u6210\u9762\u201d\u4e2d\uff0c\u7ebf\u662f\u600e\u4e48\u52a8\u7684\uff1f', opts: ['\u7ed5\u81ea\u5df1\u65cb\u8f6c', '\u5411\u4fa7\u9762\u5e73\u79fb', '\u5ef6\u4f38\u53d8\u957f', '\u968f\u4fbf\u52a8'], ans: 1 }
+  ];
+  buildQuiz('posttest-quiz', questions);
+})();
+
+/* ========================================
+   ConcepTest
+   ======================================== */
+(function() {
+  var questions = [
+    { q: '\u201c\u94c5\u7b14\u5c16\u5c31\u662f\u4e00\u4e2a\u70b9\u201d\u2014\u2014\u5bf9\u5417\uff1f', opts: ['\u5bf9\uff0c\u5b83\u5f88\u5c0f', '\u4e0d\u5bf9\uff0c\u5b83\u53ea\u662f\u201c\u8bb0\u53f7\u201d\uff0c\u771f\u6b63\u7684\u70b9\u6ca1\u6709\u5927\u5c0f'], ans: 1 },
+    { q: '\u201c\u684c\u9762\u662f\u4e00\u4e2a\u5e73\u9762\u201d\u2014\u2014\u5bf9\u5417\uff1f', opts: ['\u5bf9\uff0c\u5b83\u5f88\u5e73', '\u4e0d\u5bf9\uff0c\u684c\u9762\u6709\u539a\u5ea6\uff0c\u53ea\u662f\u5e73\u9762\u7684\u8fd1\u4f3c'], ans: 1 },
+    { q: '\u201c\u4e24\u70b9\u786e\u5b9a\u4e00\u6761\u76f4\u7ebf\u201d\u2014\u2014\u5bf9\u5417\uff1f', opts: ['\u5bf9\uff0c\u8fc7\u4e24\u70b9\u53ea\u80fd\u753b\u4e00\u6761\u76f4\u7ebf', '\u4e0d\u5bf9\uff0c\u53ef\u4ee5\u753b\u5f88\u591a\u6761'], ans: 0 }
+  ];
+  buildQuiz('conceptest-quiz', questions);
+})();
+
+var diagnosticHints = {
+  pretest: [
+    { correct: '\u5f88\u68d2\uff01\u201c\u4ea4\u70b9\u201d\u5c31\u662f\u70b9\u7684\u5178\u578b\u5b9e\u4f8b\u3002\u7eb8\u662f\u9762\uff0c\u7ef3\u5b50\u662f\u7ebf\u3002', wrong: '\u201c\u4e24\u6761\u76f4\u7ebf\u7684\u4ea4\u70b9\u201d\u662f\u70b9\uff0c\u7eb8\u3001\u684c\u9762\u662f\u9762\uff0c\u7ef3\u5b50\u662f\u7ebf\u2014\u2014\u8bb0\u4f4f\uff1a\u4ea4\u70b9\u90fd\u662f\u70b9\uff01' },
+    { correct: '\u6b63\u786e\uff01\u7ebf\u6bb5\u6709\u4e24\u4e2a\u7aef\u70b9\uff0c\u5c31\u50cf\u4e00\u6839\u7b77\u5b50\u6709\u4e24\u5934\u3002', wrong: '\u7ebf\u6bb5\u6709 2 \u4e2a\u7aef\u70b9\uff0c\u5c31\u50cf\u4e00\u6839\u7b77\u5b50\u6709\u4e24\u5934\u3002\u5c04\u7ebf\u6709 1 \u4e2a\uff0c\u76f4\u7ebf\u6ca1\u6709\u7aef\u70b9\u3002' },
+    { correct: '\u5bf9\uff01\u4e00\u4e2a\u70b9\u79fb\u52a8\u7559\u4e0b\u7684\u8f68\u8ff9\u5c31\u662f\u7ebf\uff0c\u8fd9\u5c31\u662f\u201c\u70b9\u52a8\u6210\u7ebf\u201d\u3002', wrong: '\u201c\u70b9\u52a8\u6210\u7ebf\u201d\u662f\u6307\u4e00\u4e2a\u70b9\u79fb\u52a8\u7559\u4e0b\u7684\u8f68\u8ff9\u5c31\u662f\u7ebf\uff0c\u4e0d\u662f\u70b9\u80fd\u201c\u53d8\u201d\u6210\u7ebf\uff0c\u4e5f\u4e0d\u662f\u70b9\u548c\u7ebf\u662f\u540c\u4e00\u4e2a\u4e1c\u897f\u3002' }
+  ],
+  posttest: [
+    { correct: '\u6b63\u786e\uff01\u6570\u5b66\u91cc\u7684\u70b9\u53ea\u6709\u4f4d\u7f6e\u4fe1\u606f\uff0c\u6ca1\u6709\u5927\u5c0f\u3002\u4f60\u753b\u7684\u5706\u70b9\u53ea\u662f\u201c\u8bb0\u53f7\u201d\u3002', wrong: '\u6570\u5b66\u91cc\u7684\u70b9\u6ca1\u6709\u5927\u5c0f\uff0c\u53ea\u8868\u793a\u4f4d\u7f6e\u3002\u65e0\u8bba\u7528\u591a\u7ec6\u7684\u7b14\uff0c\u753b\u51fa\u6765\u7684\u90fd\u53ea\u662f\u201c\u8bb0\u53f7\u201d\uff0c\u4e0d\u662f\u771f\u6b63\u7684\u70b9\u3002' },
+    { correct: '\u5bf9\uff01\u4e0d\u5171\u7ebf\u7684\u4e09\u4e2a\u70b9\u786e\u5b9a\u4e00\u4e2a\u5e73\u9762\u3002\u5982\u679c\u4e09\u70b9\u5171\u7ebf\uff0c\u5c31\u53ea\u80fd\u786e\u5b9a\u4e00\u6761\u7ebf\u4e86\u3002', wrong: '\u4e0d\u5171\u7ebf\u4e09\u70b9\u786e\u5b9a\u4e00\u4e2a\u5e73\u9762\u3002\u60f3\u60f3\u4e09\u811a\u67b6\u2014\u2014\u4e09\u4e2a\u817f\u4e0d\u5728\u4e00\u6761\u76f4\u7ebf\u4e0a\uff0c\u6240\u4ee5\u7a33\u7a33\u5730\u652f\u6491\u4f4f\u4e86\u76f8\u673a\u3002' },
+    { correct: '\u6b63\u786e\uff01\u7ebf\u5411\u4fa7\u9762\u5e73\u79fb\u624d\u80fd\u626b\u51fa\u9762\uff0c\u5c31\u50cf\u76f4\u5c3a\u4fa7\u8fb9\u7d27\u8d34\u684c\u9762\u6ed1\u52a8\u4e00\u6837\u3002', wrong: '\u201c\u7ebf\u52a8\u6210\u9762\u201d\u662f\u6307\u7ebf\u5411\u4fa7\u9762\u5e73\u79fb\u626b\u51fa\u9762\uff0c\u4e0d\u662f\u65cb\u8f6c\u3001\u4e0d\u662f\u5ef6\u4f38\u3001\u4e5f\u4e0d\u662f\u968f\u4fbf\u52a8\u3002' }
+  ],
+  conceptest: [
+    { correct: '\u5bf9\uff01\u94c5\u7b14\u5c16\u53ea\u662f\u4e00\u4e2a\u201c\u8bb0\u53f7\u201d\uff0c\u7528\u6765\u8868\u793a\u70b9\u7684\u4f4d\u7f6e\u3002\u771f\u6b63\u7684\u70b9\u6ca1\u6709\u5927\u5c0f\u3002', wrong: '\u94c5\u7b14\u5c16\u4e0d\u662f\u6570\u5b66\u610f\u4e49\u4e0a\u7684\u201c\u70b9\u201d\uff0c\u5b83\u53ea\u662f\u4e00\u4e2a\u201c\u8bb0\u53f7\u201d\u3002\u771f\u6b63\u7684\u70b9\u6ca1\u6709\u5927\u5c0f\uff0c\u53ea\u6709\u4f4d\u7f6e\u3002\u8fd9\u662f\u672c\u8bfe\u6700\u91cd\u8981\u7684\u4e00\u4e2a\u601d\u60f3\uff01' },
+    { correct: '\u5bf9\uff01\u684c\u9762\u6709\u539a\u5ea6\uff08\u5373\u4f7f\u5f88\u8584\uff09\uff0c\u800c\u5e73\u9762\u6ca1\u6709\u539a\u5ea6\u3002\u684c\u9762\u53ea\u662f\u5e73\u9762\u7684\u4e00\u4e2a\u8fd1\u4f3c\u3002', wrong: '\u684c\u9762\u4e0d\u662f\u5e73\u9762\u2014\u2014\u5b83\u6709\u539a\u5ea6\uff01\u5e73\u9762\u662f\u6570\u5b66\u7406\u60f3\u5316\u7684\u4e1c\u897f\uff0c\u6ca1\u6709\u539a\u5ea6\u3002\u684c\u9762\u3001\u7eb8\u5f20\u90fd\u53ea\u662f\u5e73\u9762\u7684\u201c\u66ff\u8eab\u201d\u3002' },
+    { correct: '\u5bf9\uff01\u8fc7\u4e24\u4e2a\u70b9\u53ea\u80fd\u753b\u4e00\u6761\u76f4\u7ebf\uff0c\u8fd9\u662f\u51e0\u4f55\u7684\u57fa\u672c\u516c\u7406\u3002', wrong: '\u8fc7\u4e24\u4e2a\u70b9\u53ea\u80fd\u753b\u4e00\u6761\u76f4\u7ebf\u3002\u4f60\u53ef\u4ee5\u8bd5\u8bd5\uff1a\u5728\u7eb8\u4e0a\u753b\u4e24\u4e2a\u70b9\uff0c\u7528\u76f4\u5c3a\u8fde\u8d77\u6765\u2014\u2014\u600e\u4e48\u8fde\u90fd\u53ea\u6709\u4e00\u6761\u3002\u201c\u4e24\u70b9\u786e\u5b9a\u4e00\u6761\u76f4\u7ebf\u201d\u662f\u4e00\u6761\u516c\u7406\u3002' }
+  ]
+};
+
+function buildQuiz(containerId, questions) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  var quizType = containerId.replace('-quiz', '');
+  var hints = diagnosticHints[quizType] || [];
+  container.innerHTML = '';
+  questions.forEach(function(q, qi) {
+    var div = document.createElement('div');
+    div.style.cssText = 'margin-bottom:18px';
+    div.innerHTML = '<p style="font-weight:600;margin:0 0 8px">' + (qi + 1) + '. ' + q.q + '</p>';
+    var optsDiv = document.createElement('div');
+    q.opts.forEach(function(opt, oi) {
+      var btn = document.createElement('button');
+      btn.className = 'quiz-option';
+      btn.textContent = String.fromCharCode(65 + oi) + '. ' + opt;
+      btn.addEventListener('click', function() {
+        if (btn.disabled) return;
+        var allBtns = optsDiv.querySelectorAll('.quiz-option');
+        allBtns.forEach(function(b) { b.disabled = true; });
+        var fb = document.createElement('p');
+        fb.className = 'quiz-feedback';
+        if (oi === q.ans) {
+          btn.classList.add('correct');
+          fb.style.color = 'var(--ok)';
+          fb.textContent = '\u2714 \u6b63\u786e\uff01' + (hints[qi] ? ' ' + hints[qi].correct : '');
+        } else {
+          btn.classList.add('wrong');
+          allBtns[q.ans].classList.add('correct');
+          fb.style.color = '#ef4444';
+          fb.textContent = '\u2718 \u7b54\u6848 ' + String.fromCharCode(65 + q.ans) + '\u3002' + (hints[qi] ? hints[qi].wrong : '');
+        }
+        optsDiv.appendChild(fb);
+      });
+      optsDiv.appendChild(btn);
+    });
+    div.appendChild(optsDiv);
+    container.appendChild(div);
+  });
+}
+</script>
+
+/* ========================================
+   三段式分层练习检查按钮
+   ======================================== */
+(function() {
+  document.getElementById('tier1-check').addEventListener('click', function() {
+    document.getElementById('tier1-feedback').textContent = '\u2714 \u57fa\u7840\u7ea7\u53c2\u8003\uff1a\u2460\u53ea\u80fd\u753b\u4e00\u6761\u76f4\u7ebf\uff1b\u2461\u70b9\uff1a\u7c89\u7b14\u5c16/\u706f\u6ce1/\u5899\u89d2\uff1b\u7ebf\uff1a\u684c\u6cbf/\u7a97\u6846\u8fb9/\u7535\u7ebf\uff1b\u9762\uff1a\u684c\u9762/\u5730\u9762/\u9ed1\u677f\uff1b\u2462\u7ebf\u6bb5\u6709\u786e\u5b9a\u957f\u5ea6\uff0c\u5c04\u7ebf\u53ea\u6709\u8d77\u70b9\u65e0\u7ec8\u70b9\u3002';
+  });
+  document.getElementById('tier2-check').addEventListener('click', function() {
+    document.getElementById('tier2-feedback').textContent = '\u2714 \u8fdb\u9636\u7ea7\u53c2\u8003\uff1a\u24604\u4e2a\u70b9\u4e24\u4e24\u8fde\u7ebf\uff0c\u6700\u591a 6 \u6761\uff1b\u2461\u4e09\u70b9\u5171\u7ebf\u65f6\u53ea\u786e\u5b9a\u4e00\u6761\u7ebf\uff0c\u4e0d\u80fd\u786e\u5b9a\u5e73\u9762\uff1b\u2462\u4e2d\u70b9 C \u628a\u7ebf\u6bb5\u5206\u6210\u4e24\u6bb5\u76f8\u7b49\u7684\u7ebf\u6bb5 AC = CB\u3002';
+  });
+  document.getElementById('tier3-check').addEventListener('click', function() {
+    document.getElementById('tier3-feedback').textContent = '\u2714 \u6311\u6218\u7ea7\u53c2\u8003\uff1a\u24604\u4e2a\u70b9\u6700\u591a\u786e\u5b9a 4 \u4e2a\u5e73\u9762\uff08\u4e09\u68f1\u9525\u7684 4 \u4e2a\u9762\uff09\uff1b\u2461\u6298\u75d5\u662f\u4e00\u6761\u7ebf\uff0c\u5b83\u628a\u5e73\u9762\u5206\u6210\u4e24\u4e2a\u534a\u5e73\u9762\uff1b\u2462\u4e09\u6761\u4e24\u4e24\u76f8\u4ea4\u4f46\u4e0d\u5171\u70b9\u7684\u76f4\u7ebf\u786e\u5b9a 1 \u4e2a\u5e73\u9762\u3002';
+  });
+})();
+
+<script src="../scripts/ai-tutor.js"></script>
+<script src="../scripts/teachany-tutor-card.js" defer></script>
+<script src="../scripts/teachany-tts-narrator.js" defer></script>
+<script src="../scripts/teachany-section-hints.js" defer></script>
+<script src="../scripts/teachany-knowledge-graph.js" defer></script>
+<script src="../scripts/teachany-audio-player.js?v=bar-only-20260513" defer></script>
+</body>
+</html>

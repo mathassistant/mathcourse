@@ -1,0 +1,50 @@
+[
+  {
+    "id": "s01-hero",
+    "src": "tts/s01-hero.mp3",
+    "size": 76176,
+    "label": "hero"
+  },
+  {
+    "id": "s02-decode",
+    "src": "tts/s02-decode.mp3",
+    "size": 137952,
+    "label": "decode"
+  },
+  {
+    "id": "s03-check-idea",
+    "src": "tts/s03-check-idea.mp3",
+    "size": 146880,
+    "label": "check-idea"
+  },
+  {
+    "id": "s04-calc-animation",
+    "src": "tts/s04-calc-animation.mp3",
+    "size": 136800,
+    "label": "calc-animation"
+  },
+  {
+    "id": "s05-mod11",
+    "src": "tts/s05-mod11.mp3",
+    "size": 216720,
+    "label": "mod11"
+  },
+  {
+    "id": "s06-error-lab",
+    "src": "tts/s06-error-lab.mp3",
+    "size": 137376,
+    "label": "error-lab"
+  },
+  {
+    "id": "s07-x-meaning",
+    "src": "tts/s07-x-meaning.mp3",
+    "size": 138816,
+    "label": "x-meaning"
+  },
+  {
+    "id": "s08-summary",
+    "src": "tts/s08-summary.mp3",
+    "size": 186336,
+    "label": "summary"
+  }
+]

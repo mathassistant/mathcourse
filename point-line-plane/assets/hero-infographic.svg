@@ -1,0 +1,84 @@
+<svg viewBox="0 0 680 340" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="heroArr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#9fb4cc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrBlue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrTeal" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#2dd4bf" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <title>点线面知识结构</title>
+  <desc>点、线、面：维度升级的全过程</desc>
+
+  <!-- 标题 -->
+  <text x="340" y="28" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="500" fill="#eef6ff">点线面 —— 几何世界的"元老"</text>
+  <text x="340" y="48" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#9fb4cc">一个点、一条线、一个面，构成了整个几何世界</text>
+
+  <!-- ===== 第一步：点（0维） ===== -->
+  <rect x="30" y="75" width="150" height="110" rx="14" fill="#14233a" stroke="#38bdf8" stroke-width="1.2"/>
+  <!-- 点 -->
+  <circle cx="105" cy="118" r="6" fill="#38bdf8"/>
+  <!-- 标注：没有大小 -->
+  <line x1="105" y1="112" x2="105" y2="100" stroke="#38bdf8" stroke-width="0.8" stroke-dasharray="2 2"/>
+  <text x="105" y="96" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#38bdf8">没有大小</text>
+  <text x="105" y="152" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="600" fill="#38bdf8">● 点 Point</text>
+  <text x="105" y="170" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#9fb4cc">只有位置</text>
+  <!-- 维度标签 -->
+  <rect x="30" y="65" width="42" height="18" rx="9" fill="rgba(248,68,68,0.15)" stroke="#f87171" stroke-width="0.6"/>
+  <text x="51" y="78" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#f87171">0 维</text>
+
+  <!-- 箭头①：点 → 平移 → 线 -->
+  <line x1="185" y1="130" x2="248" y2="130" stroke="#f87171" stroke-width="1.5" marker-end="url(#arrBlue)" opacity="0.8"/>
+  <text x="216" y="122" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#f87171">向→平移</text>
+  <text x="216" y="144" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#9fb4cc">维度 +1</text>
+
+  <!-- ===== 第二步：线（1维） ===== -->
+  <rect x="250" y="75" width="170" height="110" rx="14" fill="#14233a" stroke="#2dd4bf" stroke-width="1.2"/>
+  <!-- 线 -->
+  <line x1="275" y1="130" x2="395" y2="130" stroke="#2dd4bf" stroke-width="3" stroke-linecap="round"/>
+  <!-- 长度标注 -->
+  <line x1="275" y1="148" x2="275" y2="138" stroke="#2dd4bf" stroke-width="1"/>
+  <line x1="395" y1="148" x2="395" y2="138" stroke="#2dd4bf" stroke-width="1"/>
+  <line x1="275" y1="148" x2="395" y2="148" stroke="#2dd4bf" stroke-width="0.8" stroke-dasharray="3 2"/>
+  <text x="335" y="162" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#2dd4bf">有长度</text>
+  <text x="335" y="152" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="600" fill="#2dd4bf">━ 线 Line</text>
+  <text x="335" y="170" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#9fb4cc">有长度，无宽度</text>
+  <!-- 维度标签 -->
+  <rect x="250" y="65" width="42" height="18" rx="9" fill="rgba(248,68,68,0.15)" stroke="#f87171" stroke-width="0.6"/>
+  <text x="271" y="78" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#f87171">1 维</text>
+
+  <!-- 箭头②：线 → 平移 → 面 -->
+  <line x1="425" y1="130" x2="488" y2="130" stroke="#f87171" stroke-width="1.5" marker-end="url(#arrTeal)" opacity="0.8"/>
+  <!-- 垂直平移方向提示 -->
+  <line x1="460" y1="110" x2="460" y2="150" stroke="#a78bfa" stroke-width="1.2" stroke-dasharray="4 2"/>
+  <polygon points="457,114 460,108 463,114" fill="#a78bfa"/>
+  <polygon points="457,146 460,152 463,146" fill="#a78bfa"/>
+  <text x="478" y="122" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#f87171">向↓平移</text>
+  <text x="478" y="144" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#9fb4cc">维度 +1</text>
+
+  <!-- ===== 第三步：面（2维） ===== -->
+  <rect x="500" y="75" width="170" height="110" rx="14" fill="#14233a" stroke="#a78bfa" stroke-width="1.2"/>
+  <!-- 面（矩形） -->
+  <rect x="522" y="100" width="126" height="55" rx="3" fill="rgba(167,139,250,0.12)" stroke="#a78bfa" stroke-width="1.8"/>
+  <!-- 长宽标注 -->
+  <line x1="522" y1="162" x2="540" y2="162" stroke="#a78bfa" stroke-width="0.8" stroke-dasharray="2 2"/>
+  <text x="585" y="176" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#a78bfa">有长、有宽</text>
+  <text x="585" y="152" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="600" fill="#a78bfa">▣ 面 Plane</text>
+  <text x="585" y="170" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#9fb4cc">有长宽，无厚度</text>
+  <!-- 维度标签 -->
+  <rect x="500" y="65" width="42" height="18" rx="9" fill="rgba(248,68,68,0.15)" stroke="#f87171" stroke-width="0.6"/>
+  <text x="521" y="78" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#f87171">2 维</text>
+
+  <!-- 底部说明 -->
+  <rect x="100" y="210" width="480" height="50" rx="12" fill="#14233a" stroke="#25415f" stroke-width="0.6"/>
+  <text x="340" y="232" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="600" fill="#eef6ff">运动让维度升级：点（0维）→ 线（1维）→ 面（2维）</text>
+  <text x="340" y="252" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#9fb4cc">点动成线（平移方向↔）· 线动成面（平移方向↕）</text>
+
+  <!-- 核心问题 -->
+  <rect x="100" y="278" width="480" height="46" rx="10" fill="rgba(56,189,248,0.06)" stroke="rgba(56,189,248,0.2)" stroke-width="0.6"/>
+  <text x="340" y="298" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="500" fill="#bae6fd">核心问题：我们身边的万物，由什么"最小单位"构成？</text>
+  <text x="340" y="316" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#9fb4cc">从看得见的记号，到看不见的数学抽象</text>
+</svg>
