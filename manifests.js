@@ -100,7 +100,7 @@ var ALL_MANIFESTS = {
     "stage": "elementary",
     "domain": "geometry",
     "lesson_type": "",
-    "description": "同一个长方形，铺地砖算面积，围栅栏算周长。通过互动对比画布，一次看清楚两个概念的区别。",
+    "description": "同一个长方形，面积和周长到底哪里不一样？通过互动对比画布，一次看清楚。",
     "tags": [],
     "prerequisites": [
       "array-to-area",
