@@ -341,8 +341,9 @@
   function playNext() {
     userPaused = false;
     if (currentIdx < orderedTracks.length - 1) {
-      playTrack(currentIdx + 1);
-      scrollToSection(currentIdx + 1);
+      var nextIdx = currentIdx + 1;
+      playTrack(nextIdx);
+      scrollToSection(nextIdx);
     } else {
       audio.pause();
       isPlaying = false;
@@ -355,8 +356,9 @@
   function playPrev() {
     userPaused = false;
     if (currentIdx > 0) {
-      playTrack(currentIdx - 1);
-      scrollToSection(currentIdx - 1);
+      var prevIdx = currentIdx - 1;
+      playTrack(prevIdx);
+      scrollToSection(prevIdx);
     } else if (currentIdx === 0) {
       audio.currentTime = 0;
       playTrack(0);
