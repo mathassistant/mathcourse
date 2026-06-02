@@ -157,9 +157,9 @@ input, textarea { width: 100%; border-radius: 12px; border: 1px solid var(--line
 [
   {"id":"s01-hero","src":"tts/s01-hero.mp3","label":"开场引入","target":"hero"},
   {"id":"s02-abt","src":"tts/s02-abt.mp3","label":"ABT叙事","target":"abt-narrative"},
-  {"id":"s03-formation","src":"tts/s03-formation.mp3","label":"方阵中的乘法","target":"array-multiplication"},
+  {"id":"s03-formation","src":"tts/s03-formation.mp3","label":"方阵中的乘法","target":"array-multiplication","syncConfig":{"type":"canvas-step","canvasId":"canvas-formation","totalSteps":5}},
   {"id":"s04-analogy-bridge","src":"tts/s04-analogy-bridge.mp3","label":"类比桥","target":"analogy-bridge"},
-  {"id":"s05-inquiry-lab","src":"tts/s05-inquiry-lab.mp3","label":"探究实验","target":"area-formula"},
+  {"id":"s05-inquiry-lab","src":"tts/s05-inquiry-lab.mp3","label":"探究实验","target":"area-formula","syncConfig":{"type":"timeline-events","canvasId":"canvas-grid","events":[{"t":0,"action":"showPeople"},{"t":8,"action":"showGrid"}]}},
   {"id":"s06-formula","src":"tts/s06-formula.mp3","label":"公式总结","target":"formula-summary"},
   {"id":"s07-practice","src":"tts/s07-practice.mp3","label":"分层练习","target":"tiered-practice"},
   {"id":"s08-summary","src":"tts/s08-summary.mp3","label":"课堂小结","target":"summary"}
@@ -654,27 +654,34 @@ if (window.TeachAnySync) {
     currentStep: 0,
     maxSteps: 5,
     setStep: function(n) {
-      // This canvas uses rows-based animation
-      var canvas = document.getElementById('canvas-formation');
-      if (!canvas) return;
-      // Reset and replay to step n
-      if (n === 0) { /* handled by reset */ }
-      else {
-        // Directly set the row count
-        var rows = Math.min(n, 5);
-        // We can't easily set internal variables, so we do a reset + step approach
-        // For now, just note that formation animation is handled via manual buttons
+      // Reset then advance row by row via button clicks
+      var resetBtn = document.getElementById('btn-reset-formation');
+      var stepBtn = document.getElementById('btn-step-formation');
+      if (resetBtn) resetBtn.click();
+      for (var i = 0; i < n && i < 5; i++) {
+        if (stepBtn) stepBtn.click();
       }
     },
     reset: function() {
       var el = document.getElementById('formation-total');
       if (el) el.textContent = '0';
+      var btn = document.getElementById('btn-reset-formation');
+      if (btn) btn.click();
     },
     getMaxSteps: function() { return this.maxSteps; }
   });
 
   window.TeachAnySync.register('canvas-grid', {
-    reset: function() { /* handled by slider update */ },
+    doAction: function(action) {
+      if (action === 'showGrid') {
+        var btn = document.getElementById('btn-view-grid');
+        if (btn) btn.click();
+      } else if (action === 'showPeople') {
+        var btn = document.getElementById('btn-view-people');
+        if (btn) btn.click();
+      }
+    },
+    reset: function() {},
     getMaxSteps: function() { return 1; }
   });
 }

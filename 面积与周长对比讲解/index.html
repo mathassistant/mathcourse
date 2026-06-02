@@ -135,9 +135,9 @@ h1 { font-size: clamp(28px, 6vw, 46px); line-height: 1.15; margin: 0 auto 16px; 
   <script type="application/json" data-teachany-audio-playlist>
 [
   {"id":"s01-hero","src":"tts/s01-hero.mp3","label":"开场引入","target":"hero"},
-  {"id":"s02-two-views","src":"tts/s02-two-views.mp3","label":"核心概念","target":"two-views"},
-  {"id":"s03-inquiry1","src":"tts/s03-inquiry1.mp3","label":"固定面积探究","target":"inquiry-fixed-area"},
-  {"id":"s04-inquiry2","src":"tts/s04-inquiry2.mp3","label":"固定周长探究","target":"inquiry-fixed-perimeter"},
+  {"id":"s02-two-views","src":"tts/s02-two-views.mp3","label":"核心概念","target":"two-views","syncConfig":{"type":"canvas-step","canvasId":"canvas-compare","totalSteps":7}},
+  {"id":"s03-inquiry1","src":"tts/s03-inquiry1.mp3","label":"固定面积探究","target":"inquiry-fixed-area","syncConfig":{"type":"canvas-step","canvasId":"canvas-compare","totalSteps":7}},
+  {"id":"s04-inquiry2","src":"tts/s04-inquiry2.mp3","label":"固定周长探究","target":"inquiry-fixed-perimeter","syncConfig":{"type":"canvas-step","canvasId":"canvas-compare","totalSteps":7}},
   {"id":"s05-conceptest","src":"tts/s05-conceptest.mp3","label":"概念检查","target":"conceptest"},
   {"id":"s06-practice","src":"tts/s06-practice.mp3","label":"分层练习","target":"tiered-practice"},
   {"id":"s07-mistakes","src":"tts/s07-mistakes.mp3","label":"易错点提醒","target":"common-mistakes"},
@@ -535,6 +535,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var CELL = 42;
   var ox, oy;
   var PAD = 68; // left/bottom padding for labels
+  var currentStep = 7; // 0-7 animation steps, default = show all
 
   function recalc() {
     ox = PAD + 20;
@@ -548,159 +549,155 @@ document.addEventListener('DOMContentLoaded', function() {
     var tw = LEN * CELL;
     var th = WID * CELL;
 
-    // === Area: filled grid cells ===
+    // Step 0: Grid outline only (empty frame)
     for (var r = 0; r < WID; r++) {
       for (var c = 0; c < LEN; c++) {
         var x = ox + c * CELL;
         var y = oy + r * CELL;
-        // alternate shades for readability
-        var shade = (r + c) % 2 === 0
-          ? 'rgba(34,197,94,0.15)'
-          : 'rgba(34,197,94,0.07)';
-        ctx.fillStyle = shade;
-        ctx.fillRect(x + 1, y + 1, CELL - 2, CELL - 2);
-        ctx.strokeStyle = 'rgba(34,197,94,0.25)';
+        ctx.strokeStyle = 'rgba(148,163,184,0.15)';
         ctx.lineWidth = 0.5;
         ctx.strokeRect(x + 1, y + 1, CELL - 2, CELL - 2);
-
-        // cell number
-        ctx.fillStyle = 'rgba(34,197,94,0.5)';
-        ctx.font = '10px monospace';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(r * LEN + c + 1, x + CELL / 2, y + CELL / 2);
       }
     }
 
-    // === Perimeter: highlighted border ===
-    // Top border
-    ctx.strokeStyle = '#f59e0b';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(ox, oy);
-    ctx.lineTo(ox + tw, oy);
-    ctx.stroke();
-
-    // Right border
-    ctx.beginPath();
-    ctx.moveTo(ox + tw, oy);
-    ctx.lineTo(ox + tw, oy + th);
-    ctx.stroke();
-
-    // Bottom border
-    ctx.beginPath();
-    ctx.moveTo(ox + tw, oy + th);
-    ctx.lineTo(ox, oy + th);
-    ctx.stroke();
-
-    // Left border
-    ctx.beginPath();
-    ctx.moveTo(ox, oy + th);
-    ctx.lineTo(ox, oy);
-    ctx.stroke();
-
-    // === Perimeter tick marks on top ===
-    ctx.strokeStyle = '#f59e0b';
-    ctx.lineWidth = 2;
-    for (var c = 0; c < LEN; c++) {
-      var tx = ox + c * CELL + CELL / 2;
-      ctx.beginPath();
-      ctx.moveTo(tx, oy - 8);
-      ctx.lineTo(tx, oy);
-      ctx.stroke();
-      ctx.fillStyle = '#f59e0b';
-      ctx.font = 'bold 11px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(c + 1, tx, oy - 14);
+    // Step 1: Fill cells with area shading (green)
+    if (currentStep >= 1) {
+      for (var r = 0; r < WID; r++) {
+        for (var c = 0; c < LEN; c++) {
+          var x = ox + c * CELL;
+          var y = oy + r * CELL;
+          var shade = (r + c) % 2 === 0
+            ? 'rgba(34,197,94,0.15)'
+            : 'rgba(34,197,94,0.07)';
+          ctx.fillStyle = shade;
+          ctx.fillRect(x + 1, y + 1, CELL - 2, CELL - 2);
+          ctx.strokeStyle = 'rgba(34,197,94,0.25)';
+          ctx.lineWidth = 0.5;
+          ctx.strokeRect(x + 1, y + 1, CELL - 2, CELL - 2);
+        }
+      }
     }
 
-    // === Perimeter tick marks on right ===
-    for (var r = 0; r < WID; r++) {
-      var ty = oy + r * CELL + CELL / 2;
-      ctx.beginPath();
-      ctx.moveTo(ox + tw + 8, ty);
-      ctx.lineTo(ox + tw, ty);
-      ctx.stroke();
+    // Step 2: Cell numbers
+    if (currentStep >= 2) {
+      for (var r = 0; r < WID; r++) {
+        for (var c = 0; c < LEN; c++) {
+          var x = ox + c * CELL;
+          var y = oy + r * CELL;
+          ctx.fillStyle = 'rgba(34,197,94,0.5)';
+          ctx.font = '10px monospace';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(r * LEN + c + 1, x + CELL / 2, y + CELL / 2);
+        }
+      }
+    }
+
+    // Step 3: Perimeter border (all 4 sides)
+    if (currentStep >= 3) {
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(ox, oy, tw, th);
+    }
+
+    // Step 4: Tick marks on top (+ right)
+    if (currentStep >= 4) {
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 2;
+      for (var c = 0; c < LEN; c++) {
+        var tx = ox + c * CELL + CELL / 2;
+        ctx.beginPath();
+        ctx.moveTo(tx, oy - 8);
+        ctx.lineTo(tx, oy);
+        ctx.stroke();
+        ctx.fillStyle = '#f59e0b';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(c + 1, tx, oy - 14);
+      }
+      for (var r = 0; r < WID; r++) {
+        var ty = oy + r * CELL + CELL / 2;
+        ctx.beginPath();
+        ctx.moveTo(ox + tw + 8, ty);
+        ctx.lineTo(ox + tw, ty);
+        ctx.stroke();
+        ctx.fillStyle = '#f59e0b';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(r + 1, ox + tw + 14, ty + 4);
+      }
+    }
+
+    // Step 5: Tick marks bottom + left
+    if (currentStep >= 5) {
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 2;
+      for (var c = LEN - 1; c >= 0; c--) {
+        var bx = ox + c * CELL + CELL / 2;
+        ctx.beginPath();
+        ctx.moveTo(bx, oy + th + 8);
+        ctx.lineTo(bx, oy + th);
+        ctx.stroke();
+        ctx.fillStyle = '#f59e0b';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(LEN - c, bx, oy + th + 22);
+      }
+      for (var r = WID - 1; r >= 0; r--) {
+        var ly = oy + r * CELL + CELL / 2;
+        ctx.beginPath();
+        ctx.moveTo(ox - 8, ly);
+        ctx.lineTo(ox, ly);
+        ctx.stroke();
+        ctx.fillStyle = '#f59e0b';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText(WID - r, ox - 14, ly + 4);
+      }
+    }
+
+    // Step 6: Dimension labels and formulas
+    if (currentStep >= 6) {
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = 'bold 13px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('长 = ' + LEN, ox + tw / 2, oy - 30);
+      ctx.save();
+      ctx.translate(ox - 36, oy + th / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText('宽 = ' + WID, 0, 0);
+      ctx.restore();
+
+      ctx.fillStyle = '#22c55e';
+      ctx.font = 'bold 14px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('面积 = ' + LEN + ' \u00d7 ' + WID + ' = ' + (LEN * WID) + '\uff08铺满的格子\uff09', ox + tw / 2, oy + th + 48);
       ctx.fillStyle = '#f59e0b';
-      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText('周长 = 2\u00d7(' + LEN + '+' + WID + ') = ' + (2 * (LEN + WID)) + '\uff08边框的线段\uff09', ox + tw / 2, oy + th + 68);
+    }
+
+    // Step 7: Legend
+    if (currentStep >= 7) {
+      var lx = ox + tw + 50;
+      var ly = oy + 20;
+      ctx.fillStyle = 'rgba(34,197,94,0.2)';
+      ctx.fillRect(lx, ly, 16, 16);
+      ctx.strokeStyle = 'rgba(34,197,94,0.4)';
+      ctx.strokeRect(lx, ly, 16, 16);
+      ctx.fillStyle = '#22c55e';
+      ctx.font = '12px sans-serif';
       ctx.textAlign = 'left';
-      ctx.fillText(r + 1, ox + tw + 14, ty + 4);
-    }
-
-    // === Perimeter tick marks on bottom (reverse) ===
-    for (var c = LEN - 1; c >= 0; c--) {
-      var bx = ox + c * CELL + CELL / 2;
+      ctx.textBaseline = 'middle';
+      ctx.fillText('\u9762\u79ef\uff1a\u683c\u5b50', lx + 24, ly + 8);
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.moveTo(bx, oy + th + 8);
-      ctx.lineTo(bx, oy + th);
+      ctx.moveTo(lx, ly + 36);
+      ctx.lineTo(lx + 16, ly + 36);
       ctx.stroke();
       ctx.fillStyle = '#f59e0b';
-      ctx.font = 'bold 11px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(LEN - c, bx, oy + th + 22);
+      ctx.fillText('\u5468\u957f\uff1a\u8fb9\u6846', lx + 24, ly + 36);
     }
-
-    // === Perimeter tick marks on left (reverse) ===
-    for (var r = WID - 1; r >= 0; r--) {
-      var ly = oy + r * CELL + CELL / 2;
-      ctx.beginPath();
-      ctx.moveTo(ox - 8, ly);
-      ctx.lineTo(ox, ly);
-      ctx.stroke();
-      ctx.fillStyle = '#f59e0b';
-      ctx.font = 'bold 11px sans-serif';
-      ctx.textAlign = 'right';
-      ctx.fillText(WID - r, ox - 14, ly + 4);
-    }
-
-    // === Dimension arrows ===
-    // Length arrow (top)
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = 'bold 13px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('长 = ' + LEN, ox + tw / 2, oy - 30);
-
-    // Width arrow (left)
-    ctx.save();
-    ctx.translate(ox - 36, oy + th / 2);
-    ctx.rotate(-Math.PI / 2);
-    ctx.fillText('宽 = ' + WID, 0, 0);
-    ctx.restore();
-
-    // === Area formula at bottom center ===
-    ctx.fillStyle = '#22c55e';
-    ctx.font = 'bold 14px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('面积 = ' + LEN + ' × ' + WID + ' = ' + (LEN * WID) + '（铺满的格子）', ox + tw / 2, oy + th + 48);
-
-    // === Perimeter formula at bottom-right of grid ===
-    ctx.fillStyle = '#f59e0b';
-    ctx.fillText('周长 = 2×(' + LEN + '+' + WID + ') = ' + (2 * (LEN + WID)) + '（边框的线段）', ox + tw / 2, oy + th + 68);
-
-    // === Legend ===
-    var lx = ox + tw + 50;
-    var ly = oy + 20;
-
-    // Area legend
-    ctx.fillStyle = 'rgba(34,197,94,0.2)';
-    ctx.fillRect(lx, ly, 16, 16);
-    ctx.strokeStyle = 'rgba(34,197,94,0.4)';
-    ctx.strokeRect(lx, ly, 16, 16);
-    ctx.fillStyle = '#22c55e';
-    ctx.font = '12px sans-serif';
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('面积：格子', lx + 24, ly + 8);
-
-    // Perimeter legend
-    ctx.strokeStyle = '#f59e0b';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(lx, ly + 36);
-    ctx.lineTo(lx + 16, ly + 36);
-    ctx.stroke();
-    ctx.fillStyle = '#f59e0b';
-    ctx.fillText('周长：边框', lx + 24, ly + 36);
   }
 
   function updateUI() {
@@ -711,18 +708,48 @@ document.addEventListener('DOMContentLoaded', function() {
     draw();
   }
 
+  // Expose for TeachAnySync audio-driven step animation
+  window._canvasCompareSetStep = function(n) {
+    currentStep = Math.max(0, Math.min(7, n));
+    draw();
+  };
+  window._canvasCompareReset = function() {
+    currentStep = 0;
+    draw();
+  };
+
   document.getElementById('slider-length').addEventListener('input', function() {
     LEN = parseInt(this.value);
+    if (window.TeachAnySync) window.TeachAnySync.notifyManualInteraction('canvas-compare');
     updateUI();
   });
 
   document.getElementById('slider-width').addEventListener('input', function() {
     WID = parseInt(this.value);
+    if (window.TeachAnySync) window.TeachAnySync.notifyManualInteraction('canvas-compare');
     updateUI();
   });
 
   updateUI();
 })();
+</script>
+
+<!-- =============================================
+     TeachAnySync Canvas Registration
+     ============================================= -->
+<script>
+if (window.TeachAnySync) {
+  window.TeachAnySync.register('canvas-compare', {
+    setStep: function(n) {
+      if (window._canvasCompareSetStep) window._canvasCompareSetStep(n);
+    },
+    reset: function() {
+      if (window._canvasCompareReset) window._canvasCompareReset();
+    },
+    getMaxSteps: function() { return 7; }
+  });
+}
+</script>
 </script>
 
 <!-- =============================================

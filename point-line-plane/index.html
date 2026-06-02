@@ -203,10 +203,10 @@ h3 { font-size: 18px; margin: 0 0 8px; }
 [
   {"id":"s01-hero","src":"tts/s01-hero.mp3","label":"开场引入","target":"hero"},
   {"id":"s02-point","src":"tts/s02-point.mp3","label":"认识点","target":"what-is-point"},
-  {"id":"s03-point-to-line","src":"tts/s03-point-to-line.mp3","label":"点动成线","target":"point-to-line"},
+  {"id":"s03-point-to-line","src":"tts/s03-point-to-line.mp3","label":"点动成线","target":"point-to-line","syncConfig":{"type":"canvas-step","canvasId":"canvas-point-motion","totalSteps":3}},
   {"id":"s04-three-line-types","src":"tts/s04-three-line-types.mp3","label":"三种线","target":"three-line-types"},
   {"id":"s05-geogebra","src":"tts/s05-geogebra-3points.mp3","label":"GeoGebra实验","target":"geogebra-3points"},
-  {"id":"s06-line-to-plane","src":"tts/s06-line-to-plane.mp3","label":"线动成面","target":"line-to-plane"},
+  {"id":"s06-line-to-plane","src":"tts/s06-line-to-plane.mp3","label":"线动成面","target":"line-to-plane","syncConfig":{"type":"timeline-events","canvasId":"canvas-line-sweep","events":[{"t":0,"action":"startSweep"}]}},
   {"id":"s07-treasure","src":"tts/s07-treasure-hunt.mp3","label":"教室寻宝","target":"classroom-treasure"},
   {"id":"s08-summary","src":"tts/s08-summary.mp3","label":"课堂小结","target":"summary"}
 ]
@@ -812,16 +812,33 @@ if (location.hostname === 'localhost' || location.search.includes('debug')) {
    ======================================== */
 if (window.TeachAnySync) {
   window.TeachAnySync.register('canvas-point-motion', {
+    setStep: function(n) {
+      // Trigger button-based animation
+      if (n <= 0) {
+        var btn = document.getElementById('btn-move-reset');
+        if (btn) btn.click();
+      } else if (n === 1) {
+        var btn = document.getElementById('btn-move-slow');
+        if (btn) btn.click();
+      } else {
+        var btn = document.getElementById('btn-move-fast');
+        if (btn) btn.click();
+      }
+    },
     reset: function() {
-      var canvas = document.getElementById('canvas-point-motion');
-      if (!canvas) return;
-      var ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      var btn = document.getElementById('btn-move-reset');
+      if (btn) btn.click();
     },
     getMaxSteps: function() { return 3; }
   });
 
   window.TeachAnySync.register('canvas-line-sweep', {
+    doAction: function(action) {
+      if (action === 'startSweep') {
+        var btn = document.getElementById('btn-sweep-demo');
+        if (btn) btn.click();
+      }
+    },
     reset: function() {
       var c3 = document.getElementById('canvas-line-sweep');
       if (!c3) return;

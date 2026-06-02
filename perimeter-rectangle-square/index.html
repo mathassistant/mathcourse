@@ -175,8 +175,8 @@ input, textarea { width: 100%; border-radius: 12px; border: 1px solid var(--line
   <script type="application/json" data-teachany-audio-playlist>
 [
   {"id":"s01-hero","src":"tts/s01-hero.mp3","label":"开场引入","target":"hero"},
-  {"id":"s02-perimeter","src":"tts/s02-what-is-perimeter.mp3","label":"周长概念","target":"module-1"},
-  {"id":"s03-discovery","src":"tts/s03-discovery-lab.mp3","label":"探究实验","target":"discovery"},
+  {"id":"s02-perimeter","src":"tts/s02-what-is-perimeter.mp3","label":"周长概念","target":"module-1","syncConfig":{"type":"canvas-step","canvasId":"perimeter-demo","totalSteps":2}},
+  {"id":"s03-discovery","src":"tts/s03-discovery-lab.mp3","label":"探究实验","target":"discovery","syncConfig":{"type":"canvas-step","canvasId":"discovery-canvas","totalSteps":4}},
   {"id":"s04-formula","src":"tts/s04-formula.mp3","label":"公式总结","target":"formula-summary"},
   {"id":"s05-concepTest","src":"tts/s05-concepTest.mp3","label":"概念辨析","target":"conceptest-1"},
   {"id":"s06-practice","src":"tts/s06-practice.mp3","label":"分级练习","target":"scaffold-practice"},
@@ -1082,8 +1082,25 @@ if (window.TeachAnySync) {
     getMaxSteps: function() { return this.maxSteps; }
   });
   window.TeachAnySync.register('discovery-canvas', {
+    currentStep: 0,
+    maxSteps: 4,
+    setStep: function(n) {
+      this.currentStep = n;
+      var configs = [
+        { l: 8, w: 5 },   // 初始状态 - 普通长方形
+        { l: 10, w: 3 },  // 细长形
+        { l: 6, w: 6 },   // 正方形
+        { l: 4, w: 8 }    // 矮胖形
+      ];
+      if (n >= 0 && n < configs.length) {
+        var c = configs[n];
+        document.getElementById('length-slider').value = c.l;
+        document.getElementById('width-slider').value = c.w;
+        updateDiscovery();
+      }
+    },
     reset: function() { updateDiscovery(); },
-    getMaxSteps: function() { return 1; }
+    getMaxSteps: function() { return this.maxSteps; }
   });
 }
 drawDiscoveryCanvas();
