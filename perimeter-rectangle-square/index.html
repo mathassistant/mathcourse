@@ -379,6 +379,22 @@ input, textarea { width: 100%; border-radius: 12px; border: 1px solid var(--line
   </div>
 </section>
 
+<!-- ConcepTest -->
+<section id="conceptest-1" class="section" data-tts="s05-concepTest" data-tsh="概念辨析 - 别掉进陷阱">
+  <div class="card">
+    <span class="phase-tag">🎯 ConcepTest</span>
+    <h2>概念辨析：别掉进陷阱！</h2>
+    <p>一个长方形的长是 10 厘米，宽是 5 厘米。以下哪个说法<strong>正确</strong>？</p>
+    <div class="grid">
+      <button class="choice" onclick="conceptestAnswer(this, false, '不对！如果长翻倍（10→20），周长从30变成50，并不是简单的翻倍关系哦。')">A. 如果把长变成原来的2倍，周长也变成原来的2倍</button>
+      <button class="choice" onclick="conceptestAnswer(this, true, '✅ 正确！正方形 C=4a，边长翻倍→周长翻倍。长方形则不能简单类推！')">B. 正方形的边长扩大2倍，周长也扩大2倍</button>
+      <button class="choice" onclick="conceptestAnswer(this, false, '周长是一圈的长度，不是面积。长+宽=15，但周长=30。混淆了周长和"半周长"的概念。')">C. 这个长方形的周长等于 10 + 5 = 15 厘米</button>
+      <button class="choice" onclick="conceptestAnswer(this, false, '长方形C=2(a+b)=30；正方形C=4×a，如果a=7.5，C=30，边长=7.5不是15。')">D. 周长是 30 厘米，改成正方形后边长就是 15 厘米</button>
+    </div>
+    <div class="result warn" id="conceptest-feedback" style="margin-top:12px">先独立判断，再看诊断反馈。</div>
+  </div>
+</section>
+
 <!-- Scaffold Practice -->
 <section id="scaffold-practice" class="section" data-tts="s06-practice" data-tsh="分级练习 - 从示范到独立">
   <div class="card">
@@ -409,22 +425,6 @@ input, textarea { width: 100%; border-radius: 12px; border: 1px solid var(--line
         <p id="scaffold-indep-fb" style="margin-top:6px;font-size:14px"></p>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ConcepTest -->
-<section id="conceptest-1" class="section" data-tts="s05-concepTest" data-tsh="概念辨析 - 别掉进陷阱">
-  <div class="card">
-    <span class="phase-tag">🎯 ConcepTest</span>
-    <h2>概念辨析：别掉进陷阱！</h2>
-    <p>一个长方形的长是 10 厘米，宽是 5 厘米。以下哪个说法<strong>正确</strong>？</p>
-    <div class="grid">
-      <button class="choice" onclick="conceptestAnswer(this, false, '不对！如果长翻倍（10→20），周长从30变成50，并不是简单的翻倍关系哦。')">A. 如果把长变成原来的2倍，周长也变成原来的2倍</button>
-      <button class="choice" onclick="conceptestAnswer(this, true, '✅ 正确！正方形 C=4a，边长翻倍→周长翻倍。长方形则不能简单类推！')">B. 正方形的边长扩大2倍，周长也扩大2倍</button>
-      <button class="choice" onclick="conceptestAnswer(this, false, '周长是一圈的长度，不是面积。长+宽=15，但周长=30。混淆了周长和"半周长"的概念。')">C. 这个长方形的周长等于 10 + 5 = 15 厘米</button>
-      <button class="choice" onclick="conceptestAnswer(this, false, '长方形C=2(a+b)=30；正方形C=4×a，如果a=7.5，C=30，边长=7.5不是15。')">D. 周长是 30 厘米，改成正方形后边长就是 15 厘米</button>
-    </div>
-    <div class="result warn" id="conceptest-feedback" style="margin-top:12px">先独立判断，再看诊断反馈。</div>
   </div>
 </section>
 
