@@ -371,7 +371,7 @@
     if (!el) return;
     scrollLock = true;
     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    setTimeout(function() { scrollLock = false; }, 900);
+    setTimeout(function() { scrollLock = false; }, 1800);
   }
 
   // ═══════════════════════════════════════════════
@@ -506,15 +506,19 @@
     if (isDragging) return;
 
     var bestIdx = -1;
-    var bestTop = Infinity;
+    var bestDist = Infinity;
+    var viewCenter = window.innerHeight / 2;
 
     entries.forEach(function(entry) {
       if (!entry.isIntersecting) return;
       for (var i = 0; i < orderedTracks.length; i++) {
         if (orderedTracks[i]._el === entry.target) {
-          if (i < bestTop || bestIdx < 0) {
+          var rect = entry.target.getBoundingClientRect();
+          var elCenter = rect.top + rect.height / 2;
+          var dist = Math.abs(elCenter - viewCenter);
+          if (dist < bestDist) {
+            bestDist = dist;
             bestIdx = i;
-            bestTop = i;
           }
           break;
         }
