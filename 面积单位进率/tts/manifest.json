@@ -1,0 +1,14 @@
+{
+  "voice": "zh-CN-XiaoxiaoNeural",
+  "files": [
+    "s01-hero.mp3",
+    "s02-concept.mp3",
+    "s03-discovery.mp3",
+    "s04-formula.mp3",
+    "s05-concepTest.mp3",
+    "s06-practice.mp3",
+    "s07-synthesis.mp3",
+    "s08-summary.mp3"
+  ],
+  "generated_at": "2026-06-03"
+}

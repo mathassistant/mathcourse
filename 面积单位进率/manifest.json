@@ -1,0 +1,33 @@
+{
+  "id": "面积单位进率",
+  "course_id": "面积单位进率",
+  "node_id": "math-elementary-measurement-area-unit",
+  "name": "面积单位进率",
+  "name_en": "Area Unit Conversion Rates",
+  "subject": "math",
+  "grade": "3",
+  "stage": "elementary",
+  "domain": "geometry",
+  "lesson_type": "inquiry-project",
+  "status": "community",
+  "author": "TeachAny",
+  "version": "0.1.0",
+  "curriculum": "人教版",
+  "description": "为什么1平方米=100平方分米？从长度进率×10到面积进率×100的秘密，用方格图亲眼看见！",
+  "tags": ["小学数学", "面积", "进率", "单位换算", "三年级"],
+  "learning_objectives": [
+    "理解面积单位之间的进率是100而非10的原因",
+    "掌握平方米、平方分米、平方厘米之间的换算",
+    "能区分长度单位进率(×10)与面积单位进率(×100)",
+    "通过方格图直观感受面积进率的由来"
+  ],
+  "has_tts": true,
+  "has_video": false,
+  "has_images": true,
+  "has_hero": true,
+  "has_canvas": true,
+  "has_knowledge_graph": true,
+  "free_mode": true,
+  "created_at": "2026-06-03",
+  "updated_at": "2026-06-03"
+}

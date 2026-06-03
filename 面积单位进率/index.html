@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>面积单位进率 — 为什么是100不是10？</title>
+<meta name="description" content="长度进率×10，面积进率×100。用方格图亲眼看见 1dm² = 100cm² 的秘密！">
+
+<meta name="course-id" content="面积单位进率">
+<meta name="course-title" content="面积单位进率">
+<meta name="course-subject" content="math">
+<meta name="course-grade" content="elementary-3">
+<meta name="course-prereqs" content="array-to-area,perimeter-rectangle-square">
+<meta name="course-next" content="">
+<meta name="course-version" content="0.1.0">
+<meta name="teachany-version" content="7.14.0">
+<meta name="teachany-node" content="math-elementary-measurement-area-unit">
+<meta name="teachany-subject" content="math">
+<meta name="teachany-grade" content="3">
+<meta name="teachany-stage" content="elementary">
+<meta name="teachany-domain" content="geometry">
+<meta name="teachany-prerequisites" content="array-to-area,perimeter-rectangle-square">
+<meta name="teachany-lesson-type" content="inquiry-project">
+<meta name="teachany-free-mode" content="true">
+
+<link rel="stylesheet" href="../../scripts/ai-tutor.css">
+<link rel="stylesheet" href="../../scripts/teachany-tutor-card.css">
+<link rel="stylesheet" href="../../scripts/teachany-section-hints.css">
+<link rel="stylesheet" href="../../scripts/teachany-knowledge-graph.css">
+<link rel="stylesheet" href="../../scripts/teachany-tts-narrator.css">
+
+<style>
+:root {
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --card: #ffffff;
+  --line: #e2e8f0;
+  --text: #1e293b;
+  --muted: #64748b;
+  --brand: #3b82f6;
+  --accent: #8b5cf6;
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; max-width: 100%; overflow-x: hidden; scroll-behavior: smooth; }
+body {
+  padding-top: var(--safe-top);
+  padding-bottom: calc(18px + var(--safe-bottom));
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Source Han Sans SC", system-ui, sans-serif;
+  line-height: 1.7;
+  font-size: 16px;
+}
+a { color: var(--brand); }
+button, a, input, select, textarea { min-height: 44px; }
+img, video, canvas, svg { max-width: 100%; height: auto; }
+.teachany-brand-bar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 16px;
+  background: rgba(248,250,252,.94);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.brand-logo { display: flex; align-items: center; gap: 8px; color: var(--text); text-decoration: none; font-weight: 800; }
+.brand-mark { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, var(--brand), var(--accent)); color: #fff; font-weight: 900; }
+.brand-right { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+.brand-link { text-decoration: none; }
+.brand-version { color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: rgba(0,0,0,.05); padding: 4px 8px; border-radius: 999px; }
+.hero {
+  padding: 56px 20px 32px; text-align: center;
+  background: linear-gradient(180deg, rgba(59,130,246,.06) 0%, rgba(139,92,246,.04) 50%, transparent 100%);
+}
+h1 { font-size: clamp(26px, 5vw, 42px); line-height: 1.2; margin: 0 auto 12px; max-width: 960px; }
+.subtitle { color: var(--muted); font-size: clamp(15px, 2.6vw, 18px); max-width: 860px; margin: 0 auto; }
+.hero-quiz { display: inline-flex; flex-direction: column; gap: 10px; margin-top: 24px; }
+.hero-btn { font-size: 17px; padding: 12px 32px; border-radius: 14px; border: 2px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; font-weight: 600; transition: all .2s; }
+.hero-btn:hover { border-color: var(--brand); background: #eff6ff; }
+.hero-btn.reveal { border-color: var(--ok); background: #f0fdf4; }
+.hero-btn.wrong { border-color: var(--danger); background: #fef2f2; }
+.hero-reveal { margin-top: 12px; font-size: 26px; font-weight: 900; }
+.section { max-width: 1080px; margin: 0 auto; padding: 28px 20px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+.choice { width: 100%; text-align: left; border: 1px solid rgba(139,92,246,.24); border-radius: 14px; background: rgba(139,92,246,.05); color: var(--text); padding: 14px 16px; cursor: pointer; font-size: 15px; }
+.choice.selected { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(139,92,246,.15); background: rgba(139,92,246,.1); }
+.choice.correct { border-color: var(--ok); background: rgba(34,197,94,.08); }
+.choice.wrong { border-color: var(--danger); background: rgba(239,68,68,.08); }
+.phase-tag { display: inline-flex; align-items: center; gap: 6px; color: #7c3aed; background: rgba(139,92,246,.1); border: 1px solid rgba(139,92,246,.22); border-radius: 999px; padding: 4px 10px; font-size: 13px; }
+.result { padding: 14px; border-radius: 12px; background: rgba(34,197,94,.06); border: 1px solid rgba(34,197,94,.22); }
+.warn { background: rgba(245,158,11,.06); border-color: rgba(245,158,11,.25); }
+.canvas-wrap { overflow: auto; background: #f1f5f9; border: 1px solid var(--line); border-radius: 16px; padding: 12px; text-align: center; }
+.comparison-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 15px; }
+.comparison-table th { background: rgba(59,130,246,.08); padding: 10px 14px; text-align: center; border: 1px solid var(--line); font-weight: 700; }
+.comparison-table td { padding: 10px 14px; text-align: center; border: 1px solid var(--line); }
+.comparison-table .highlight { background: rgba(34,197,94,.1); font-weight: 700; color: var(--ok); }
+.formula-box { background: linear-gradient(135deg, rgba(59,130,246,.06), rgba(139,92,246,.06)); border: 2px solid rgba(59,130,246,.2); border-radius: 16px; padding: 20px; text-align: center; margin: 16px 0; }
+.formula-box big { font-size: 24px; font-weight: 900; color: var(--brand); }
+.insight { background: rgba(34,197,94,.06); border-left: 4px solid var(--ok); padding: 14px 18px; border-radius: 0 12px 12px 0; margin: 12px 0; }
+.slider-group { display: flex; align-items: center; gap: 10px; margin: 8px 0; }
+.slider-group label { font-size: 13px; color: var(--muted); min-width: 50px; }
+.slider-group input[type=range] { flex: 1; accent-color: var(--brand); }
+.slider-group span { font-weight: 700; color: var(--brand); min-width: 28px; text-align: center; font-size: 18px; }
+.step-bar { display: flex; justify-content: center; gap: 6px; margin: 10px 0; }
+.step-bar button { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--line); background: var(--card); cursor: pointer; font-size: 14px; font-weight: 700; transition: all .2s; }
+.step-bar button.active { border-color: var(--brand); background: var(--brand); color: #fff; }
+.step-bar button.played { border-color: rgba(34,197,94,.5); background: rgba(34,197,94,.15); }
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.summary-item { background: rgba(59,130,246,.04); border: 1px solid rgba(59,130,246,.15); border-radius: 14px; padding: 16px; text-align: center; }
+.summary-item .num { font-size: 32px; font-weight: 900; color: var(--brand); }
+.summary-item .label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<div class="teachany-course">
+
+<!-- TTS 播放列表 -->
+<script type="application/json" data-teachany-audio-playlist>
+[
+  {"id":"s01-hero","src":"tts/s01-hero.mp3","label":"开场引入","target":"hero"},
+  {"id":"s02-concept","src":"tts/s02-concept.mp3","label":"核心概念","target":"concept"},
+  {"id":"s03-discovery","src":"tts/s03-discovery.mp3","label":"探究实验","target":"discovery","syncConfig":{"type":"canvas-step","canvasId":"canvas-grid","totalSteps":5}},
+  {"id":"s04-formula","src":"tts/s04-formula.mp3","label":"进率公式","target":"formula"},
+  {"id":"s05-concepTest","src":"tts/s05-concepTest.mp3","label":"概念辨析","target":"concepTest"},
+  {"id":"s06-practice","src":"tts/s06-practice.mp3","label":"分级练习","target":"practice"},
+  {"id":"s07-synthesis","src":"tts/s07-synthesis.mp3","label":"综合挑战","target":"synthesis"},
+  {"id":"s08-summary","src":"tts/s08-summary.mp3","label":"课堂小结","target":"summary"}
+]
+</script>
+
+<!-- ====== 品牌栏 ====== -->
+<div class="teachany-brand-bar">
+  <a class="brand-logo" href="../../"><span class="brand-mark">△</span> TeachAny</a>
+  <div class="brand-right">
+    <span class="brand-version">v0.1.0</span>
+  </div>
+</div>
+
+<!-- ====== s01: Hero ====== -->
+<section id="hero" class="section hero" data-tts="s01-hero" data-tsh="开场引入">
+  <h1>1m² = 100dm²<br>不是 10！</h1>
+  <p class="subtitle">长度进率×10，面积进率为什么变成了×100？<br>用方格图亲眼看见这个秘密。</p>
+  <div class="hero-quiz">
+    <p style="color:var(--muted);font-size:15px;">👇 先来测测你的直觉</p>
+    <button class="hero-btn" id="hero-btn-10" onclick="heroAnswer(10, this)">A. 1平方米 = 10平方分米</button>
+    <button class="hero-btn" id="hero-btn-100" onclick="heroAnswer(100, this)">B. 1平方米 = 100平方分米</button>
+    <p class="hero-reveal" id="hero-feedback" style="display:none;"></p>
+  </div>
+</section>
+
+<!-- ====== s02: 核心概念 — 长度 vs 面积 ====== -->
+<section id="concept" class="section" data-tts="s02-concept" data-tsh="核心概念">
+  <div class="card">
+    <span class="phase-tag">📐 概念</span>
+    <h2>为什么进率从 10 变成了 100？</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="margin-top:0;">📏 一维：长度</h3>
+        <p>沿着<strong>一条线</strong>，每个大单位分成 10 个小段。</p>
+        <div style="text-align:center;font-size:20px;margin:12px 0;font-weight:700;">
+          1m = 10 dm
+        </div>
+        <div style="background:#e2e8f0;border-radius:8px;height:64px;display:flex;align-items:center;justify-content:space-evenly;padding:0 4px;font-size:12px;color:var(--muted);">
+          <span style="background:var(--brand);color:#fff;border-radius:4px;padding:2px 6px;">1dm</span>
+          <span style="background:var(--brand);color:#fff;border-radius:4px;padding:2px 6px;">1dm</span>
+          <span style="background:var(--brand);color:#fff;border-radius:4px;padding:2px 6px;">1dm</span>
+          <span style="background:var(--brand);color:#fff;border-radius:4px;padding:2px 6px;">1dm</span>
+          <span style="background:var(--brand);color:#fff;border-radius:4px;padding:2px 6px;">1dm</span>
+          <span style="background:var(--brand);color:#fff;border-radius:4px;padding:2px 6px;">1dm</span>
+          <span style="background:var(--brand);color:#fff;border-radius:4px;padding:2px 6px;">1dm</span>
+          <span style="background:var(--brand);color:#fff;border-radius:4px;padding:2px 6px;">1dm</span>
+          <span style="background:var(--brand);color:#fff;border-radius:4px;padding:2px 6px;">1dm</span>
+          <span style="background:var(--brand);color:#fff;border-radius:4px;padding:2px 6px;">1dm</span>
+        </div>
+        <p style="text-align:center;color:var(--brand);font-weight:700;">进率 = 10</p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;">📐 二维：面积</h3>
+        <p><strong>长和宽</strong>两个方向都要变！</p>
+        <div style="text-align:center;font-size:20px;margin:12px 0;font-weight:700;">
+          1m² = 10dm × 10dm = <span style="color:var(--ok);">100 dm²</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(10,1fr);gap:1px;background:#cbd5e1;border-radius:8px;overflow:hidden;width:160px;height:160px;margin:0 auto;">
+        <script>for(var r=0;r<100;r++) document.write('<div style="background:#93c5fd;aspect-ratio:1;"></div>');</script>
+        </div>
+        <p style="text-align:center;color:var(--ok);font-weight:700;margin-top:8px;">进率 = 10 × 10 = 100</p>
+      </div>
+    </div>
+    <div class="insight" style="margin-top:16px;">
+      <strong>关键洞察：</strong>长度是"一条线"（1 个方向变 ×10），面积是"一整片"（2 个方向都变 ×10）。<br>
+      所以面积进率 = 10 × 10 = <strong>100</strong>。这就是 1 和 2 的区别！
+    </div>
+  </div>
+</section>
+
+<!-- ====== s03: 探究实验 — Canvas 方格填色 ====== -->
+<section id="discovery" class="section" data-tts="s03-discovery" data-tsh="探究实验">
+  <div class="card">
+    <span class="phase-tag">🔬 探究</span>
+    <h2>亲眼看见：1dm² 里有多少个 1cm²？</h2>
+    <p>下面是一个边长 <strong>1 分米（10 厘米）</strong>的正方形。每一小格是 <strong>1cm²</strong>。<br>跟着音频一起数，看看能不能填满 100 个格子！</p>
+    <div class="canvas-wrap" id="discovery-canvas-wrap">
+      <canvas id="canvas-grid" width="400" height="440"></canvas>
+    </div>
+    <div class="step-bar" id="step-btns">
+      <button onclick="canvasGridSetStep(0)" class="active" id="step-btn-0">0</button>
+      <button onclick="canvasGridSetStep(1)" id="step-btn-1">1</button>
+      <button onclick="canvasGridSetStep(2)" id="step-btn-2">2</button>
+      <button onclick="canvasGridSetStep(3)" id="step-btn-3">3</button>
+      <button onclick="canvasGridSetStep(4)" id="step-btn-4">4</button>
+      <button onclick="canvasGridSetStep(5)" id="step-btn-5">5</button>
+    </div>
+    <p id="grid-count" style="text-align:center;font-size:20px;font-weight:700;color:var(--muted);">已填: <span style="color:var(--ok);">0</span> / 100 cm²</p>
+  </div>
+</section>
+
+<!-- ====== s04: 进率公式 ====== -->
+<section id="formula" class="section" data-tts="s04-formula" data-tsh="进率公式">
+  <div class="card">
+    <span class="phase-tag">📋 公式</span>
+    <h2>面积进率规律</h2>
+    <table class="comparison-table">
+      <tr><th>长度单位</th><th>进率</th><th>面积单位</th><th>进率</th></tr>
+      <tr><td>1m = 10dm</td><td>×10</td><td class="highlight">1m² = 100dm²</td><td class="highlight">×100</td></tr>
+      <tr><td>1dm = 10cm</td><td>×10</td><td class="highlight">1dm² = 100cm²</td><td class="highlight">×100</td></tr>
+      <tr><td>1cm = 10mm</td><td>×10</td><td class="highlight">1cm² = 100mm²</td><td class="highlight">×100</td></tr>
+    </table>
+    <div class="formula-box">
+      <p style="font-size:15px;margin:0 0 8px;">📝 <strong>换算口诀</strong></p>
+      <big>大 → 小：× 100</big><br>
+      <big>小 → 大：÷ 100</big>
+    </div>
+    <div class="grid-2" style="margin-top:12px;">
+      <div class="card">
+        <strong>例：3m² = ? dm²</strong><br>
+        大→小，×100<br>
+        3 × 100 = <span style="color:var(--ok);font-weight:700;">300 dm²</span>
+      </div>
+      <div class="card">
+        <strong>例：500cm² = ? dm²</strong><br>
+        小→大，÷100<br>
+        500 ÷ 100 = <span style="color:var(--ok);font-weight:700;">5 dm²</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== s05: 概念辨析 ====== -->
+<section id="concepTest" class="section" data-tts="s05-concepTest" data-tsh="概念辨析">
+  <div class="card">
+    <span class="phase-tag">🎯 辨析</span>
+    <h2>别踩坑！判断题挑战</h2>
+    <p>以下说法，哪些是对的？点击选项看解析。</p>
+    <div class="grid">
+      <button class="choice" onclick="conceptCheck(this,false,'错！1m = 100cm，所以 1m² = 100cm×100cm = 10000cm²。漏了一个零，差了100倍！')">① 1m² = 100cm² ✓</button>
+      <button class="choice" onclick="conceptCheck(this,true,'对！边长1m=10dm，面积=10×10=100dm²。')">② 边长1m的正方形，面积=100dm² ✓</button>
+      <button class="choice" onclick="conceptCheck(this,true,'对！200÷100=2。小变大除以100。')">③ 200cm² = 2dm² ✓</button>
+      <button class="choice" onclick="conceptCheck(this,true,'对！30×100=3000。大变小乘以100。')">④ 30dm² = 3000cm² ✓</button>
+    </div>
+    <div class="result warn" id="concept-feedback" style="margin-top:12px;">👆 点击每个选项查看解析</div>
+  </div>
+</section>
+
+<!-- ====== s06: 分级练习 ====== -->
+<section id="practice" class="section" data-tts="s06-practice" data-tsh="分级练习">
+  <div class="card">
+    <span class="phase-tag">🏋️ 练习</span>
+    <h2>分级练习：从示范到独立</h2>
+    <div class="grid">
+      <div class="card">
+        <h3 style="margin-top:0;">🅰️ 示范</h3>
+        <p>书桌面积 60dm² = ? cm²</p>
+        <p style="color:var(--ok);">解：大→小 ×100<br>60 × 100 = <strong>6000 cm²</strong></p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;">🅱️ 半支架</h3>
+        <p>黑板 4m² = ? dm²</p>
+        <label>你的答案：<input id="prac-half" placeholder="填入数字" style="width:120px;"></label>
+        <button class="choice" style="width:auto;margin-top:8px;padding:6px 14px;" onclick="checkHalfPractice()">检查</button>
+        <p id="prac-half-fb" style="margin-top:6px;font-size:14px;"></p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;">🅲 独立完成</h3>
+        <p>房间 15m² = ? dm²</p>
+        <label>你的答案：<input id="prac-indep" placeholder="填入数字" style="width:120px;"></label>
+        <button class="choice" style="width:auto;margin-top:8px;padding:6px 14px;" onclick="checkIndepPractice()">检查</button>
+        <p id="prac-indep-fb" style="margin-top:6px;font-size:14px;"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== s07: 综合挑战 ====== -->
+<section id="synthesis" class="section" data-tts="s07-synthesis" data-tsh="综合挑战">
+  <div class="card">
+    <span class="phase-tag">🔥 挑战</span>
+    <h2>综合题：铺地砖</h2>
+    <p>小明家客厅 <strong>长 6m、宽 4m</strong>，想铺<strong>边长 50cm</strong> 的正方形地砖。需要多少块？</p>
+    <div class="grid-2">
+      <div class="card">
+        <h4>步骤 ① 客厅面积</h4>
+        <p>6 × 4 = 24m²<br>→ <span id="step1-check" style="color:var(--muted);">合 ? dm²</span></p>
+        <input id="synth-step1" placeholder="填入 dm²" style="width:100px;">
+        <button class="choice" style="width:auto;margin-top:4px;padding:4px 10px;font-size:13px;" onclick="checkSynthStep1()">检查</button>
+        <p id="synth-fb1" style="font-size:13px;"></p>
+      </div>
+      <div class="card">
+        <h4>步骤 ② 一块地砖面积</h4>
+        <p>50cm × 50cm = 2500cm²<br>→ <span id="step2-check" style="color:var(--muted);">合 ? dm²</span></p>
+        <input id="synth-step2" placeholder="填入 dm²" style="width:100px;">
+        <button class="choice" style="width:auto;margin-top:4px;padding:4px 10px;font-size:13px;" onclick="checkSynthStep2()">检查</button>
+        <p id="synth-fb2" style="font-size:13px;"></p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px;text-align:center;">
+      <h4>步骤 ③ 需要多少块？</h4>
+      <p id="synth-step3-prompt" style="color:var(--muted);">先完成①②再来算</p>
+      <input id="synth-step3" placeholder="填入块数" style="width:100px;">
+      <button class="choice" style="width:auto;margin-top:4px;padding:6px 14px;" onclick="checkSynthStep3()">🎉 算出答案</button>
+      <p id="synth-fb3" style="font-size:15px;font-weight:700;"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== s08: 课堂小结 ====== -->
+<section id="summary" class="section" data-tts="s08-summary" data-tsh="课堂小结">
+  <div class="card">
+    <span class="phase-tag">📝 小结</span>
+    <h2>今天你学到了什么？</h2>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="num">10→100</div>
+        <div class="label">长度进率10，面积进率100</div>
+      </div>
+      <div class="summary-item">
+        <div class="num">×100</div>
+        <div class="label">大单位 → 小单位</div>
+      </div>
+      <div class="summary-item">
+        <div class="num">÷100</div>
+        <div class="label">小单位 → 大单位</div>
+      </div>
+      <div class="summary-item">
+        <div class="num">10×10</div>
+        <div class="label">关键：二维 = 两个方向都×10</div>
+      </div>
+    </div>
+    <div class="insight" style="margin-top:16px;">
+      <strong>核心口诀：</strong>长度进率是 10，面积进率是 100。二维世界，10 × 10 = 100！
+    </div>
+  </div>
+</section>
+
+</div><!-- /.teachany-course -->
+
+<!-- ====== Canvas 脚本 ====== -->
+<script>
+(function() {
+  var canvas = document.getElementById('canvas-grid');
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+
+  var COLS = 10, ROWS = 10;
+  var cellSize = 32;
+  var gridX = (W - COLS * cellSize) / 2;
+  var gridY = 50;
+  var currentStep = 0;
+  var synthStep1Ok = false, synthStep2Ok = false;
+
+  function drawGrid(filledCols) {
+    ctx.clearRect(0, 0, W, H);
+
+    // Title
+    ctx.fillStyle = '#1e293b';
+    ctx.font = 'bold 18px "PingFang SC", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('1dm² = 10cm × 10cm = ? cm²', W/2, 34);
+
+    // Grid border
+    var totalW = COLS * cellSize, totalH = ROWS * cellSize;
+    ctx.strokeStyle = '#1e293b';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(gridX, gridY, totalW, totalH);
+
+    // Cells
+    for (var r = 0; r < ROWS; r++) {
+      for (var c = 0; c < COLS; c++) {
+        var x = gridX + c * cellSize, y = gridY + r * cellSize;
+        if (c < filledCols) {
+          // Filled cell
+          var shade = 0.4 + (c / COLS) * 0.5;
+          ctx.fillStyle = 'rgba(34,197,94,' + shade.toFixed(2) + ')';
+          ctx.fillRect(x + 1, y + 1, cellSize - 2, cellSize - 2);
+          ctx.fillStyle = '#fff';
+          ctx.font = '9px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('1cm²', x + cellSize/2, y + cellSize/2);
+        }
+        // Grid line
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.lineWidth = 0.5;
+        ctx.strokeRect(x, y, cellSize, cellSize);
+      }
+    }
+
+    // Count display
+    var count = filledCols * ROWS;
+    ctx.fillStyle = count >= 100 ? '#22c55e' : '#64748b';
+    ctx.font = 'bold 22px "PingFang SC", sans-serif';
+    ctx.textAlign = 'center';
+    var countY = gridY + totalH + 60;
+    if (count >= 100) {
+      ctx.fillText('✅ ' + count + ' cm²  ——  1dm² = 100cm²！', W/2, countY);
+    } else if (count === 0) {
+      ctx.fillText('已填: 0 / 100 cm²  ← 点击下方按钮开始', W/2, countY);
+    } else {
+      ctx.fillText('已填: ' + count + ' / 100 cm²', W/2, countY);
+    }
+
+    // Legend
+    ctx.fillStyle = '#64748b';
+    ctx.font = '12px "PingFang SC", sans-serif';
+    ctx.fillText('每个小格 = 1cm × 1cm = 1cm²', W/2, countY + 28);
+
+    // Update HTML count
+    var countEl = document.querySelector('#grid-count span');
+    if (countEl) countEl.textContent = count;
+  }
+
+  // Step mapping: step 0=0 cols, step 1=2 cols, step 2=5 cols, step 3=8 cols, step 4=10 cols
+  var stepCols = [0, 2, 5, 8, 10];
+
+  window.canvasGridSetStep = function(n) {
+    currentStep = n;
+    var cols = stepCols[n] || 0;
+    drawGrid(cols);
+    // Update step buttons
+    for (var i = 0; i <= 5; i++) {
+      var btn = document.getElementById('step-btn-' + i);
+      if (btn) {
+        btn.className = (i === n) ? 'active' : (i < n) ? 'played' : '';
+      }
+    }
+    // Notify sync on manual interaction
+    if (typeof TeachAnySync !== 'undefined') {
+      TeachAnySync.notifyManualInteraction('canvas-grid');
+    }
+  };
+
+  // Initial draw
+  drawGrid(0);
+
+  // Register with TeachAnySync
+  window.TeachAnySync.register('canvas-grid', {
+    currentStep: 0,
+    maxSteps: 5,
+    setStep: function(n) {
+      this.currentStep = n;
+      var cols = stepCols[n] || 0;
+      drawGrid(cols);
+      // Update step buttons
+      for (var i = 0; i <= 5; i++) {
+        var btn = document.getElementById('step-btn-' + i);
+        if (btn) {
+          btn.className = (i === n) ? 'active' : (i < n) ? 'played' : '';
+        }
+      }
+    },
+    reset: function() {
+      this.currentStep = 0;
+      drawGrid(0);
+    },
+    getMaxSteps: function() {
+      return 5;
+    }
+  });
+})();
+</script>
+
+<!-- ====== 交互逻辑 ====== -->
+<script>
+// Hero quiz
+function heroAnswer(val, btn) {
+  var fb = document.getElementById('hero-feedback');
+  var btn10 = document.getElementById('hero-btn-10');
+  var btn100 = document.getElementById('hero-btn-100');
+  btn10.className = 'hero-btn';
+  btn100.className = 'hero-btn';
+  if (val === 100) {
+    btn.className = 'hero-btn reveal';
+    fb.style.display = 'block';
+    fb.style.color = 'var(--ok)';
+    fb.textContent = '✅ 你答对了！1m² = 100dm²';
+  } else {
+    btn.className = 'hero-btn wrong';
+    btn100.className = 'hero-btn reveal';
+    fb.style.display = 'block';
+    fb.style.color = 'var(--ok)';
+    fb.textContent = '很多同学都选这个…但正确答案是 B：100！往下看就知道为什么';
+  }
+}
+
+// Concept check
+function conceptCheck(btn, correct, explanation) {
+  var allBtns = document.querySelectorAll('#concepTest .choice');
+  allBtns.forEach(function(b) {
+    b.className = b.className.replace(/ correct| wrong/g, '');
+  });
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  document.getElementById('concept-feedback').textContent = explanation;
+  document.getElementById('concept-feedback').className = correct ? 'result' : 'result warn';
+}
+
+// Practice checks
+function checkHalfPractice() {
+  var val = document.getElementById('prac-half').value.trim();
+  var fb = document.getElementById('prac-half-fb');
+  if (val === '400') {
+    fb.innerHTML = '<span style="color:var(--ok);">✅ 正确！4×100=400 dm²</span>';
+  } else {
+    fb.innerHTML = '<span style="color:var(--danger);">❌ 再想想：大→小 ×100，4×100=？</span>';
+  }
+}
+
+function checkIndepPractice() {
+  var val = document.getElementById('prac-indep').value.trim();
+  var fb = document.getElementById('prac-indep-fb');
+  if (val === '1500') {
+    fb.innerHTML = '<span style="color:var(--ok);">✅ 正确！15×100=1500 dm²</span>';
+  } else {
+    fb.innerHTML = '<span style="color:var(--danger);">❌ 再想想：大→小 ×100，15×100=？</span>';
+  }
+}
+
+// Synthesis steps
+function checkSynthStep1() {
+  var val = document.getElementById('synth-step1').value.trim();
+  var fb = document.getElementById('synth-fb1');
+  if (val === '2400') {
+    fb.innerHTML = '<span style="color:var(--ok);">✅ 24m² = 2400 dm²</span>';
+    document.getElementById('step1-check').textContent = '= 2400 dm² ✓';
+    document.getElementById('step1-check').style.color = 'var(--ok)';
+    synthStep1Ok = true;
+    checkSynthReady();
+  } else {
+    fb.innerHTML = '<span style="color:var(--danger);">❌ 24×100=2400，再试试</span>';
+    synthStep1Ok = false;
+  }
+}
+
+function checkSynthStep2() {
+  var val = document.getElementById('synth-step2').value.trim();
+  var fb = document.getElementById('synth-fb2');
+  if (val === '25') {
+    fb.innerHTML = '<span style="color:var(--ok);">✅ 2500cm² = 25 dm²</span>';
+    document.getElementById('step2-check').textContent = '= 25 dm² ✓';
+    document.getElementById('step2-check').style.color = 'var(--ok)';
+    synthStep2Ok = true;
+    checkSynthReady();
+  } else {
+    fb.innerHTML = '<span style="color:var(--danger);">❌ 2500÷100=25，再试试</span>';
+    synthStep2Ok = false;
+  }
+}
+
+function checkSynthReady() {
+  if (synthStep1Ok && synthStep2Ok) {
+    document.getElementById('synth-step3-prompt').textContent = '2400 dm² ÷ 25 dm² = ? 块';
+    document.getElementById('synth-step3-prompt').style.color = 'var(--text)';
+  }
+}
+
+function checkSynthStep3() {
+  var fb = document.getElementById('synth-fb3');
+  if (!synthStep1Ok || !synthStep2Ok) {
+    fb.innerHTML = '<span style="color:var(--warn);">⚠️ 请先完成步骤①②</span>';
+    return;
+  }
+  var val = document.getElementById('synth-step3').value.trim();
+  if (val === '96') {
+    fb.innerHTML = '<span style="color:var(--ok);font-size:20px;">🎉 太棒了！2400÷25=96 块。全部正确！</span>';
+  } else {
+    fb.innerHTML = '<span style="color:var(--danger);">❌ 2400÷25=96，再试试</span>';
+  }
+}
+</script>
+
+<!-- TTS 系统 -->
+<script src="../../scripts/teachany-tts-narrator.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof window.TeachAnyTTS !== 'undefined') {
+    window.TeachAnyTTS.init({
+      container: '.teachany-course',
+      scrollOffset: 68
+    });
+  }
+});
+</script>
+
+</body>
+</html>
