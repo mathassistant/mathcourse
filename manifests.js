@@ -109,5 +109,26 @@ var ALL_MANIFESTS = {
     "has_canvas": false,
     "has_geogebra": false,
     "has_knowledge_graph": false
+  },
+  "面积单位进率": {
+    "id": "面积单位进率",
+    "name": "面积单位进率",
+    "subject": "math",
+    "grade": "3",
+    "stage": "elementary",
+    "domain": "geometry",
+    "lesson_type": "inquiry-project",
+    "description": "为什么1平方米=100平方分米？从长度进率×10到面积进率×100的秘密，用方格图亲眼看见！",
+    "tags": [
+      "小学数学",
+      "面积",
+      "进率",
+      "单位换算",
+      "三年级"
+    ],
+    "prerequisites": [],
+    "has_canvas": true,
+    "has_geogebra": false,
+    "has_knowledge_graph": true
   }
 };
